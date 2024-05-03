@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:toefl_app/presentation/listening_screen.dart';
+import 'package:toefl_app/theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,12 +13,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      themeMode: ThemeMode.light,
+      theme: appTheme,
       home: const Scaffold(
-        body: Text('Hello world'),
+        body: ListeningPage(),
       ),
     );
   }
