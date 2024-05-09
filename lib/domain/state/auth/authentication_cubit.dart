@@ -1,14 +1,14 @@
 import 'package:bloc/bloc.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:equatable/equatable.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:toefl_app/data/repository/auth_repository.dart';
 
 part 'authentication_state.dart';
 
 class AuthenticationCubit extends Cubit<AuthenticationState> {
-  final SupabaseClient _supabaseClient;
+  final AuthRepository _authRepository;
 
-  AuthenticationCubit(this._supabaseClient) : super(AuthenticationInitial());
+  AuthenticationCubit(this._authRepository) : super(AuthenticationInitial());
 
   Future<void> login({
     required String email,
@@ -18,7 +18,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     try {
       emit(AuthenticationLoading());
 
-      await _supabaseClient.auth.signInWithPassword(
+      await _authRepository.login(
         password: password,
         email: email,
       );
@@ -44,24 +44,15 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     try {
       emit(AuthenticationLoading());
 
-      final AuthResponse res = await _supabaseClient.auth.signUp(
+      await _authRepository.register(
         password: password,
         email: email,
+        name: name,
       );
 
-      if (res.user != null) {
-        await _supabaseClient.from('users').insert({
-          'id': res.user!.id,
-          'name': name,
-          'email': res.user!.email!,
-        });
-
-        emit(
-          AuthenticationRegisterSuccess(),
-        );
-      } else {
-        emit(const AuthenticationFailed(errorMsg: 'User is null'));
-      }
+      emit(
+        AuthenticationRegisterSuccess(),
+      );
     } catch (e) {
       emit(
         AuthenticationFailed(errorMsg: e.toString()),
@@ -72,6 +63,6 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   }
 
   void logout() async {
-    await _supabaseClient.auth.signOut();
+    await _authRepository.logout();
   }
 }
