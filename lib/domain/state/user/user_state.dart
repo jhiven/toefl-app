@@ -11,15 +11,13 @@ final class UserInitial extends UserState {}
 
 final class UserFetchSucess extends UserState {
   final UserModel user;
-  final Session session;
 
   const UserFetchSucess({
     required this.user,
-    required this.session,
   });
 
   @override
-  List<Object> get props => [user, session];
+  List<Object> get props => [user];
 }
 
 final class UserFailed extends UserState {
