@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toefl_app/presentation/screen/home_test.dart';
 
 class TestPage extends StatelessWidget {
   const TestPage({Key? key});
@@ -6,19 +7,13 @@ class TestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: const BackButton(
-          color: Colors.black,
-        )
-      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(
-                  top: 110),
+              padding: const EdgeInsets.only(top: 70),
               child: Center(
                 child: RichText(
                   text: const TextSpan(
@@ -71,7 +66,10 @@ class TestPage extends StatelessWidget {
                 SizedBox(
                   width: 350,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const HomePage()));
+                    },
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
                       backgroundColor: const Color(0xFF14487A),

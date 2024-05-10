@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:toefl_app/presentation/screen/home_test.dart';
-import 'package:toefl_app/presentation/screen/register_page.dart';
-import 'package:toefl_app/presentation/screen/test_page.dart';
 
 void main() {
   runApp(const MyApp());

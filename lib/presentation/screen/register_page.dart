@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:toefl_app/presentation/screen/test_page.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key});
+class RegisterPage extends StatelessWidget {
+  const RegisterPage({Key? key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const BackButtonIcon(),
-          color: const Color(0xFF14487A),
-          onPressed: () {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const TestPage()));
-          },
+        leading: const BackButton(
+          color: Color(0xFF14487A),
         ),
       ),
       body: Column(
@@ -62,19 +56,6 @@ class HomePage extends StatelessWidget {
             ),
           ),
           const Padding(
-            padding: EdgeInsets.only(right: 10),
-            child: Center(
-              child: Text(
-                'You Have 3 Times of Chance to Test',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Color(0xFF14487A),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
-          const Padding(
             padding: EdgeInsets.only(top: 15, left: 35, bottom: 20),
             child: Text(
               'Credit : x ',
@@ -97,35 +78,21 @@ class HomePage extends StatelessWidget {
                       backgroundColor: const Color(0xFF14487A),
                     ),
                     child: const Text(
-                      'Start Test',
+                      'Register',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  width: 350,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 50),
-                      backgroundColor: Colors.white,
-                      side: const BorderSide(color: Color(0xFF14487A)),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Get Pro',
-                          style: TextStyle(
-                            color: Color(0xFF14487A),
-                          ),
-                        ),
-                        Icon(
-                          Icons.workspace_premium,
-                          color: Color(0xFFF6C410),
-                        )
-                      ],
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Text(
+                      'already have a token? Login',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color(0xFF14487A),
+                        fontWeight: FontWeight.normal,
+                      ),
                     ),
                   ),
                 ),
