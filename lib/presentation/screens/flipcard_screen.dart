@@ -12,16 +12,26 @@ class FlipcardScreen extends StatefulWidget {
 
 class _FlipcardScreenState extends State<FlipcardScreen> {
   int _currentIndex = 0;
-  final keyList =
-      List.generate(5, (index) => GlobalKey<FlipCardState>());
+  final keyList = List.generate(5 + 1, (index) => GlobalKey<FlipCardState>());
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _showFlipcardBeginDialog();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         forceMaterialTransparency: true,
-        leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back_rounded)),
+        leading: IconButton(
+            onPressed: () {
+              // Navigator.of(context).pop();
+            },
+            icon: Icon(Icons.arrow_back_rounded)),
         title: Text('Flipcards'),
         titleSpacing: 0,
       ),
@@ -34,30 +44,45 @@ class _FlipcardScreenState extends State<FlipcardScreen> {
               child: CarouselSlider.builder(
                 options: CarouselOptions(
                   height: 600,
-                  viewportFraction: 0.85, 
-                  enlargeCenterPage: true, 
+                  viewportFraction: 0.85,
+                  enlargeCenterPage: true,
                   enlargeStrategy: CenterPageEnlargeStrategy.height,
                   enableInfiniteScroll: false,
                   initialPage: 0,
                   onPageChanged: (index, reason) {
                     setState(() {
-                      if (keyList[_currentIndex].currentState?.isFront != true){
+                      if (keyList[_currentIndex].currentState?.isFront !=
+                          true) {
                         keyList[_currentIndex].currentState?.toggleCard();
                       }
-                      _currentIndex = index;
+                      if (index != (5 + 1) - 1) {
+                        _currentIndex = index;
+                      }else {
+                        _showFlipcardCompletedDialog();
+                      }
                     });
                   },
                 ),
-                itemCount: 5,
+                itemCount: 5 + 1,
                 itemBuilder: (context, index, realIndex) {
+                  if (index == (5 + 1) - 1) {
+                    return SizedBox();
+                  }
+
                   return SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
                     child: FlipCard(
                       key: keyList[index],
                       flipOnTouch: disableFlip(index),
-                      front: FlipcardWidget(title: 'QUESTION', color: Color.fromRGBO(20, 72, 122, 1),), 
-                      back: FlipcardWidget(title: 'ANSWER', color: Color.fromRGBO(246, 196, 16, 1),),
+                      front: FlipcardWidget(
+                        title: 'QUESTION',
+                        color: Color.fromRGBO(20, 72, 122, 1),
+                      ),
+                      back: FlipcardWidget(
+                        title: 'ANSWER',
+                        color: Color.fromRGBO(246, 196, 16, 1),
+                      ),
                     ),
                   );
                 },
@@ -66,7 +91,7 @@ class _FlipcardScreenState extends State<FlipcardScreen> {
             Padding(
               padding: const EdgeInsets.only(bottom: 50),
               child: Text(
-                '${_currentIndex + 1} of 5',
+                '${_currentIndex + 1} of ${(5 + 1) - 1}',
               ),
             ),
           ],
@@ -76,11 +101,153 @@ class _FlipcardScreenState extends State<FlipcardScreen> {
   }
 
   bool disableFlip(index) {
-    if(index != _currentIndex) {
+    if (index != _currentIndex) {
       return false;
-    }
-    else{
+    } else {
       return true;
     }
+  }
+
+  Future<void> _showFlipcardBeginDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return PopScope(
+          canPop: false,
+          child: AlertDialog(
+            content: const SingleChildScrollView(
+                child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  children: [
+                    Image(
+                        image: AssetImage(
+                            'assets/images/flipcard_dialog_image_1.png')),
+                    Text('Tap to flip the card'),
+                  ],
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                Column(
+                  children: [
+                    Image(
+                        image: AssetImage(
+                            'assets/images/flipcard_dialog_image_2.png')),
+                    Text(
+                      'Swipe left/right\nto the next/previous card',
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ],
+            )),
+            actions: <Widget>[
+              Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Color.fromRGBO(246, 196, 16, 1),
+                      borderRadius: BorderRadius.circular(100),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          offset: Offset(2, 2),
+                          blurRadius: 3,
+                        )
+                      ]),
+                  child: TextButton(
+                    child: const Text(
+                      'OK',
+                      style: TextStyle(color: Color.fromRGBO(20, 72, 122, 1)),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _showFlipcardCompletedDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return PopScope(
+          canPop: false,
+          child: AlertDialog(
+            content: const SingleChildScrollView(
+                child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Icon(
+                  Icons.check_rounded,
+                  color: Color.fromRGBO(20, 72, 122, 1),
+                  size: 100,
+                ),
+                Text('Flipcards Completed'),
+              ],
+            )),
+            actions: <Widget>[
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          border: Border.all(),  
+                        ),
+                      child: TextButton(
+                        child: const Text(
+                          'Go back',
+                          style: TextStyle(color: Color.fromRGBO(20, 72, 122, 1)),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Color.fromRGBO(246, 196, 16, 1),
+                          borderRadius: BorderRadius.circular(100),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              offset: Offset(2, 2),
+                              blurRadius: 3,
+                            )
+                          ]),
+                      child: TextButton(
+                        child: const Text(
+                          'Start again',
+                          style: TextStyle(color: Color.fromRGBO(20, 72, 122, 1)),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => FlipcardScreen()));
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
