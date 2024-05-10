@@ -12,7 +12,25 @@ class TestRepository {
     return await _supabaseDatabase.getPacketById(packetId);
   }
 
+  Future<TestPacketModel> getRandomPacket() async {
+    return await _supabaseDatabase.getRandomPacket();
+  }
+
   Future<void> decrementTestRemaining(int userId) {
     return _supabaseDatabase.decrementTestRemaining(userId);
+  }
+
+  Future<void> insertHistory({
+    required int packetId,
+    required double listeningScore,
+    required double readingScore,
+    required double structureScore,
+  }) async {
+    return await _supabaseDatabase.insertHistory(
+      packetId: packetId,
+      listeningScore: listeningScore,
+      readingScore: readingScore,
+      structureScore: structureScore,
+    );
   }
 }

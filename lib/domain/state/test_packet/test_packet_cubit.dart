@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:toefl_app/data/repository/test_repository.dart';
 import 'package:toefl_app/domain/models/test_packet_model.dart';
 import 'package:toefl_app/domain/models/test_section_model.dart';
+import 'package:toefl_app/utils/score_env.dart';
 
 part 'test_packet_state.dart';
 
@@ -13,6 +14,7 @@ class TestPacketCubit extends Cubit<TestPacketState> {
 
   void startTest(int userId) async {
     try {
+      // final TestPacketModel packet = await _testRepository.getRandomPacket();
       final TestPacketModel packet = await _testRepository.getPacketById(1);
 
       // await _testRepository.decrementTestRemaining(userId);
@@ -21,7 +23,6 @@ class TestPacketCubit extends Cubit<TestPacketState> {
         TestPacketAnswering(
           packet: packet,
           currentSection: packet.listSection.first,
-          // status: TestPacketStatus.answering,
         ),
       );
     } catch (e) {
@@ -44,64 +45,11 @@ class TestPacketCubit extends Cubit<TestPacketState> {
     }
 
     final TestPacketAnswering tps = state as TestPacketAnswering;
+    final ScoreEnv scores = ScoreEnv();
 
     switch (sectionType) {
       case SectionType.listening:
-        final scoreList = [
-          24,
-          25,
-          26,
-          27,
-          28,
-          29,
-          30,
-          31,
-          32,
-          32,
-          33,
-          35,
-          37,
-          38,
-          39,
-          41,
-          41,
-          42,
-          43,
-          44,
-          45,
-          45,
-          46,
-          47,
-          47,
-          48,
-          48,
-          49,
-          49,
-          50,
-          51,
-          51,
-          52,
-          52,
-          53,
-          54,
-          54,
-          55,
-          56,
-          57,
-          57,
-          58,
-          59,
-          60,
-          61,
-          62,
-          63,
-          65,
-          66,
-          67,
-          68
-        ];
-
-        final score = scoreList[totalCorrect];
+        final score = scores.listeningScore[totalCorrect];
 
         emit(
           tps.copyWith(
@@ -109,50 +57,7 @@ class TestPacketCubit extends Cubit<TestPacketState> {
           ),
         );
       case SectionType.structure:
-        final scoreList = [
-          20,
-          20,
-          21,
-          22,
-          23,
-          25,
-          26,
-          27,
-          29,
-          31,
-          33,
-          35,
-          36,
-          37,
-          38,
-          40,
-          40,
-          41,
-          42,
-          43,
-          44,
-          45,
-          46,
-          47,
-          48,
-          49,
-          50,
-          51,
-          52,
-          53,
-          54,
-          55,
-          56,
-          57,
-          58,
-          60,
-          61,
-          63,
-          65,
-          67,
-          68
-        ];
-        final score = scoreList[totalCorrect];
+        final score = scores.structureScore[totalCorrect];
 
         emit(
           tps.copyWith(
@@ -160,60 +65,7 @@ class TestPacketCubit extends Cubit<TestPacketState> {
           ),
         );
       case SectionType.reading:
-        final scoreList = [
-          21,
-          22,
-          23,
-          23,
-          24,
-          25,
-          26,
-          27,
-          28,
-          28,
-          29,
-          30,
-          31,
-          32,
-          34,
-          35,
-          36,
-          37,
-          38,
-          39,
-          40,
-          41,
-          42,
-          43,
-          43,
-          44,
-          45,
-          46,
-          46,
-          47,
-          48,
-          48,
-          49,
-          50,
-          51,
-          52,
-          52,
-          53,
-          54,
-          54,
-          55,
-          56,
-          57,
-          58,
-          59,
-          60,
-          61,
-          63,
-          65,
-          66,
-          67
-        ];
-        final score = scoreList[totalCorrect];
+        final score = scores.readingScore[totalCorrect];
 
         emit(
           tps.copyWith(
@@ -225,7 +77,7 @@ class TestPacketCubit extends Cubit<TestPacketState> {
     }
   }
 
-  void nextSection() {
+  Future<void> nextSection() async {
     if (state is! TestPacketAnswering) {
       return emit(const TestPacketError(
         errorMsg:
@@ -245,6 +97,13 @@ class TestPacketCubit extends Cubit<TestPacketState> {
       );
     } on RangeError catch (_) {
       final total = tps.listeningScore + tps.readingScore + tps.structureScore;
+
+      await _testRepository.insertHistory(
+        listeningScore: tps.listeningScore,
+        readingScore: tps.readingScore,
+        structureScore: tps.structureScore,
+        packetId: tps.packet.id,
+      );
 
       emit(
         TestPacketDone(

@@ -89,10 +89,44 @@ class SupabaseDatabase {
     }
   }
 
+  Future<TestPacketModel> getRandomPacket() async {
+    try {
+      final Map<String, dynamic> packetId = await _supabaseClient.rpc(
+        'random_packet_id',
+        params: {'auth_id': _supabaseClient.auth.currentUser!.id},
+      );
+
+      return await getPacketById(packetId['id']);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
   Future<void> decrementTestRemaining(int userId) {
     return _supabaseClient.rpc(
       'decrement_test_remaining',
       params: {'id': userId},
     );
+  }
+
+  Future<void> insertHistory({
+    required int packetId,
+    required double listeningScore,
+    required double readingScore,
+    required double structureScore,
+  }) async {
+    final data = {
+      'packet_id': packetId,
+      'user_id': _supabaseClient.auth.currentUser!.id,
+      'listening_score': listeningScore.floor(),
+      'reading_score': readingScore.floor(),
+      'structure_score': structureScore.floor(),
+    };
+
+    try {
+      await _supabaseClient.from('test_history').insert(data);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
   }
 }
