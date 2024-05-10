@@ -1,5 +1,9 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:toefl_app/presentation/screens/reading_question.dart';
+import 'package:toefl_app/presentation/screens/written_question.dart';
+import 'package:toefl_app/presentation/screens/written_instruction.dart';
+import 'package:toefl_app/theme.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/state/authentication_cubit.dart';
@@ -7,6 +11,8 @@ import 'package:toefl_app/domain/state/user_cubit.dart';
 import 'package:toefl_app/presentation/screens/home_screen.dart';
 import 'package:toefl_app/presentation/screens/login_screen.dart';
 import 'package:toefl_app/utils/supabase_env.dart';
+import 'package:toefl_app/widgets/question_page.dart';
+import 'package:toefl_app/widgets/test.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,14 +50,14 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
+        theme: appTheme,
+        themeMode: ThemeMode.light,
         debugShowCheckedModeBanner: false,
         home: supabaseClient.auth.currentSession == null
             ? const LoginScreen()
-            : const HomeScreen(),
+            // : const WrittenInstruction(),
+            : const WrittenQuestion(),
+        // : const ReadingQuestion(),
         builder: BotToastInit(),
         navigatorObservers: [BotToastNavigatorObserver()],
       ),
