@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:toefl_app/widgets/primary_button.dart';
+import 'package:toefl_app/presentation/widgets/primary_button.dart';
 
 class PreparationPage extends StatefulWidget {
   final String heading;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:toefl_app/widgets/preparation_page.dart';
+import 'package:toefl_app/presentation/widgets/preparation_page.dart';
 
 class WrittenInstruction extends StatelessWidget {
   const WrittenInstruction({super.key});

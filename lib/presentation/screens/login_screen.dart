@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toefl_app/domain/state/authentication_cubit.dart';
-import 'package:toefl_app/domain/state/user_cubit.dart';
+import 'package:toefl_app/domain/state/auth/authentication_cubit.dart';
+import 'package:toefl_app/domain/state/user/user_cubit.dart';
 import 'package:toefl_app/presentation/screens/home_screen.dart';
 import 'package:toefl_app/presentation/screens/register_screen.dart';
 
@@ -13,15 +13,16 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  late final GlobalKey<FormState> _formKey;
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
-  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+    _formKey = GlobalKey<FormState>();
   }
 
   @override
@@ -83,7 +84,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   }
 
                   final emailRegex = RegExp(
-                      r'^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+                    r'^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$',
+                  );
 
                   if (!emailRegex.hasMatch(value)) {
                     return 'Please input valid email';

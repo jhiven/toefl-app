@@ -1,30 +1,36 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:toefl_app/presentation/screens/reading_question.dart';
-import 'package:toefl_app/presentation/screens/written_question.dart';
-import 'package:toefl_app/presentation/screens/written_instruction.dart';
-import 'package:toefl_app/theme.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toefl_app/domain/state/authentication_cubit.dart';
-import 'package:toefl_app/domain/state/user_cubit.dart';
+import 'package:toefl_app/data/provider/supabase_database.dart';
+import 'package:toefl_app/data/repository/auth_repository.dart';
+import 'package:toefl_app/data/repository/test_repository.dart';
+import 'package:toefl_app/domain/state/auth/authentication_cubit.dart';
+import 'package:toefl_app/domain/state/test_packet/test_packet_cubit.dart';
+import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
+import 'package:toefl_app/domain/state/timer/timer_bloc.dart';
+import 'package:toefl_app/domain/state/user/user_cubit.dart';
 import 'package:toefl_app/presentation/screens/home_screen.dart';
 import 'package:toefl_app/presentation/screens/login_screen.dart';
-import 'package:toefl_app/utils/supabase_env.dart';
-import 'package:toefl_app/widgets/question_page.dart';
-import 'package:toefl_app/widgets/test.dart';
+import 'package:toefl_app/utils/supabase_constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Bloc.observer = SimpleBlocObserver();
 
   final supabase = await Supabase.initialize(
-    url: SupabaseEnv.url,
-    anonKey: SupabaseEnv.anonKey,
+    url: SupabaseConstants.url,
+    anonKey: SupabaseConstants.anonKey,
   );
 
   runApp(
     MyApp(
-      supabaseClient: supabase.client,
+      supabaseDatabase: SupabaseDatabase(
+        supabaseClient: supabase.client,
+      ),
+      home: supabase.client.auth.currentSession == null
+          ? const LoginScreen()
+          : const HomeScreen(),
     ),
   );
 }
@@ -32,34 +38,63 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({
     super.key,
-    required this.supabaseClient,
+    required this.supabaseDatabase,
+    required this.home,
   });
 
-  final SupabaseClient supabaseClient;
+  final SupabaseDatabase supabaseDatabase;
+  final Widget home;
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
+    return MultiRepositoryProvider(
       providers: [
-        BlocProvider(
-          create: (context) => AuthenticationCubit(supabaseClient),
+        RepositoryProvider(
+          create: (context) => AuthRepository(
+            supabaseDatabase: supabaseDatabase,
+          ),
         ),
-        BlocProvider(
-          create: (context) => UserCubit(supabaseClient)..getSession(),
+        RepositoryProvider(
+          create: (context) => TestRepository(
+            supabaseDatabase: supabaseDatabase,
+          ),
         ),
       ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: appTheme,
-        themeMode: ThemeMode.light,
-        debugShowCheckedModeBanner: false,
-        home: supabaseClient.auth.currentSession == null
-            ? const LoginScreen()
-            // : const WrittenInstruction(),
-            : const WrittenQuestion(),
-        // : const ReadingQuestion(),
-        builder: BotToastInit(),
-        navigatorObservers: [BotToastNavigatorObserver()],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => AuthenticationCubit(
+              context.read<AuthRepository>(),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => UserCubit(
+              context.read<AuthRepository>(),
+            )..getSession(),
+          ),
+          BlocProvider(
+            create: (context) => TestPacketCubit(
+              context.read<TestRepository>(),
+            )..startTest(1),
+          ),
+          BlocProvider(
+            create: (context) => TestSectionCubit(),
+          ),
+          BlocProvider(
+            create: (context) => TimerBloc(),
+          ),
+        ],
+        child: MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+          debugShowCheckedModeBanner: false,
+          home: home,
+          builder: BotToastInit(),
+          navigatorObservers: [BotToastNavigatorObserver()],
+        ),
       ),
     );
   }

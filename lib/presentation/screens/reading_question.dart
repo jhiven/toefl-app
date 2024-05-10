@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:toefl_app/widgets/question_page.dart';
+import 'package:toefl_app/presentation/widgets/question_page.dart';
 
 class ReadingQuestion extends StatefulWidget {
   const ReadingQuestion({super.key});

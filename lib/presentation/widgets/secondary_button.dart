@@ -2,27 +2,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class SecondaryButton extends StatefulWidget {
+class SecondaryButton extends StatelessWidget {
   final String opsi;
   final String text;
+  final VoidCallback? onPressed;
 
-  const SecondaryButton({super.key, required this.opsi, required this.text});
+  const SecondaryButton(
+      {super.key, required this.opsi, required this.text, this.onPressed});
 
-  @override
-  State<SecondaryButton> createState() => _SecondaryButtonState();
-}
-
-class _SecondaryButtonState extends State<SecondaryButton> {
-  late MediaQueryData queryData = MediaQuery.of(context);
   @override
   Widget build(BuildContext context) {
+    final MediaQueryData queryData = MediaQuery.of(context);
     return Padding(
       padding: const EdgeInsets.only(top: 12.0),
       child: SizedBox(
         width: queryData.size.width,
         height: queryData.size.width * 1 / 7,
         child: ElevatedButton(
-            onPressed: () {},
+            onPressed: onPressed,
             style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
                     Theme.of(context).colorScheme.tertiaryContainer)),
@@ -37,7 +34,7 @@ class _SecondaryButtonState extends State<SecondaryButton> {
                     child: Align(
                         alignment: Alignment.center,
                         child: Text(
-                          widget.opsi,
+                          opsi,
                           style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.w500,
@@ -48,7 +45,7 @@ class _SecondaryButtonState extends State<SecondaryButton> {
                     width: queryData.size.width * 1 / 1.9,
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(widget.text,
+                      child: Text(text,
                           style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,

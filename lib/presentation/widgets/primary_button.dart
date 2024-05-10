@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:toefl_app/presentation/screens/written_question.dart';
 
-class PrimaryButton extends StatefulWidget {
+class PrimaryButton extends StatelessWidget {
   final String text;
   final IconData? icon;
-  const PrimaryButton({super.key, required this.text, required this.icon});
+  final VoidCallback? onPressed;
+  const PrimaryButton(
+      {super.key, required this.text, required this.icon, this.onPressed});
 
-  @override
-  State<PrimaryButton> createState() => _PrimaryButtonState();
-}
-
-class _PrimaryButtonState extends State<PrimaryButton> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onPressed,
       style: ButtonStyle(
         shadowColor: MaterialStateProperty.all(Colors.black),
         elevation: MaterialStateProperty.all(2.0),
@@ -26,13 +23,13 @@ class _PrimaryButtonState extends State<PrimaryButton> {
         children: [
           const Spacer(),
           Text(
-            widget.text,
+            text,
             style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
           ),
           const Spacer(),
-          if (widget.icon != null)
+          if (icon != null)
             Icon(
-              widget.icon!,
+              icon!,
               color: Theme.of(context).colorScheme.onPrimary,
             ),
         ],
