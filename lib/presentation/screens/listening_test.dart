@@ -1,6 +1,11 @@
-import 'dart:async';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toefl_app/domain/state/test_packet/test_packet_cubit.dart';
+import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
+import 'package:toefl_app/domain/state/timer/timer_bloc.dart';
+import 'package:toefl_app/presentation/widgets/audio_player.dart';
+import 'package:toefl_app/presentation/widgets/primary_button.dart';
+import 'package:toefl_app/presentation/widgets/secondary_button.dart';
 
 class ListeningTest extends StatefulWidget {
   const ListeningTest({Key? key}) : super(key: key);
@@ -10,58 +15,7 @@ class ListeningTest extends StatefulWidget {
 }
 
 class _ListeningTestState extends State<ListeningTest> {
-  final AudioPlayer _audioPlayer = AudioPlayer();
-  bool _isPlaying = false;
-  Duration _duration = Duration.zero;
-  Duration _position = Duration.zero;
   int _currentQuestion = 1;
-  Timer? _timer;
-
-  @override
-  void initState() {
-    super.initState();
-    _initializePlayer();
-    _startTimer();
-  }
-
-  @override
-  void dispose() {
-    _audioPlayer.dispose();
-    _timer?.cancel();
-    super.dispose();
-  }
-
-  void _initializePlayer() {
-    _audioPlayer.onPlayerStateChanged.listen((state) {
-      setState(() {
-        _isPlaying = state == PlayerState.playing;
-      });
-    });
-
-    _audioPlayer.onDurationChanged.listen((newDuration) {
-      setState(() {
-        _duration = newDuration;
-      });
-    });
-
-    _audioPlayer.onPositionChanged.listen((newPosition) {
-      setState(() {
-        _position = newPosition;
-      });
-    });
-  }
-
-  void _startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-      setState(() {
-        if (_duration.inSeconds > 0) {
-          _duration -= Duration(seconds: 1);
-        } else {
-          timer.cancel();
-        }
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,107 +28,122 @@ class _ListeningTestState extends State<ListeningTest> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Question, $_currentQuestion"),
-                  Text(_formatTime(_duration)),
+                  BlocBuilder<TestSectionCubit, TestSectionState>(
+                    builder: (context, state) {
+                      switch (state.status) {
+                        case TestSectionStatus.success:
+                          return Text(
+                              "Question ${state.currentQuestionIdx + 1}/${state.section.questionList.length}");
+                        default:
+                          return const SizedBox();
+                      }
+                    },
+                  ),
+                  BlocConsumer<TimerBloc, TimerState>(
+                    listener: (context, state) {
+                      context.read<TestSectionCubit>().sectionTimeout();
+                    },
+                    listenWhen: (previous, current) =>
+                        previous is TimerRunInProgress &&
+                        current is TimerRunComplete,
+                    builder: (context, state) {
+                      switch (state) {
+                        case TimerInitial():
+                          return const CircularProgressIndicator();
+                        case TimerRunInProgress():
+                          return Text('waktu: ${state.duration}');
+                        case TimerRunComplete():
+                          return const SizedBox();
+                      }
+                    },
+                  ),
                 ],
               ),
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Spacer(),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.secondary,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(20))),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 22, top: 12),
-                            child: GestureDetector(
-                              onTap: () async {
-                                if (_isPlaying) {
-                                  await _audioPlayer.pause();
-                                } else {
-                                  String url =
-                                      'https://vnnepnnwzlgsectnnyyc.supabase.co/storage/v1/object/public/listening-audio/paket%201/no1.mp3';
-                                  await _audioPlayer.play(UrlSource(url));
+                padding: EdgeInsets.all(20),
+                child: BlocBuilder<TestSectionCubit, TestSectionState>(
+                  builder: (context, state) {
+                    switch (state.status) {
+                      case TestSectionStatus.success:
+                        final answerList = state.currentQuestion.answerList;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Spacer(),
+                            AudioPlayerWidget(url: state.currentQuestion.url!),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Spacer(),
+                            SecondaryButton(
+                              opsi: "A",
+                              text: answerList[0].answer,
+                              onPressed: () {
+                                context
+                                    .read<TestSectionCubit>()
+                                    .setSelectedAnswer(answer: answerList[0]);
+                              },
+                            ),
+                            SecondaryButton(
+                              opsi: "B",
+                              text: answerList[1].answer,
+                              onPressed: () {
+                                context
+                                    .read<TestSectionCubit>()
+                                    .setSelectedAnswer(answer: answerList[1]);
+                              },
+                            ),
+                            SecondaryButton(
+                              opsi: "C",
+                              text: answerList[2].answer,
+                              onPressed: () {
+                                context
+                                    .read<TestSectionCubit>()
+                                    .setSelectedAnswer(answer: answerList[2]);
+                              },
+                            ),
+                            SecondaryButton(
+                              opsi: "D",
+                              text: answerList[3].answer,
+                              onPressed: () {
+                                context
+                                    .read<TestSectionCubit>()
+                                    .setSelectedAnswer(answer: answerList[3]);
+                              },
+                            ),
+                            const Spacer(),
+                            PrimaryButton(
+                              onPressed: () {
+                                final status = context
+                                    .read<TestSectionCubit>()
+                                    .state
+                                    .status;
+                                switch (status) {
+                                  case TestSectionStatus.initial:
+                                    break;
+                                  case TestSectionStatus.success:
+                                    context
+                                        .read<TestSectionCubit>()
+                                        .checkAnswer();
+                                    context
+                                        .read<TestSectionCubit>()
+                                        .nextQuestion();
+                                  case TestSectionStatus.done:
+                                    context
+                                        .read<TestPacketCubit>()
+                                        .nextSection();
                                 }
                               },
-                              child: CircleAvatar(
-                                radius: 15,
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.primary,
-                                child: Icon(
-                                  _isPlaying ? Icons.pause : Icons.play_arrow,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                          _buildSlider(),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 5,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(_formatTime(_position)),
-                                Text(_formatTime(_duration))
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Spacer(),
-                    _buildOption('A'),
-                    _buildOption('B'),
-                    _buildOption('C'),
-                    _buildOption('D'),
-                    Spacer(),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Theme.of(context).colorScheme.primary),
-                        ),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Text(
-                              "Next",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary),
-                            ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Icon(
-                                Icons.arrow_right,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
                             ),
                           ],
-                        ),
-                      ),
-                    ),
-                  ],
+                        );
+                      default:
+                        return const SizedBox();
+                    }
+                  },
                 ),
               ),
             ),
@@ -182,50 +151,5 @@ class _ListeningTestState extends State<ListeningTest> {
         ),
       ),
     );
-  }
-
-  Widget _buildSlider() {
-    return Slider(
-      min: 0,
-      max: _duration.inSeconds.toDouble(),
-      value: _position.inSeconds.toDouble(),
-      onChanged: (value) async {
-        final position = Duration(seconds: value.toInt());
-        await _audioPlayer.seek(position);
-        await _audioPlayer.resume();
-      },
-    );
-  }
-
-  Widget _buildOption(String option) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      color: Colors.grey[300],
-      child: Row(
-        children: [
-          Text(
-            'Option $option:',
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(width: 20),
-          Expanded(
-            child: Text(
-              'This is option $option',
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  String _formatTime(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
-    final minutes = twoDigits(duration.inMinutes.remainder(60));
-    final seconds = twoDigits(duration.inSeconds.remainder(60));
-
-    return "$minutes:$seconds";
   }
 }
