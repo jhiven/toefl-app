@@ -18,46 +18,14 @@ class TestScreen extends StatelessWidget {
       body: MultiBlocListener(
         listeners: [
           BlocListener<TestPacketCubit, TestPacketState>(
-            listener: (context, state) {
-              state as TestPacketAnswering;
-
-              context.read<TestSectionCubit>().setTestSection(
-                    section: state.currentSection,
-                  );
-              switch (state.currentSection.sectionType) {
-                case SectionType.structure:
-                  context
-                      .read<TimerBloc>()
-                      .add(const TimerStarted(duration: Duration(seconds: 25)));
-                case SectionType.reading:
-                  context
-                      .read<TimerBloc>()
-                      .add(const TimerStarted(duration: Duration(seconds: 55)));
-                default:
-                  break;
-              }
-            },
+            listener: _onChangeSection,
             listenWhen: (previous, current) =>
                 previous is TestPacketAnswering &&
                 current is TestPacketAnswering &&
                 previous.currentSection != current.currentSection,
           ),
           BlocListener<TestPacketCubit, TestPacketState>(
-            listener: (context, state) {
-              state as TestPacketAnswering;
-
-              context.read<TestSectionCubit>().setTestSection(
-                    section: state.currentSection,
-                  );
-
-              switch (state.currentSection.sectionType) {
-                case SectionType.listening:
-                  context.read<TimerBloc>().add(
-                      const TimerStarted(duration: Duration(seconds: 100)));
-                default:
-                  break;
-              }
-            },
+            listener: _onChangeSection,
             listenWhen: (previous, current) =>
                 previous is TestPacketInitial && current is TestPacketAnswering,
           ),
@@ -85,6 +53,29 @@ class TestScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _onChangeSection(BuildContext context, TestPacketState state) {
+    state as TestPacketAnswering;
+    context.read<TestSectionCubit>().setTestSection(
+          section: state.currentSection,
+        );
+    switch (state.currentSection.sectionType) {
+      case SectionType.listening:
+        context
+            .read<TimerBloc>()
+            .add(const TimerStarted(duration: Duration(seconds: 100)));
+      case SectionType.structure:
+        context
+            .read<TimerBloc>()
+            .add(const TimerStarted(duration: Duration(seconds: 25)));
+      case SectionType.reading:
+        context
+            .read<TimerBloc>()
+            .add(const TimerStarted(duration: Duration(seconds: 55)));
+      default:
+        break;
+    }
   }
 
   Widget _buildQuestionView() {
