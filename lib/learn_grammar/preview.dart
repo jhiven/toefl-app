@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toefl_app/learn_grammar/style.dart';
-import 'package:toefl_app/learn_grammar/question.dart';
+import 'package:toefl_app/learn/pages/question.dart';
 
 class PreviewScreen extends StatefulWidget {
   const PreviewScreen({super.key});

@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
-import 'package:toefl_app/presentation/widgets/flipcard_widget.dart';
+import 'package:toefl_app/learn/widget/flipcard_widget.dart';
 
 class FlipcardScreen extends StatefulWidget {
   const FlipcardScreen({super.key});
@@ -27,13 +27,8 @@ class _FlipcardScreenState extends State<FlipcardScreen> {
     return Scaffold(
       appBar: AppBar(
         forceMaterialTransparency: true,
-        leading: IconButton(
-            onPressed: () {
-              // Navigator.of(context).pop();
-            },
-            icon: Icon(Icons.arrow_back_rounded)),
         title: Text('Flipcards'),
-        titleSpacing: 0,
+        centerTitle: true,
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -57,7 +52,7 @@ class _FlipcardScreenState extends State<FlipcardScreen> {
                       }
                       if (index != (5 + 1) - 1) {
                         _currentIndex = index;
-                      }else {
+                      } else {
                         _showFlipcardCompletedDialog();
                       }
                     });
@@ -204,13 +199,14 @@ class _FlipcardScreenState extends State<FlipcardScreen> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          border: Border.all(),  
-                        ),
+                        borderRadius: BorderRadius.circular(100),
+                        border: Border.all(),
+                      ),
                       child: TextButton(
                         child: const Text(
                           'Go back',
-                          style: TextStyle(color: Color.fromRGBO(20, 72, 122, 1)),
+                          style:
+                              TextStyle(color: Color.fromRGBO(20, 72, 122, 1)),
                         ),
                         onPressed: () {
                           Navigator.of(context).pop();
@@ -232,12 +228,16 @@ class _FlipcardScreenState extends State<FlipcardScreen> {
                       child: TextButton(
                         child: const Text(
                           'Start again',
-                          style: TextStyle(color: Color.fromRGBO(20, 72, 122, 1)),
+                          style:
+                              TextStyle(color: Color.fromRGBO(20, 72, 122, 1)),
                         ),
                         onPressed: () {
                           Navigator.of(context).pop();
                           Navigator.of(context).pop();
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => FlipcardScreen()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => FlipcardScreen()));
                         },
                       ),
                     ),

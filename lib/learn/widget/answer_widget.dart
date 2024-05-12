@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class BoxItem extends StatelessWidget {
   final String text;
 
-  const BoxItem({Key? key, required this.text}) : super(key: key);
+  const BoxItem({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/state/synonym_cubit.dart';
+import 'package:toefl_app/learn/widget/bottom_backgorund.dart';
+import 'package:toefl_app/learn/widget/button_next.dart';
 
 class SynonymGame extends StatefulWidget {
   const SynonymGame({super.key});
@@ -21,10 +23,6 @@ class _SynonymGameState extends State<SynonymGame> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: InkWell(
-          onTap: () {},
-          child: Icon(Icons.arrow_back),
-        ),
         title: Text(
           'Synonym',
           style: TextStyle(fontWeight: FontWeight.bold),
@@ -59,7 +57,7 @@ class _SynonymGameState extends State<SynonymGame> {
                                       .getChosenText1(kata1);
                                 },
                                 child: Container(
-                                    height: 50,
+                                    height: 60,
                                     width: 150,
                                     decoration: BoxDecoration(
                                       borderRadius: const BorderRadius.all(
@@ -98,7 +96,7 @@ class _SynonymGameState extends State<SynonymGame> {
                                       .getChosenText2(kata2);
                                 },
                                 child: Container(
-                                    height: 50,
+                                    height: 60,
                                     width: 150,
                                     decoration: BoxDecoration(
                                       borderRadius: const BorderRadius.all(
@@ -127,41 +125,11 @@ class _SynonymGameState extends State<SynonymGame> {
               )
             ],
           ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              height: 90.0,
-              color: Colors.white,
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: InkWell(
-                  onTap: () {},
-                  child: Container(
-                    padding: EdgeInsets.only(right: 20, left: 20),
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: const Color(0xFF14487A),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(),
-                        Text(
-                          "Next",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        Icon(
-                          Icons.arrow_forward,
-                          color: Colors.white,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+          BottomBackground(
+            butoon1: Container(),
+            button2: InkWell(
+              onTap: () {},
+              child: ButtonNext(next: true,),
             ),
           ),
         ],
