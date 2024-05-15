@@ -5,6 +5,7 @@ import 'package:toefl_app/domain/state/authentication_cubit.dart';
 import 'package:toefl_app/domain/state/user_cubit.dart';
 import 'package:toefl_app/presentation/screens/home_screen.dart';
 import 'package:toefl_app/presentation/screens/register_screen.dart';
+import 'package:toefl_app/presentation/widgets/login_input.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -120,86 +121,55 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.circular(10.0), // Rounded corners
-                            border: Border.all(
-                              color: Color(0xFF14487A), // Warna border
-                            ),
-                          ),
-                          margin: const EdgeInsets.only(bottom: 10),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 20),
-                            child: TextFormField(
-                              controller: _emailController,
-                              decoration: const InputDecoration(
-                                hintText: 'Email',
-                                border: InputBorder.none,
-                                contentPadding:
-                                    EdgeInsets.symmetric(vertical: 14),
-                              ),
-                              keyboardType: TextInputType.emailAddress,
-                              validator: (value) {
-                                if (value == null) {
-                                  return 'Email can not be empty';
-                                }
+                        LoginInput(
+                          hintText: "Fill your email",
+                          labelText: "Email",
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Email can not be empty';
+                            }
 
-                                if (value.isEmpty) {
-                                  return 'Email can not be empty';
-                                }
+                            if (value.isEmpty) {
+                              return 'Email can not be empty';
+                            }
 
-                                final emailRegex = RegExp(
-                                    r'^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+                            final emailRegex = RegExp(
+                                r'^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
 
-                                if (!emailRegex.hasMatch(value)) {
-                                  return 'Please input valid email';
-                                }
+                            if (!emailRegex.hasMatch(value)) {
+                              return 'Please input valid email';
+                            }
 
-                                return null;
-                              },
-                            ),
-                          ),
+                            return null;
+                          },
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.circular(10), // Rounded corners
-                            border: Border.all(
-                              color: Color(0xFF14487A), // Warna border
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 20),
-                            child: TextFormField(
-                              controller: _passwordController,
-                              decoration: const InputDecoration(
-                                hintText: 'Password',
-                                border: InputBorder.none,
-                                contentPadding:
-                                    EdgeInsets.symmetric(vertical: 14),
-                              ),
-                              obscureText: true,
-                              enableSuggestions: false,
-                              autocorrect: false,
-                              validator: (value) {
-                                if (value == null) {
-                                  return 'Password can not be empty';
-                                }
+                        const SizedBox(height: 12),
+                        LoginInput(
+                          labelText: "Password",
+                          hintText: 'Fill your password',
+                          controller: _passwordController,
+                          obscureText: true,
+                          enableSuggestions: false,
+                          autocorrect: false,
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Password can not be empty';
+                            }
 
-                                if (value.isEmpty) {
-                                  return 'Password can not be empty';
-                                }
+                            if (value.isEmpty) {
+                              return 'Password can not be empty';
+                            }
 
-                                if (value.length < 8) {
-                                  return 'Password must be longer than 8 characters';
-                                }
+                            if (value.length < 8) {
+                              return 'Password must be longer than 8 characters';
+                            }
 
-                                return null;
-                              },
-                            ),
-                          ),
+                            return null;
+                          },
                         ),
+                        const SizedBox(height: 35),
                         Container(
                           margin: const EdgeInsets.only(
                               top:
@@ -224,7 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   0), // Menghilangkan padding bawaan ElevatedButton
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(
-                                    10), // Atur radius border
+                                    99), // Atur radius border
                               ),
                             ),
                             child: Ink(
@@ -238,7 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   end: Alignment.centerRight,
                                 ),
                                 borderRadius: BorderRadius.circular(
-                                    10), // Atur radius border
+                                    99), // Atur radius border
                               ),
                               child: Container(
                                 alignment: Alignment.center,
@@ -253,6 +223,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
+                        const SizedBox(height: 12),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

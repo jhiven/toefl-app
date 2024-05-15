@@ -4,8 +4,10 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/state/authentication_cubit.dart';
 import 'package:toefl_app/domain/state/user_cubit.dart';
+import 'package:toefl_app/presentation/screens/history_screen.dart';
 import 'package:toefl_app/presentation/screens/home_screen.dart';
 import 'package:toefl_app/presentation/screens/login_screen.dart';
+import 'package:toefl_app/presentation/screens/result_screen.dart';
 import 'package:toefl_app/utils/supabase_env.dart';
 
 void main() async {
@@ -44,8 +46,8 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
+        themeMode: ThemeMode.light,
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
         debugShowCheckedModeBanner: false,
