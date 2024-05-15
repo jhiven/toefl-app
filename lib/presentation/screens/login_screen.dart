@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toefl_app/domain/state/authentication_cubit.dart';
-import 'package:toefl_app/domain/state/user_cubit.dart';
+import 'package:toefl_app/domain/state/auth/authentication_cubit.dart';
+import 'package:toefl_app/domain/state/user/user_cubit.dart';
 import 'package:toefl_app/presentation/screens/home_screen.dart';
 import 'package:toefl_app/presentation/screens/register_screen.dart';
 import 'package:toefl_app/presentation/widgets/login_input.dart';

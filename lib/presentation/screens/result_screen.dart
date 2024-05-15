@@ -255,7 +255,7 @@ class ResultPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   textStyle: const TextStyle(
                     fontSize: 18,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 child: const Center(
