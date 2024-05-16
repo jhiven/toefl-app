@@ -10,7 +10,7 @@ import 'package:toefl_app/domain/state/test_packet/test_packet_cubit.dart';
 import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
 import 'package:toefl_app/domain/state/timer/timer_bloc.dart';
 import 'package:toefl_app/domain/state/user/user_cubit.dart';
-import 'package:toefl_app/presentation/screens/home_screen.dart';
+import 'package:toefl_app/presentation/screens/home_page.dart';
 import 'package:toefl_app/presentation/screens/login_screen.dart';
 import 'package:toefl_app/utils/supabase_constants.dart';
 
@@ -30,7 +30,7 @@ void main() async {
       ),
       home: supabase.client.auth.currentSession == null
           ? const LoginScreen()
-          : const HomeScreen(),
+          : const HomePage(),
     ),
   );
 }

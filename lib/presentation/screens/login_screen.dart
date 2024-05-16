@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/state/auth/authentication_cubit.dart';
 import 'package:toefl_app/domain/state/user/user_cubit.dart';
-import 'package:toefl_app/presentation/screens/home_screen.dart';
+import 'package:toefl_app/presentation/screens/home_page.dart';
 import 'package:toefl_app/presentation/screens/register_screen.dart';
 import 'package:toefl_app/presentation/widgets/login_input.dart';
 
@@ -48,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) {
-                  return const HomeScreen();
+                  return const HomePage();
                 },
               ),
             );
@@ -64,9 +63,6 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: const BackButton(
-            color: Colors.black,
-          ),
         ),
         body: Column(
           mainAxisAlignment:
