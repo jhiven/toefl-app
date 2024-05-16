@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:toefl_app/presentation/screens/home_test.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toefl_app/data/repository/auth_repository.dart';
+import 'package:toefl_app/presentation/screens/home_tests.dart';
+import 'package:toefl_app/presentation/screens/login_screen.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key});
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,8 +15,9 @@ class HomePage extends StatelessWidget {
           icon: const BackButtonIcon(),
           color: const Color(0xFF14487A),
           onPressed: () {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const HomeTest()));
+            context.read<AuthRepository>().logout();
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const LoginScreen()));
           },
         ),
       ),
@@ -23,65 +27,35 @@ class HomePage extends StatelessWidget {
         children: [
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(
-                top: 110,
-              ),
+              padding: const EdgeInsets.only(top: 70),
               child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    RichText(
-                      textAlign: TextAlign.center,
-                      text: const TextSpan(
-                        style: TextStyle(
-                          fontSize: 34,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: 'TOEFL ',
-                            style: TextStyle(color: Color(0xFF14487A)),
-                          ),
-                          TextSpan(
-                            text: 'PENS',
-                            style: TextStyle(color: Color(0xFFF6C410)),
-                          ),
-                        ],
+                child: RichText(
+                  text: const TextSpan(
+                    style: TextStyle(
+                      fontSize: 34,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: 'TOEFL ',
+                        style: TextStyle(color: Color(0xFF14487A)),
                       ),
-                    ),
-                    const Text(
-                      'Test',
-                      style: TextStyle(
-                          color: Color(0xFF14487A),
-                          fontSize: 24,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ],
+                      TextSpan(
+                        text: 'PENS',
+                        style: TextStyle(color: Color(0xFFF6C410)),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.only(right: 10),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 50),
             child: Center(
-              child: Text(
-                'You Have 3 Times of Chance to Test',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Color(0xFF14487A),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(top: 15, left: 35, bottom: 20),
-            child: Text(
-              'Credit : x ',
-              style: TextStyle(
-                fontSize: 16,
-                color: Color(0xFF14487A),
-                fontWeight: FontWeight.normal,
+              child: Image.asset(
+                'assets/images/home.png',
+                height: 250,
               ),
             ),
           ),
@@ -97,9 +71,25 @@ class HomePage extends StatelessWidget {
                       backgroundColor: const Color(0xFF14487A),
                     ),
                     child: const Text(
-                      'Start Test',
+                      'Learn',
                       style: TextStyle(color: Colors.white),
                     ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: 350,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const HomeTest()));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 50),
+                      backgroundColor: const Color(0xFF14487A),
+                    ),
+                    child: const Text('Test',
+                        style: TextStyle(color: Colors.white)),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -109,24 +99,10 @@ class HomePage extends StatelessWidget {
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
-                      backgroundColor: Colors.white,
-                      side: const BorderSide(color: Color(0xFF14487A)),
+                      backgroundColor: const Color(0xFF14487A),
                     ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Get Pro',
-                          style: TextStyle(
-                            color: Color(0xFF14487A),
-                          ),
-                        ),
-                        Icon(
-                          Icons.workspace_premium,
-                          color: Color(0xFFF6C410),
-                        )
-                      ],
-                    ),
+                    child: const Text('History',
+                        style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ],
