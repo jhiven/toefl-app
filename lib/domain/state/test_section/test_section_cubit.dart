@@ -23,6 +23,15 @@ class TestSectionCubit extends Cubit<TestSectionState> {
     );
   }
 
+  void startSection() {
+    emit(
+      state.copyWith(
+        isShowInstruction: false,
+        status: TestSectionStatus.success,
+      ),
+    );
+  }
+
   void nextQuestion() {
     final int idx = state.currentQuestionIdx + 1;
     try {
