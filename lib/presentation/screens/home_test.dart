@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:toefl_app/presentation/screen/home_test.dart';
+import 'package:toefl_app/presentation/screens/home_page.dart';
+import 'package:toefl_app/presentation/screens/home_test.dart';
 
-class TestPage extends StatelessWidget {
-  const TestPage({Key? key});
+class HomeTest extends StatelessWidget {
+  const HomeTest({Key? key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:toefl_app/presentation/screen/test_page.dart';
+import 'package:toefl_app/presentation/screens/home_test.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key});
@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
           color: const Color(0xFF14487A),
           onPressed: () {
             Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const TestPage()));
+                MaterialPageRoute(builder: (context) => const HomeTest()));
           },
         ),
       ),

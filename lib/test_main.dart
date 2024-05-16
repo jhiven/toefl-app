@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:toefl_app/presentation/screen/home_test.dart';
+import 'package:toefl_app/presentation/screens/home_page.dart';
 
 void main() {
   runApp(const MyApp());
