@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
 import 'package:toefl_app/presentation/widgets/audio_player.dart';
 import 'package:toefl_app/presentation/widgets/primary_button.dart';
 
@@ -72,7 +74,12 @@ class _PreparationPageState extends State<PreparationPage> {
                     AudioPlayerWidget(url: widget.url!),
                   ],
                   Spacer(),
-                  const PrimaryButton(),
+                  PrimaryButton(
+                    textButton: "Start",
+                    onPressed: () {
+                      context.read<TestSectionCubit>().startSection();
+                    },
+                  ),
                 ]),
           ),
         ),

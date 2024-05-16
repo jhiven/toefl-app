@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {
   final VoidCallback? onPressed;
-  const PrimaryButton({super.key, this.onPressed});
+  final String? textButton;
+  const PrimaryButton({super.key, this.onPressed, this.textButton});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class PrimaryButton extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           Text(
-            "Next",
+            textButton ?? "Next",
             textAlign: TextAlign.center,
             style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
           ),

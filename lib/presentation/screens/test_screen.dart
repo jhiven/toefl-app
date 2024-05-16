@@ -4,6 +4,7 @@ import 'package:toefl_app/domain/models/test_section_model.dart';
 import 'package:toefl_app/domain/state/test_packet/test_packet_cubit.dart';
 import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
 import 'package:toefl_app/domain/state/timer/timer_bloc.dart';
+import 'package:toefl_app/presentation/screens/listening_direction.dart';
 import 'package:toefl_app/presentation/screens/listening_test.dart';
 import 'package:toefl_app/presentation/widgets/audio_player.dart';
 
@@ -37,7 +38,7 @@ class TestScreen extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 );
               case TestPacketAnswering():
-                return ListeningTest();
+                return _buildQuestionView();
               case TestPacketError():
                 return Text(state.errorMsg);
               case TestPacketDone():
@@ -97,11 +98,11 @@ class TestScreen extends StatelessWidget {
           case TestSectionStatus.success:
             final answerList = state.currentQuestion.answerList;
             if (state.isShowInstruction) {
-              return const SizedBox();
+              return ListeningPage();
             } else {
               switch (state.section.sectionType) {
                 case SectionType.listening:
-                  return const SizedBox();
+                  return ListeningTest();
                 default:
                   return ListView(
                     children: [
