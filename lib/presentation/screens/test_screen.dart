@@ -13,9 +13,7 @@ class TestScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Test'),
-      ),
+      appBar: AppBar(),
       body: MultiBlocListener(
         listeners: [
           BlocListener<TestPacketCubit, TestPacketState>(
@@ -98,51 +96,60 @@ class TestScreen extends StatelessWidget {
             );
           case TestSectionStatus.success:
             final answerList = state.currentQuestion.answerList;
-            return ListView(
-              children: [
-                BlocConsumer<TimerBloc, TimerState>(
-                  listener: (context, state) {
-                    context.read<TestSectionCubit>().sectionTimeout();
-                  },
-                  listenWhen: (previous, current) =>
-                      previous is TimerRunInProgress &&
-                      current is TimerRunComplete,
-                  builder: (context, state) {
-                    switch (state) {
-                      case TimerInitial():
-                        return const CircularProgressIndicator();
-                      case TimerRunInProgress():
-                        return Text('waktu: ${state.duration}');
-                      case TimerRunComplete():
-                        return const SizedBox();
-                    }
-                  },
-                ),
-                if (state.section.sectionType == SectionType.listening)
-                  AudioPlayerWidget(
-                    url: state.currentQuestion.url!,
-                  ),
-                if (state.currentQuestion.question != null)
-                  Text(state.currentQuestion.question!),
-                ...answerList.map(
-                  (answer) => ListTile(
-                    title: Text(answer.answer),
-                    onTap: () {
-                      context
-                          .read<TestSectionCubit>()
-                          .setSelectedAnswer(answer: answer);
-                    },
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    context.read<TestSectionCubit>().checkAnswer();
-                    context.read<TestSectionCubit>().nextQuestion();
-                  },
-                  child: const Text('Next'),
-                )
-              ],
-            );
+            if (state.isShowInstruction) {
+              return const SizedBox();
+            } else {
+              switch (state.section.sectionType) {
+                case SectionType.listening:
+                  return const SizedBox();
+                default:
+                  return ListView(
+                    children: [
+                      BlocConsumer<TimerBloc, TimerState>(
+                        listener: (context, state) {
+                          context.read<TestSectionCubit>().sectionTimeout();
+                        },
+                        listenWhen: (previous, current) =>
+                            previous is TimerRunInProgress &&
+                            current is TimerRunComplete,
+                        builder: (context, state) {
+                          switch (state) {
+                            case TimerInitial():
+                              return const CircularProgressIndicator();
+                            case TimerRunInProgress():
+                              return Text('waktu: ${state.duration}');
+                            case TimerRunComplete():
+                              return const SizedBox();
+                          }
+                        },
+                      ),
+                      if (state.section.sectionType == SectionType.listening)
+                        AudioPlayerWidget(
+                          url: state.currentQuestion.url!,
+                        ),
+                      if (state.currentQuestion.question != null)
+                        Text(state.currentQuestion.question!),
+                      ...answerList.map(
+                        (answer) => ListTile(
+                          title: Text(answer.answer),
+                          onTap: () {
+                            context
+                                .read<TestSectionCubit>()
+                                .setSelectedAnswer(answer: answer);
+                          },
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          context.read<TestSectionCubit>().checkAnswer();
+                          context.read<TestSectionCubit>().nextQuestion();
+                        },
+                        child: const Text('Next'),
+                      )
+                    ],
+                  );
+              }
+            }
           case TestSectionStatus.done:
             return _buildChangeSectionView(
               context: context,
