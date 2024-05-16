@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:toefl_app/presentation/screens/listening_direction.dart';
+import 'package:toefl_app/presentation/screens/test_screen.dart';
 
 class HomeTest extends StatelessWidget {
   const HomeTest({super.key});
@@ -91,8 +91,11 @@ class HomeTest extends StatelessWidget {
                   width: 350,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const ListeningPage()));
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const TestScreen(),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),

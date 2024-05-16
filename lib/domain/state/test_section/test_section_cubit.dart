@@ -16,6 +16,7 @@ class TestSectionCubit extends Cubit<TestSectionState> {
         currentQuestion: section.questionList.first,
         status: TestSectionStatus.success,
         selectedAnswer: TestAnswerModel.empty,
+        isShowInstruction: true,
         currentQuestionIdx: 0,
         totalCorrect: 0,
         totalIncorrect: 0,

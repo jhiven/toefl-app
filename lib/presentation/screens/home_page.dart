@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/data/repository/auth_repository.dart';
+import 'package:toefl_app/presentation/screens/history_screen.dart';
 import 'package:toefl_app/presentation/screens/home_tests.dart';
 import 'package:toefl_app/presentation/screens/login_screen.dart';
 
@@ -96,7 +97,11 @@ class HomePage extends StatelessWidget {
                 SizedBox(
                   width: 350,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const HistoryPage(),
+                      ));
+                    },
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
                       backgroundColor: const Color(0xFF14487A),

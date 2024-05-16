@@ -4,28 +4,20 @@ import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
 import 'package:toefl_app/presentation/widgets/audio_player.dart';
 import 'package:toefl_app/presentation/widgets/primary_button.dart';
 
-class PreparationPage extends StatefulWidget {
+class PreparationPage extends StatelessWidget {
   final String heading;
   final String desc;
   final String? url;
 
   const PreparationPage({
-    Key? key,
+    super.key,
     required this.heading,
     required this.desc,
     this.url,
-  }) : super(key: key);
-
-  @override
-  State<PreparationPage> createState() => _PreparationPageState();
-}
-
-class _PreparationPageState extends State<PreparationPage> {
-  late MediaQueryData queryData;
+  });
 
   @override
   Widget build(BuildContext context) {
-    queryData = MediaQuery.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -33,7 +25,7 @@ class _PreparationPageState extends State<PreparationPage> {
         Padding(
           padding: const EdgeInsets.all(20),
           child: Text(
-            widget.heading,
+            heading,
             style: TextStyle(
               color: Theme.of(context).colorScheme.primary,
               fontSize: 24,
@@ -55,7 +47,7 @@ class _PreparationPageState extends State<PreparationPage> {
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Text(
-              widget.desc,
+              desc,
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 16,
@@ -65,22 +57,23 @@ class _PreparationPageState extends State<PreparationPage> {
         ),
         Expanded(
           child: Padding(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (widget.url != null) ...[
-                    AudioPlayerWidget(url: widget.url!),
-                  ],
-                  Spacer(),
-                  PrimaryButton(
-                    textButton: "Start",
-                    onPressed: () {
-                      context.read<TestSectionCubit>().startSection();
-                    },
-                  ),
-                ]),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (url != null) ...[
+                  AudioPlayerWidget(url: url!),
+                ],
+                const Spacer(),
+                PrimaryButton(
+                  textButton: "Start",
+                  onPressed: () {
+                    context.read<TestSectionCubit>().startSection();
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ],

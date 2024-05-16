@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 class Result extends StatelessWidget {
   final String tesSection;
 
-  const Result({Key? key, required this.tesSection}) : super(key: key);
+  const Result({
+    super.key,
+    required this.tesSection,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,7 @@ class Result extends StatelessWidget {
             border: Border.all(color: Theme.of(context).colorScheme.primary),
             borderRadius: BorderRadius.circular(24.0),
           ),
-          child: Icon(Icons.arrow_back),
+          child: const Icon(Icons.arrow_back),
         ),
       ],
     );

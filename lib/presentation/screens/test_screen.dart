@@ -6,6 +6,7 @@ import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
 import 'package:toefl_app/domain/state/timer/timer_bloc.dart';
 import 'package:toefl_app/presentation/screens/listening_direction.dart';
 import 'package:toefl_app/presentation/screens/listening_test.dart';
+import 'package:toefl_app/presentation/screens/result_screen.dart';
 import 'package:toefl_app/presentation/widgets/audio_player.dart';
 
 class TestScreen extends StatelessWidget {
@@ -42,10 +43,10 @@ class TestScreen extends StatelessWidget {
               case TestPacketError():
                 return Text(state.errorMsg);
               case TestPacketDone():
-                return _buildTotalScoreView(
+                return ResultPage(
                   listeningScore: state.listeningScore,
-                  structureScore: state.structureScore,
                   readingScore: state.readingScore,
+                  structureScore: state.structureScore,
                   totalScore: state.totalScore,
                 );
             }
@@ -98,11 +99,11 @@ class TestScreen extends StatelessWidget {
           case TestSectionStatus.success:
             final answerList = state.currentQuestion.answerList;
             if (state.isShowInstruction) {
-              return ListeningPage();
+              return const ListeningPage();
             } else {
               switch (state.section.sectionType) {
                 case SectionType.listening:
-                  return ListeningTest();
+                  return const ListeningTest();
                 default:
                   return ListView(
                     children: [
@@ -179,17 +180,6 @@ class TestScreen extends StatelessWidget {
           child: const Text('Next'),
         ),
       ],
-    );
-  }
-
-  Widget _buildTotalScoreView({
-    required double listeningScore,
-    required double structureScore,
-    required double readingScore,
-    required double totalScore,
-  }) {
-    return Text(
-      'listeningScore: $listeningScore, structureScore: $structureScore, readingScore: $readingScore, total: $totalScore',
     );
   }
 }

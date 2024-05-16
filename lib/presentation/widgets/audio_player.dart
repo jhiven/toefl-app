@@ -33,21 +33,27 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
 
   void _initializePlayer() {
     _audioPlayer.onPlayerStateChanged.listen((state) {
-      setState(() {
-        _isPlaying = state == PlayerState.playing;
-      });
+      if (mounted) {
+        setState(() {
+          _isPlaying = state == PlayerState.playing;
+        });
+      }
     });
 
     _audioPlayer.onDurationChanged.listen((newDuration) {
-      setState(() {
-        _duration = newDuration;
-      });
+      if (mounted) {
+        setState(() {
+          _duration = newDuration;
+        });
+      }
     });
 
     _audioPlayer.onPositionChanged.listen((newPosition) {
-      setState(() {
-        _position = newPosition;
-      });
+      if (mounted) {
+        setState(() {
+          _position = newPosition;
+        });
+      }
     });
   }
 

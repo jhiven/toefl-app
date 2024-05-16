@@ -2,7 +2,6 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toefl_app/bloc_observer.dart';
 import 'package:toefl_app/data/provider/supabase_database.dart';
 import 'package:toefl_app/data/repository/auth_repository.dart';
 import 'package:toefl_app/data/repository/test_repository.dart';
@@ -18,7 +17,7 @@ import 'package:toefl_app/utils/supabase_constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Bloc.observer = SimpleBlocObserver();
+  // Bloc.observer = SimpleBlocObserver();
 
   final supabase = await Supabase.initialize(
     url: SupabaseConstants.url,
