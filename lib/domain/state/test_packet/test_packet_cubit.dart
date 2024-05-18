@@ -100,12 +100,12 @@ class TestPacketCubit extends Cubit<TestPacketState> {
 
       emit(const TestPacketLoading());
 
-      await _testRepository.insertHistory(
-        listeningScore: tps.listeningScore,
-        readingScore: tps.readingScore,
-        structureScore: tps.structureScore,
-        packetId: tps.packet.id,
-      );
+      // await _testRepository.insertHistory(
+      //   listeningScore: tps.listeningScore,
+      //   readingScore: tps.readingScore,
+      //   structureScore: tps.structureScore,
+      //   packetId: tps.packet.id,
+      // );
 
       emit(
         TestPacketDone(

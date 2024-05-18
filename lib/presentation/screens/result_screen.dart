@@ -18,6 +18,7 @@ class ResultPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TestLayout(
+      buttonText: 'Back to home',
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
