@@ -12,8 +12,9 @@ class TestPacketCubit extends Cubit<TestPacketState> {
 
   TestPacketCubit(this._testRepository) : super(TestPacketInitial());
 
-  void startTest(int userId) async {
+  void startTest() async {
     try {
+      emit(const TestPacketLoading());
       // final TestPacketModel packet = await _testRepository.getRandomPacket();
       final TestPacketModel packet = await _testRepository.getPacketById(1);
 

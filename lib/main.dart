@@ -78,7 +78,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => TestPacketCubit(
               context.read<TestRepository>(),
-            )..startTest(1),
+            ),
           ),
           BlocProvider(
             create: (context) => TestSectionCubit(),

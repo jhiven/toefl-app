@@ -29,10 +29,17 @@ class TestScreen extends StatelessWidget {
           BlocListener<TestPacketCubit, TestPacketState>(
             listener: _onChangeSection,
             listenWhen: (previous, current) =>
-                previous is TestPacketInitial && current is TestPacketAnswering,
+                previous is TestPacketLoading && current is TestPacketAnswering,
+          ),
+          BlocListener<TestSectionCubit, TestSectionState>(
+            listener: _onSectionStart,
+            listenWhen: (previous, current) =>
+                previous.isShowInstruction != current.isShowInstruction &&
+                current.isShowInstruction == false,
           ),
         ],
         child: BlocBuilder<TestPacketCubit, TestPacketState>(
+          buildWhen: (previous, current) => previous != current,
           builder: (context, state) {
             switch (state) {
               case TestPacketLoading():
@@ -65,6 +72,7 @@ class TestScreen extends StatelessWidget {
               sectionType: state.section.sectionType,
               totalCorrect: state.totalCorrect,
             );
+        context.read<TimerBloc>().add(const TimerStop());
       },
       listenWhen: (previous, current) =>
           previous.status == TestSectionStatus.success &&
@@ -104,19 +112,29 @@ class TestScreen extends StatelessWidget {
     context.read<TestSectionCubit>().setTestSection(
           section: state.currentSection,
         );
-    switch (state.currentSection.sectionType) {
-      case SectionType.listening:
-        context
-            .read<TimerBloc>()
-            .add(const TimerStarted(duration: Duration(hours: 1)));
-      case SectionType.structure:
-        context
-            .read<TimerBloc>()
-            .add(const TimerStarted(duration: Duration(hours: 1)));
-      case SectionType.reading:
-        context
-            .read<TimerBloc>()
-            .add(const TimerStarted(duration: Duration(hours: 1)));
+  }
+
+  void _onSectionStart(BuildContext context, TestSectionState state) {
+    final packetState = context.read<TestPacketCubit>().state;
+
+    switch (packetState) {
+      case TestPacketAnswering():
+        switch (state.section.sectionType) {
+          case SectionType.listening:
+            context
+                .read<TimerBloc>()
+                .add(const TimerStarted(duration: Duration(hours: 1)));
+          case SectionType.structure:
+            context
+                .read<TimerBloc>()
+                .add(const TimerStarted(duration: Duration(hours: 1)));
+          case SectionType.reading:
+            context
+                .read<TimerBloc>()
+                .add(const TimerStarted(duration: Duration(hours: 1)));
+          default:
+            break;
+        }
       default:
         break;
     }

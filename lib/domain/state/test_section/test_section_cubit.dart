@@ -40,6 +40,7 @@ class TestSectionCubit extends Cubit<TestSectionState> {
         state.copyWith(
           currentQuestion: state.section.questionList[idx],
           currentQuestionIdx: idx,
+          selectedAnswer: TestAnswerModel.empty,
           status: TestSectionStatus.success,
         ),
       );

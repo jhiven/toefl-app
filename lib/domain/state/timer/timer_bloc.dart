@@ -9,6 +9,7 @@ part 'timer_state.dart';
 class TimerBloc extends Bloc<TimerEvent, TimerState> {
   TimerBloc() : super(TimerInitial()) {
     on<TimerStarted>(_onTimerStarted);
+    on<TimerStop>(_onTimerStop);
     on<_TimerTicked>(_onTimerTicked);
   }
 
@@ -41,5 +42,11 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
           ? TimerRunInProgress(duration: event.duration)
           : TimerRunComplete(),
     );
+  }
+
+  void _onTimerStop(TimerStop event, Emitter<TimerState> emit) {
+    _tickerSubscription?.cancel();
+
+    emit(TimerRunComplete());
   }
 }
