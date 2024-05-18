@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:equatable/equatable.dart';
 import 'package:toefl_app/data/repository/test_repository.dart';
 import 'package:toefl_app/domain/models/test_packet_model.dart';
@@ -53,7 +54,7 @@ class TestPacketCubit extends Cubit<TestPacketState> {
 
         emit(
           tps.copyWith(
-            listeningScore: score * 10 / 3,
+            listeningScore: (score * 10 / 3).floor(),
           ),
         );
       case SectionType.structure:
@@ -61,7 +62,7 @@ class TestPacketCubit extends Cubit<TestPacketState> {
 
         emit(
           tps.copyWith(
-            structureScore: score * 10 / 3,
+            structureScore: (score * 10 / 3).floor(),
           ),
         );
       case SectionType.reading:
@@ -69,7 +70,7 @@ class TestPacketCubit extends Cubit<TestPacketState> {
 
         emit(
           tps.copyWith(
-            readingScore: score * 10 / 3,
+            readingScore: (score * 10 / 3).floor(),
           ),
         );
       default:
@@ -87,6 +88,7 @@ class TestPacketCubit extends Cubit<TestPacketState> {
 
     final TestPacketAnswering tps = state as TestPacketAnswering;
     final int idx = tps.currentSectionIdx + 1;
+    late final void Function()? loading;
 
     try {
       emit(
@@ -95,8 +97,11 @@ class TestPacketCubit extends Cubit<TestPacketState> {
           currentSectionIdx: idx,
         ),
       );
+      loading = null;
     } on RangeError catch (_) {
       final total = tps.listeningScore + tps.readingScore + tps.structureScore;
+
+      loading = BotToast.showLoading();
 
       await _testRepository.insertHistory(
         listeningScore: tps.listeningScore,
@@ -115,6 +120,8 @@ class TestPacketCubit extends Cubit<TestPacketState> {
       );
     } catch (e) {
       throw Exception(e.toString());
+    } finally {
+      if (loading != null) loading();
     }
   }
 }

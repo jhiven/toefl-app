@@ -111,16 +111,16 @@ class SupabaseDatabase {
 
   Future<void> insertHistory({
     required int packetId,
-    required double listeningScore,
-    required double readingScore,
-    required double structureScore,
+    required int listeningScore,
+    required int readingScore,
+    required int structureScore,
   }) async {
     final data = {
       'packet_id': packetId,
       'user_id': _supabaseClient.auth.currentUser!.id,
-      'listening_score': listeningScore.floor(),
-      'reading_score': readingScore.floor(),
-      'structure_score': structureScore.floor(),
+      'listening_score': listeningScore,
+      'reading_score': readingScore,
+      'structure_score': structureScore,
     };
 
     try {

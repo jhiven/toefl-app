@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 final appTheme = ThemeData.light().copyWith(
   colorScheme: const ColorScheme.light().copyWith(
     primary: const Color(0xff14487A), // button klik primary
-    onPrimary: Color.fromARGB(255, 140, 168, 197), // putih untuk pop up dll nya
-    surface: const Color.fromRGBO(0, 106, 106, 1), //profil edit , menu
+    onPrimary:
+        const Color.fromRGBO(255, 255, 255, 1), // putih untuk pop up dll nya
+    // surface: const Color.fromRGBO(0, 106, 106, 1), //profil edit , menu
     onSurface: const Color.fromRGBO(0, 0, 0, 1),
     secondary: const Color(0xffF6C410), // tulisan point
     secondaryContainer:
