@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
-import 'package:toefl_app/presentation/screens/test_layout.dart';
+import 'package:toefl_app/presentation/screens/question_layout.dart';
 import 'package:toefl_app/presentation/widgets/answer_list_button.dart';
 
 class ReadingQuestion extends StatelessWidget {
@@ -9,12 +9,17 @@ class ReadingQuestion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TestLayout(
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return QuestionLayout(
+      child: ListView(
         children: [
           _storyText(),
+          const SizedBox(
+            height: 12,
+          ),
           _questionCard(),
+          const SizedBox(
+            height: 12,
+          ),
           const AnswerListButton(),
         ],
       ),
@@ -27,9 +32,9 @@ _storyText() {
     builder: (context, state) {
       switch (state.status) {
         case TestSectionStatus.success:
-          if (state.currentQuestion.question != null) {
+          if (state.currentQuestion.text != null) {
             return Text(
-              state.currentQuestion.question!,
+              state.currentQuestion.text!,
               textAlign: TextAlign.justify,
             );
           } else {
@@ -47,10 +52,19 @@ _questionCard() {
     builder: (context, state) {
       switch (state.status) {
         case TestSectionStatus.success:
-          if (state.currentQuestion.text != null) {
-            return Text(
-              state.currentQuestion.text!,
-              textAlign: TextAlign.justify,
+          if (state.currentQuestion.question != null) {
+            return Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              color: const Color.fromRGBO(196, 209, 222, 1),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Text(
+                  state.currentQuestion.question!,
+                  style: const TextStyle(fontSize: 14),
+                ),
+              ),
             );
           } else {
             return const SizedBox();

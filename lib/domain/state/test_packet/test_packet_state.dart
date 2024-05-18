@@ -7,8 +7,6 @@ sealed class TestPacketState extends Equatable {
   List<Object> get props => [];
 }
 
-final class TestPacketInitial extends TestPacketState {}
-
 final class TestPacketAnswering extends TestPacketState {
   final TestPacketModel packet;
   final TestSectionModel currentSection;
@@ -85,3 +83,9 @@ final class TestPacketDone extends TestPacketState {
         totalScore,
       ];
 }
+
+final class TestPacketLoading extends TestPacketState {
+  const TestPacketLoading();
+}
+
+final class TestPacketInitial extends TestPacketState {}

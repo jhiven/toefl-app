@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:equatable/equatable.dart';
 import 'package:toefl_app/data/repository/test_repository.dart';
 import 'package:toefl_app/domain/models/test_packet_model.dart';
@@ -88,7 +87,6 @@ class TestPacketCubit extends Cubit<TestPacketState> {
 
     final TestPacketAnswering tps = state as TestPacketAnswering;
     final int idx = tps.currentSectionIdx + 1;
-    late final void Function()? loading;
 
     try {
       emit(
@@ -97,11 +95,10 @@ class TestPacketCubit extends Cubit<TestPacketState> {
           currentSectionIdx: idx,
         ),
       );
-      loading = null;
     } on RangeError catch (_) {
       final total = tps.listeningScore + tps.readingScore + tps.structureScore;
 
-      loading = BotToast.showLoading();
+      emit(const TestPacketLoading());
 
       await _testRepository.insertHistory(
         listeningScore: tps.listeningScore,
@@ -120,8 +117,6 @@ class TestPacketCubit extends Cubit<TestPacketState> {
       );
     } catch (e) {
       throw Exception(e.toString());
-    } finally {
-      if (loading != null) loading();
     }
   }
 }

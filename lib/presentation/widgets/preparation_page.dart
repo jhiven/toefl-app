@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
+import 'package:toefl_app/presentation/screens/test_layout.dart';
 import 'package:toefl_app/presentation/widgets/audio_player.dart';
-import 'package:toefl_app/presentation/widgets/primary_button.dart';
 
 class PreparationPage extends StatelessWidget {
   final String heading;
@@ -18,18 +16,13 @@ class PreparationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    late MediaQueryData queryData = MediaQuery.of(context);
-    return SizedBox(
-      width: queryData.size.width,
-      height: queryData.size.height - queryData.padding.top - 82,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          const Padding(padding: EdgeInsets.only(top: 50)),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
+    return TestLayout(
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
               heading,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.primary,
@@ -37,52 +30,29 @@ class PreparationPage extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
+            Text(
               'Section Preparation',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
                 fontSize: 24,
               ),
             ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Text(
-                desc,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                ),
+            const SizedBox(
+              height: 24,
+            ),
+            Text(
+              desc,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 16,
               ),
             ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (url != null) ...[
-                    AudioPlayerWidget(url: url!),
-                  ],
-                  const Spacer(),
-                  PrimaryButton(
-                    text: "Start",
-                    onPressed: () {
-                      context.read<TestSectionCubit>().startSection();
-                    },
-                    icon: null,
-                  ),
-                ],
-              ),
+            const SizedBox(
+              height: 24,
             ),
-          ),
-        ],
+            if (url != null) AudioPlayerWidget(url: url!),
+          ],
+        ),
       ),
     );
   }
