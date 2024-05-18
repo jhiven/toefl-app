@@ -78,7 +78,7 @@ class SupabaseDatabase {
       final Map<String, dynamic> data = await _supabaseClient
           .from('test_packet')
           .select(
-            'id, name, test_question(question, url, type_id, test_answer(answer, is_correct))',
+            'id, name, test_question(question, text, url, type_id, test_answer(answer, is_correct))',
           )
           .eq('id', packetId)
           .single();
@@ -111,16 +111,16 @@ class SupabaseDatabase {
 
   Future<void> insertHistory({
     required int packetId,
-    required double listeningScore,
-    required double readingScore,
-    required double structureScore,
+    required int listeningScore,
+    required int readingScore,
+    required int structureScore,
   }) async {
     final data = {
       'packet_id': packetId,
       'user_id': _supabaseClient.auth.currentUser!.id,
-      'listening_score': listeningScore.floor(),
-      'reading_score': readingScore.floor(),
-      'structure_score': structureScore.floor(),
+      'listening_score': listeningScore,
+      'reading_score': readingScore,
+      'structure_score': structureScore,
     };
 
     try {

@@ -53,7 +53,7 @@ class TestPacketCubit extends Cubit<TestPacketState> {
 
         emit(
           tps.copyWith(
-            listeningScore: score * 10 / 3,
+            listeningScore: (score * 10 / 3).floor(),
           ),
         );
       case SectionType.structure:
@@ -61,7 +61,7 @@ class TestPacketCubit extends Cubit<TestPacketState> {
 
         emit(
           tps.copyWith(
-            structureScore: score * 10 / 3,
+            structureScore: (score * 10 / 3).floor(),
           ),
         );
       case SectionType.reading:
@@ -69,7 +69,7 @@ class TestPacketCubit extends Cubit<TestPacketState> {
 
         emit(
           tps.copyWith(
-            readingScore: score * 10 / 3,
+            readingScore: (score * 10 / 3).floor(),
           ),
         );
       default:
@@ -98,12 +98,14 @@ class TestPacketCubit extends Cubit<TestPacketState> {
     } on RangeError catch (_) {
       final total = tps.listeningScore + tps.readingScore + tps.structureScore;
 
-      await _testRepository.insertHistory(
-        listeningScore: tps.listeningScore,
-        readingScore: tps.readingScore,
-        structureScore: tps.structureScore,
-        packetId: tps.packet.id,
-      );
+      emit(const TestPacketLoading());
+
+      // await _testRepository.insertHistory(
+      //   listeningScore: tps.listeningScore,
+      //   readingScore: tps.readingScore,
+      //   structureScore: tps.structureScore,
+      //   packetId: tps.packet.id,
+      // );
 
       emit(
         TestPacketDone(

@@ -22,9 +22,9 @@ class TestRepository {
 
   Future<void> insertHistory({
     required int packetId,
-    required double listeningScore,
-    required double readingScore,
-    required double structureScore,
+    required int listeningScore,
+    required int readingScore,
+    required int structureScore,
   }) async {
     return await _supabaseDatabase.insertHistory(
       packetId: packetId,

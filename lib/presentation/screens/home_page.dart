@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/data/repository/auth_repository.dart';
+import 'package:toefl_app/presentation/screens/history_screen.dart';
 import 'package:toefl_app/presentation/screens/home_tests.dart';
 import 'package:toefl_app/presentation/screens/login_screen.dart';
 
@@ -12,7 +13,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const BackButtonIcon(),
+          icon: const Icon(Icons.logout),
           color: const Color(0xFF14487A),
           onPressed: () {
             context.read<AuthRepository>().logout();
@@ -23,11 +24,12 @@ class HomePage extends StatelessWidget {
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Expanded(
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 64),
             child: Padding(
-              padding: const EdgeInsets.only(top: 70),
+              padding: const EdgeInsets.only(top: 1),
               child: Center(
                 child: RichText(
                   text: const TextSpan(
@@ -81,12 +83,15 @@ class HomePage extends StatelessWidget {
                   width: 350,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const HomeTest()));
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const HomeTest(),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
-                      backgroundColor: const Color(0xFF14487A),
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                     ),
                     child: const Text('Test',
                         style: TextStyle(color: Colors.white)),
@@ -95,14 +100,25 @@ class HomePage extends StatelessWidget {
                 const SizedBox(height: 10),
                 SizedBox(
                   width: 350,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
+                  child: OutlinedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const HistoryPage(),
+                      ));
+                    },
+                    style: OutlinedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
-                      backgroundColor: const Color(0xFF14487A),
+                      backgroundColor: Colors.white,
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
-                    child: const Text('History',
-                        style: TextStyle(color: Colors.white)),
+                    child: Text(
+                      'History',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
                   ),
                 ),
               ],

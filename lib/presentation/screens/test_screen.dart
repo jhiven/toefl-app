@@ -4,7 +4,12 @@ import 'package:toefl_app/domain/models/test_section_model.dart';
 import 'package:toefl_app/domain/state/test_packet/test_packet_cubit.dart';
 import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
 import 'package:toefl_app/domain/state/timer/timer_bloc.dart';
-import 'package:toefl_app/presentation/widgets/audio_player.dart';
+import 'package:toefl_app/presentation/screens/listening_test.dart';
+import 'package:toefl_app/presentation/screens/reading_question.dart';
+import 'package:toefl_app/presentation/screens/result_screen.dart';
+import 'package:toefl_app/presentation/screens/section_direction.dart';
+import 'package:toefl_app/presentation/screens/section_result.dart';
+import 'package:toefl_app/presentation/screens/written_question.dart';
 
 class TestScreen extends StatelessWidget {
   const TestScreen({super.key});
@@ -12,9 +17,6 @@ class TestScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Test'),
-      ),
       body: MultiBlocListener(
         listeners: [
           BlocListener<TestPacketCubit, TestPacketState>(
@@ -33,6 +35,7 @@ class TestScreen extends StatelessWidget {
         child: BlocBuilder<TestPacketCubit, TestPacketState>(
           builder: (context, state) {
             switch (state) {
+              case TestPacketLoading():
               case TestPacketInitial():
                 return const Center(
                   child: CircularProgressIndicator(),
@@ -42,10 +45,10 @@ class TestScreen extends StatelessWidget {
               case TestPacketError():
                 return Text(state.errorMsg);
               case TestPacketDone():
-                return _buildTotalScoreView(
+                return ResultPage(
                   listeningScore: state.listeningScore,
-                  structureScore: state.structureScore,
                   readingScore: state.readingScore,
+                  structureScore: state.structureScore,
                   totalScore: state.totalScore,
                 );
             }
@@ -53,29 +56,6 @@ class TestScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void _onChangeSection(BuildContext context, TestPacketState state) {
-    state as TestPacketAnswering;
-    context.read<TestSectionCubit>().setTestSection(
-          section: state.currentSection,
-        );
-    switch (state.currentSection.sectionType) {
-      case SectionType.listening:
-        context
-            .read<TimerBloc>()
-            .add(const TimerStarted(duration: Duration(seconds: 100)));
-      case SectionType.structure:
-        context
-            .read<TimerBloc>()
-            .add(const TimerStarted(duration: Duration(seconds: 25)));
-      case SectionType.reading:
-        context
-            .read<TimerBloc>()
-            .add(const TimerStarted(duration: Duration(seconds: 55)));
-      default:
-        break;
-    }
   }
 
   Widget _buildQuestionView() {
@@ -96,91 +76,49 @@ class TestScreen extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           case TestSectionStatus.success:
-            final answerList = state.currentQuestion.answerList;
-            return ListView(
-              children: [
-                BlocConsumer<TimerBloc, TimerState>(
-                  listener: (context, state) {
-                    context.read<TestSectionCubit>().sectionTimeout();
-                  },
-                  listenWhen: (previous, current) =>
-                      previous is TimerRunInProgress &&
-                      current is TimerRunComplete,
-                  builder: (context, state) {
-                    switch (state) {
-                      case TimerInitial():
-                        return const CircularProgressIndicator();
-                      case TimerRunInProgress():
-                        return Text('waktu: ${state.duration}');
-                      case TimerRunComplete():
-                        return const SizedBox();
-                    }
-                  },
-                ),
-                if (state.section.sectionType == SectionType.listening)
-                  AudioPlayerWidget(
-                    url: state.currentQuestion.url!,
-                  ),
-                if (state.currentQuestion.question != null)
-                  Text(state.currentQuestion.question!),
-                ...answerList.map(
-                  (answer) => ListTile(
-                    title: Text(answer.answer),
-                    onTap: () {
-                      context
-                          .read<TestSectionCubit>()
-                          .setSelectedAnswer(answer: answer);
-                    },
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    context.read<TestSectionCubit>().checkAnswer();
-                    context.read<TestSectionCubit>().nextQuestion();
-                  },
-                  child: const Text('Next'),
-                )
-              ],
-            );
+            if (state.isShowInstruction) {
+              return SectionDirection(
+                sectionType: state.section.sectionType,
+              );
+            } else {
+              switch (state.section.sectionType) {
+                case SectionType.listening:
+                  return const ListeningTest();
+                case SectionType.structure:
+                  return const WrittenQuestion();
+                case SectionType.reading:
+                  return const ReadingQuestion();
+                default:
+                  return const SizedBox();
+              }
+            }
           case TestSectionStatus.done:
-            return _buildChangeSectionView(
-              context: context,
-              totalCorrect: state.totalCorrect,
-              totalIncorrect: state.totalIncorrect,
-            );
+            return const SectionResult();
         }
       },
     );
   }
 
-  Widget _buildChangeSectionView({
-    required BuildContext context,
-    required int totalCorrect,
-    required int totalIncorrect,
-  }) {
-    return ListView(
-      children: [
-        const Text('Section Done'),
-        Text('total correct: $totalCorrect'),
-        Text('total incorrect: $totalIncorrect'),
-        ElevatedButton(
-          onPressed: () {
-            context.read<TestPacketCubit>().nextSection();
-          },
-          child: const Text('Next'),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTotalScoreView({
-    required double listeningScore,
-    required double structureScore,
-    required double readingScore,
-    required double totalScore,
-  }) {
-    return Text(
-      'listeningScore: $listeningScore, structureScore: $structureScore, readingScore: $readingScore, total: $totalScore',
-    );
+  void _onChangeSection(BuildContext context, TestPacketState state) {
+    state as TestPacketAnswering;
+    context.read<TestSectionCubit>().setTestSection(
+          section: state.currentSection,
+        );
+    switch (state.currentSection.sectionType) {
+      case SectionType.listening:
+        context
+            .read<TimerBloc>()
+            .add(const TimerStarted(duration: Duration(hours: 1)));
+      case SectionType.structure:
+        context
+            .read<TimerBloc>()
+            .add(const TimerStarted(duration: Duration(hours: 1)));
+      case SectionType.reading:
+        context
+            .read<TimerBloc>()
+            .add(const TimerStarted(duration: Duration(hours: 1)));
+      default:
+        break;
+    }
   }
 }

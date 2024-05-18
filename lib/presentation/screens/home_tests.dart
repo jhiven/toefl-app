@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toefl_app/domain/state/user/user_cubit.dart';
+import 'package:toefl_app/presentation/screens/test_screen.dart';
 
 class HomeTest extends StatelessWidget {
   const HomeTest({super.key});
@@ -15,16 +18,15 @@ class HomeTest extends StatelessWidget {
           },
         ),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                top: 110,
-              ),
-              child: Center(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 64),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -32,7 +34,7 @@ class HomeTest extends StatelessWidget {
                       textAlign: TextAlign.center,
                       text: const TextSpan(
                         style: TextStyle(
-                          fontSize: 34,
+                          fontSize: 32,
                           fontWeight: FontWeight.bold,
                         ),
                         children: [
@@ -54,42 +56,64 @@ class HomeTest extends StatelessWidget {
                           fontSize: 24,
                           fontWeight: FontWeight.w500),
                     ),
+                    const SizedBox(
+                      height: 70,
+                    )
                   ],
                 ),
               ),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(right: 10),
-            child: Center(
-              child: Text(
-                'You Have 3 Times of Chance to Test',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Color(0xFF14487A),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+            BlocBuilder<UserCubit, UserState>(
+              builder: (context, state) {
+                switch (state) {
+                  case UserFetchSucess():
+                    return Text(
+                      'You Have ${state.user.testRemaining} Times of Chance to Test',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: Color(0xFF14487A),
+                        fontWeight: FontWeight.w400,
+                      ),
+                    );
+                  default:
+                    return const SizedBox();
+                }
+              },
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(top: 15, left: 35, bottom: 20),
-            child: Text(
-              'Credit : x ',
-              style: TextStyle(
-                fontSize: 16,
-                color: Color(0xFF14487A),
-                fontWeight: FontWeight.normal,
-              ),
+            const SizedBox(
+              height: 8,
             ),
-          ),
-          Expanded(
-            child: Column(
-              children: [
-                SizedBox(
-                  width: 350,
-                  child: ElevatedButton(
-                    onPressed: () {},
+            BlocBuilder<UserCubit, UserState>(
+              builder: (context, state) {
+                switch (state) {
+                  case UserFetchSucess():
+                    return Text(
+                      'Credit : ${state.user.testRemaining}',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Color(0xFF14487A),
+                        fontWeight: FontWeight.normal,
+                      ),
+                    );
+                  default:
+                    return const SizedBox();
+                }
+              },
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const TestScreen(),
+                        ),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
                       backgroundColor: const Color(0xFF14487A),
@@ -99,11 +123,8 @@ class HomeTest extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  width: 350,
-                  child: ElevatedButton(
+                  const SizedBox(height: 10),
+                  OutlinedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
@@ -126,11 +147,11 @@ class HomeTest extends StatelessWidget {
                       ],
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -14,15 +14,16 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  late final GlobalKey<FormState> _formKey;
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
-  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+    _formKey = GlobalKey<FormState>();
   }
 
   @override
@@ -62,8 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-        ),
+        appBar: AppBar(),
         body: Column(
           mainAxisAlignment:
               MainAxisAlignment.start, // Mengatur posisi vertikal ke atas

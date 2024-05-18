@@ -12,3 +12,12 @@ final class TimerStarted extends TimerEvent {
 
   final Duration duration;
 }
+
+final class TimerStop extends TimerEvent {
+  const TimerStop();
+}
+
+class _TimerTicked extends TimerEvent {
+  const _TimerTicked({required this.duration});
+  final int duration;
+}
