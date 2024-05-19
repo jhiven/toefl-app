@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/data/repository/auth_repository.dart';
+import 'package:toefl_app/domain/state/test_history/test_history_cubit.dart';
+import 'package:toefl_app/domain/state/user/user_cubit.dart';
 import 'package:toefl_app/presentation/screens/history_screen.dart';
 import 'package:toefl_app/presentation/screens/home_tests.dart';
 import 'package:toefl_app/presentation/screens/login_screen.dart';
@@ -102,6 +104,15 @@ class HomePage extends StatelessWidget {
                   width: 350,
                   child: OutlinedButton(
                     onPressed: () {
+                      final userId =
+                          (context.read<UserCubit>().state as UserFetchSucess)
+                              .user
+                              .userId;
+
+                      context
+                          .read<TestHistoryCubit>()
+                          .getHistory(userId: userId);
+
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const HistoryPage(),
                       ));
