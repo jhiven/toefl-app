@@ -1,5 +1,6 @@
 import 'package:toefl_app/data/provider/supabase_database.dart';
 import 'package:toefl_app/domain/models/test_history_model.dart';
+import 'package:toefl_app/domain/models/test_leaderboard_model.dart';
 import 'package:toefl_app/domain/models/test_packet_model.dart';
 
 class TestRepository {
@@ -35,7 +36,7 @@ class TestRepository {
     );
   }
 
-  Future<void> getLeaderboard() async {
+  Future<List<TestLeaderboardModel>> getLeaderboard() async {
     return await _supabaseDatabase.getLeaderboard();
   }
 

@@ -1,5 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:toefl_app/domain/models/test_history_model.dart';
+import 'package:toefl_app/domain/models/test_leaderboard_model.dart';
 import 'package:toefl_app/domain/models/test_packet_model.dart';
 import 'package:toefl_app/domain/models/user_model.dart';
 
@@ -140,19 +141,19 @@ class SupabaseDatabase {
           .select()
           .eq('user_id', userId);
 
-      print(data);
       return data.map((e) => TestHistoryModel.fromJson(e)).toList();
     } catch (e) {
       throw Exception(e.toString());
     }
   }
 
-  Future<void> getLeaderboard() async {
+  Future<List<TestLeaderboardModel>> getLeaderboard() async {
     try {
-      final data =
-          await _supabaseClient.from('test_leaderboard').select('*, users(*)');
+      final data = await _supabaseClient
+          .from('test_leaderboard')
+          .select('*, users(name)');
 
-      print(data);
+      return data.map((e) => TestLeaderboardModel.fromJson(e)).toList();
     } catch (e) {
       throw Exception(e.toString());
     }
