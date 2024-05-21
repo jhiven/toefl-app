@@ -1,112 +1,126 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toefl_app/domain/models/material_question.dart';
 import 'package:toefl_app/domain/state/answer_cubit.dart';
 import 'package:toefl_app/domain/state/button_next_cubit.dart';
-import 'package:toefl_app/learn/pages/readingtest_page.dart';
+import 'package:toefl_app/domain/state/cubit/example_question_cubit.dart';
 import 'package:toefl_app/learn/widget/audioplayer.dart';
 import 'package:toefl_app/learn/widget/bottom_backgorund.dart';
 import 'package:toefl_app/learn/widget/button_next.dart';
 
 class ListeningTest extends StatelessWidget {
-  const ListeningTest({super.key});
+  const ListeningTest({super.key, required this.id});
+  final int id;
 
   @override
   Widget build(BuildContext context) {
-    List<Jawaban> answer = [
-      Jawaban(text: 'A', benar: true),
-      Jawaban(text: 'B', benar: false),
-      Jawaban(text: 'C', benar: false),
-      Jawaban(text: 'D', benar: false),
-    ];
     return Scaffold(
       appBar: AppBar(
-          title: Text('Audio Player Exmaple'),
-          centerTitle: true,
-          ),
+        title: Text('Audio Player Exmaple'),
+        centerTitle: true,
+      ),
       body: Stack(
         children: [
           SizedBox(
             width: double.infinity,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Text(
-                    'Audio Player',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: MusicPlayer(
-                    url:
-                        'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-                  ),
-                ),
-                Wrap(
-                  alignment: WrapAlignment.spaceAround,
-                  children: [
-                    ...answer.map((value) {
-                      int index = answer.indexOf(value);
-                      return BlocBuilder<AnswerCubit, AnswerState>(
-                        builder: (context, state1) {
-                          return BlocBuilder<ButtonNextCubit, ButtonNextState>(
-                            builder: (context, state2) {
-                              return InkWell(
-                                onTap: () {
-                                  if (state2 is ButtonNextChange && !state2.next) {
-                                    context.read<AnswerCubit>().selectAnswer(index);
-                                  }
-                                },
-                                child: Container(
-                                  width: 150,
-                                  height: 150,
-                                  decoration: BoxDecoration(
-                                    color: Color.fromARGB(255, 193, 227, 255),
-                                    borderRadius: BorderRadius.circular(15),
-                                    border: state1 is AnswerPick &&
-                                            state1.isSelected[index]
-                                        ? Border.all(
-                                            color: state2 is ButtonNextChange &&
-                                                    state2.next &&
-                                                    !value.benar
-                                                ? Colors.red
-                                                : state2 is ButtonNextChange &&
-                                                        state2.next &&
-                                                        value.benar
-                                                    ? Colors.green
-                                                    : Colors.black,
-                                            width: 2,
-                                          )
-                                        : state2 is ButtonNextChange &&
-                                                state2.next
-                                            ? Border.all(
-                                                color: value.benar
-                                                    ? Colors.green
-                                                    : Colors.transparent,
-                                                width: 2,
-                                              )
-                                            : null,
-                                  ),
-                                  margin: EdgeInsets.all(12),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    value.text,
-                                    style: TextStyle(
-                                        fontSize: 60,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      );
-                    }),
-                  ],
-                ),
-              ],
+            child: BlocBuilder<ExampleQuestionCubit, ExampleQuestionState>(
+              builder: (context, state) {
+                if (state is MaterialQuestionLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is MaterialQuestionLoaded) {
+                  MaterialQuestionModel question = state.data;
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          'Audio Player',
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: MusicPlayer(
+                          url: question.url!,
+                        ),
+                      ),
+                      Wrap(
+                        alignment: WrapAlignment.spaceAround,
+                        children: [
+                          ...question.answerList.map((value) {
+                            int index = question.answerList.indexOf(value);
+                            return BlocBuilder<AnswerCubit, AnswerState>(
+                              builder: (context, state1) {
+                                return BlocBuilder<ButtonNextCubit,
+                                    ButtonNextState>(
+                                  builder: (context, state2) {
+                                    return InkWell(
+                                      onTap: () {
+                                        if (state2 is ButtonNextChange &&
+                                            !state2.next) {
+                                          context
+                                              .read<AnswerCubit>()
+                                              .selectAnswer(index);
+                                        }
+                                      },
+                                      child: Container(
+                                        width: 150,
+                                        height: 150,
+                                        decoration: BoxDecoration(
+                                          color: Color.fromARGB(
+                                              255, 193, 227, 255),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          border: state1 is AnswerPick &&
+                                                  state1.isSelected[index]
+                                              ? Border.all(
+                                                  color: state2
+                                                              is ButtonNextChange &&
+                                                          state2.next &&
+                                                          !value.value
+                                                      ? Colors.red
+                                                      : state2 is ButtonNextChange &&
+                                                              state2.next &&
+                                                              value.value
+                                                          ? Colors.green
+                                                          : Colors.black,
+                                                  width: 2,
+                                                )
+                                              : state2 is ButtonNextChange &&
+                                                      state2.next
+                                                  ? Border.all(
+                                                      color: value.value
+                                                          ? Colors.green
+                                                          : Colors.transparent,
+                                                      width: 2,
+                                                    )
+                                                  : null,
+                                        ),
+                                        margin: EdgeInsets.all(12),
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          value.answer,
+                                          style: TextStyle(
+                                              fontSize: 60,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            );
+                          }),
+                        ],
+                      ),
+                    ],
+                  );
+                } else {
+                  return Center(child: Text('Failed to load data'));
+                }
+              },
             ),
           ),
           BottomBackground(

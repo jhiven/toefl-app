@@ -1,63 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toefl_app/domain/models/material_question.dart';
 import 'package:toefl_app/domain/state/answer_cubit.dart';
 import 'package:toefl_app/domain/state/button_next_cubit.dart';
+import 'package:toefl_app/domain/state/cubit/example_question_cubit.dart';
 import 'package:toefl_app/learn/widget/bottom_backgorund.dart';
 import 'package:toefl_app/learn/widget/button_next.dart';
 
 class ReadingTest extends StatefulWidget {
-  const ReadingTest({super.key});
+  const ReadingTest({super.key, required this.id});
+  final int id;
 
   @override
   State<ReadingTest> createState() => _ReadingTestState();
 }
 
 class _ReadingTestState extends State<ReadingTest> {
-  bool isClicked = false;
-
-  void toggleBorder() {
-    setState(() {
-      isClicked = !isClicked;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-
-    List<Jawaban> answer = [
-      Jawaban(text: 'A. Willowbrook', benar: false),
-      Jawaban(text: 'B. Mistwood', benar: false),
-      Jawaban(text: 'C. Fernhaven', benar: true),
-      Jawaban(text: 'D. Fernhaven', benar: false),
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Reading Test'),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        forceMaterialTransparency: true,
       ),
       body: Stack(
         children: [
-          Column(
-            children: [
-              SizedBox(
-                width: double.infinity,
-                child: SingleChildScrollView(
+          BlocBuilder<ExampleQuestionCubit, ExampleQuestionState>(
+            builder: (context, state) {
+              if (state is MaterialQuestionLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is MaterialQuestionLoaded) {
+                MaterialQuestionModel question = state.data;
+                return SingleChildScrollView(
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: RichText(
-                          text: TextSpan(
-                            text:
-                                'Once upon a time...Once upon a time, in a quaint little village nestled between rolling hills and lush forests, there lived a young girl named Elara. Elara was known throughout the village for her adventurous',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ),
-                      ...answer.map((value) {
-                        int index = answer.indexOf(value);
+                          padding: const EdgeInsets.all(20),
+                          child: Text(question.question!)),
+                      ...question.answerList.map((value) {
+                        int index = question.answerList.indexOf(value);
                         return BlocBuilder<AnswerCubit, AnswerState>(
                           builder: (context, state1) {
                             return BlocBuilder<ButtonNextCubit,
@@ -68,13 +50,16 @@ class _ReadingTestState extends State<ReadingTest> {
                                       left: 20, right: 20, top: 10, bottom: 10),
                                   child: InkWell(
                                     onTap: () {
-                                      if (state2 is ButtonNextChange && !state2.next) {
-                                        context.read<AnswerCubit>().selectAnswer(index);
+                                      if (state2 is ButtonNextChange &&
+                                          !state2.next) {
+                                        context
+                                            .read<AnswerCubit>()
+                                            .selectAnswer(index);
                                       }
                                     },
                                     child: Container(
-                                      height: 50,
                                       width: double.infinity,
+                                      padding: EdgeInsets.all(15),
                                       decoration: BoxDecoration(
                                         color: const Color.fromARGB(
                                             255, 143, 195, 244),
@@ -86,11 +71,11 @@ class _ReadingTestState extends State<ReadingTest> {
                                                 color: state2
                                                             is ButtonNextChange &&
                                                         state2.next &&
-                                                        !value.benar
+                                                        !value.value
                                                     ? Colors.red
                                                     : state2 is ButtonNextChange &&
                                                             state2.next &&
-                                                            value.benar
+                                                            value.value
                                                         ? Colors.green
                                                         : Colors.black,
                                                 width: 2,
@@ -98,7 +83,7 @@ class _ReadingTestState extends State<ReadingTest> {
                                             : state2 is ButtonNextChange &&
                                                     state2.next
                                                 ? Border.all(
-                                                    color: value.benar
+                                                    color: value.value
                                                         ? Colors.green
                                                         : Colors.transparent,
                                                     width: 2,
@@ -112,17 +97,23 @@ class _ReadingTestState extends State<ReadingTest> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(value.text),
+                                            Expanded(
+                                              child: Text(
+                                                value.answer,
+                                                softWrap: true,
+                                                overflow: TextOverflow.visible,
+                                              ),
+                                            ),
                                             state2 is ButtonNextChange &&
                                                     state2.next &&
-                                                    value.benar
+                                                    value.value
                                                 ? Icon(
                                                     Icons.check_circle,
                                                     color: Colors.green,
                                                   )
                                                 : state2 is ButtonNextChange &&
                                                         state2.next &&
-                                                        !value.benar &&
+                                                        !value.value &&
                                                         state1 is AnswerPick &&
                                                         state1.isSelected[index]
                                                     ? Icon(
@@ -141,11 +132,16 @@ class _ReadingTestState extends State<ReadingTest> {
                           },
                         );
                       }),
+                      SizedBox(
+                        height: 100,
+                      )
                     ],
                   ),
-                ),
-              ),
-            ],
+                );
+              } else {
+                return Center(child: Text('Failed to load data'));
+              }
+            },
           ),
           BottomBackground(
             butoon1: Container(),
@@ -180,11 +176,4 @@ class _ReadingTestState extends State<ReadingTest> {
       ),
     );
   }
-}
-
-class Jawaban {
-  final String text;
-  final bool benar;
-
-  Jawaban({required this.text, required this.benar});
 }

@@ -32,12 +32,17 @@ class CustomListTile extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 10),
-                child: Text(
-                  title,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 28),
+                child: Container(
+                  width: 220,
+                  child: Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 28),
+                  ),
                 ),
               ),
             ],

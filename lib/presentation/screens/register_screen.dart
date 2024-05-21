@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toefl_app/domain/state/authentication_cubit.dart';
-import 'package:toefl_app/domain/state/user_cubit.dart';
+import 'package:toefl_app/domain/state/auth/authentication_cubit.dart';
+import 'package:toefl_app/domain/state/user/user_cubit.dart';
 import 'package:toefl_app/presentation/screens/home_screen.dart';
 import 'package:toefl_app/presentation/screens/login_screen.dart';
+import 'package:toefl_app/presentation/widgets/login_input.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -28,138 +29,202 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void dispose() {
-    super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _nameController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthenticationCubit, AuthenticationState>(
       listener: (context, state) {
-        switch (state) {
-          case AuthenticationRegisterSuccess():
-            context.read<UserCubit>().getSession();
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Register success'),
-              ),
-            );
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) {
-                  return const HomeScreen();
-                },
-              ),
-            );
-          case AuthenticationFailed():
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Failed with error message: ${state.errorMsg}'),
-              ),
-            );
-          default:
-            break;
+        if (state is AuthenticationRegisterSuccess) {
+          context.read<UserCubit>().getSession();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Register success')),
+          );
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        } else if (state is AuthenticationFailed) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text('Failed with error message: ${state.errorMsg}')),
+          );
         }
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Register'),
+          leading: const BackButton(color: Colors.black),
         ),
-        body: Form(
-          key: _formKey,
-          child: ListView(
-            padding: const EdgeInsets.all(12),
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(hintText: 'Email'),
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null) {
-                    return 'Email can not be empty';
-                  }
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: SingleChildScrollView(
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 20),
+                          RichText(
+                            text: const TextSpan(
+                              style: TextStyle(
+                                  fontSize: 34, fontWeight: FontWeight.bold),
+                              children: [
+                                TextSpan(
+                                  text: 'TOEFL ',
+                                  style: TextStyle(color: Color(0xFF14487A)),
+                                ),
+                                TextSpan(
+                                  text: 'PENS',
+                                  style: TextStyle(color: Color(0xFFF6C410)),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          const Text(
+                            'REGISTER',
+                            style: TextStyle(
+                              color: Color(0xFF14487A),
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 57),
+                          LoginInput(
+                            controller: _nameController,
+                            labelText: 'Name',
+                            hintText: "Fill ur name",
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Name cannot be empty';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 12),
+                          LoginInput(
+                            controller: _emailController,
+                            labelText: "Email",
+                            hintText: "Fill ur Email",
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Email cannot be empty';
+                              }
+                              final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                              if (!emailRegex.hasMatch(value)) {
+                                return 'Please input a valid email';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 12),
+                          LoginInput(
+                            controller: _passwordController,
+                            labelText: "Password",
+                            hintText: "Fill ur Password",
+                            obscureText: true,
+                            enableSuggestions: false,
+                            autocorrect: false,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Password cannot be empty';
+                              }
+                              if (value.length < 8) {
+                                return 'Password must be longer than 8 characters';
+                              }
+                              return null;
+                            },
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 60),
+                            width: double.infinity,
+                            height: 50,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  final email = _emailController.text;
+                                  final password = _passwordController.text;
+                                  final name = _nameController.text;
 
-                  if (value.isEmpty) {
-                    return 'Email can not be empty';
-                  }
-
-                  final emailRegex = RegExp(
-                      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
-
-                  if (!emailRegex.hasMatch(value)) {
-                    return 'Please input valid email';
-                  }
-
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _passwordController,
-                decoration: const InputDecoration(hintText: 'Password'),
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                validator: (value) {
-                  if (value == null) {
-                    return 'Password can not be empty';
-                  }
-
-                  if (value.isEmpty) {
-                    return 'Password can not be empty';
-                  }
-
-                  if (value.length < 8) {
-                    return 'Password must be longer than 8 characters';
-                  }
-
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(hintText: 'Name'),
-                validator: (value) {
-                  if (value == null) {
-                    return 'Name can not be empty';
-                  }
-
-                  if (value.isEmpty) {
-                    return 'Name can not be empty';
-                  }
-
-                  return null;
-                },
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    final email = _emailController.text;
-                    final password = _passwordController.text;
-                    final name = _nameController.text;
-
-                    context.read<AuthenticationCubit>().register(
-                          email: email,
-                          password: password,
-                          name: name,
-                        );
-                  }
-                },
-                child: const Text('Register'),
-              ),
-              TextButton(
-                child: const Text('go to login'),
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return const LoginScreen();
-                      },
+                                  context.read<AuthenticationCubit>().register(
+                                        email: email,
+                                        password: password,
+                                        name: name,
+                                      );
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.all(0),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(99),
+                                ),
+                              ),
+                              child: Ink(
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    colors: [
+                                      Color(0xff14487A),
+                                      Color(0xff39608F)
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(99),
+                                ),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: const Text(
+                                    'Register',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'Already have an account? ',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const LoginScreen(),
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                  'Login',
+                                  style: TextStyle(
+                                    color: Color(0xff14487A),
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  );
-                },
+                  ),
+                ),
               ),
             ],
           ),

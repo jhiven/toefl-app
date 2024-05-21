@@ -17,3 +17,12 @@ final class AnswerPick extends AnswerState  {
   @override
   List<Object> get props => [isSelected];
 }
+
+class AnswerCorrectness extends AnswerState {
+  final bool isCorrect;
+
+  const AnswerCorrectness({required this.isCorrect});
+
+  @override
+  List<Object> get props => [isCorrect];
+}

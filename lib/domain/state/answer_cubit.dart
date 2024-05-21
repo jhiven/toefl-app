@@ -16,4 +16,10 @@ class AnswerCubit extends Cubit<AnswerState> {
     final List<bool> isSelected = List.generate(4, (_) => false);
     emit(AnswerPick(isSelected: isSelected));
   }
+
+  void checkAnswer(String answer1, String answer2) {
+    bool isCorrect = answer1.toLowerCase() == answer2.toLowerCase();
+    emit(AnswerCorrectness(isCorrect: isCorrect));
+  }
+
 }
