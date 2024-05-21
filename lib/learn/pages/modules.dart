@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toefl_app/domain/state/material/material_cubit.dart';
 import 'package:toefl_app/domain/state/modul_cubit.dart';
 import 'package:toefl_app/learn/pages/chapter_list.dart';
 import 'package:toefl_app/learn/widget/customListTile.dart';
@@ -44,6 +45,7 @@ class _ModulesState extends State<Modules> {
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ChapterList(path: 'assets/solar_book-outline.png',),));
                   context.read<ModulCubit>().pickModul('Reading');
+                  context.read<MaterialModulCubit>().selectModul(3);
                 },
                 child: CustomListTile(image: 'assets/solar_book-outline.png', title: 'Reading', trailing: 0),
               ),
@@ -55,6 +57,7 @@ class _ModulesState extends State<Modules> {
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ChapterList(path: 'assets/Group.png',),));
                   context.read<ModulCubit>().pickModul('Listening');
+                  context.read<MaterialModulCubit>().selectModul(1);
                 },
                 child: CustomListTile(image: 'assets/Group.png', title: 'Listening', trailing: 0),
               ),
@@ -66,6 +69,7 @@ class _ModulesState extends State<Modules> {
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ChapterList(path: 'assets/tabler_text-grammar.png',),));
                   context.read<ModulCubit>().pickModul('Grammar');
+                  context.read<MaterialModulCubit>().selectModul(2);
                 },
                 child: CustomListTile(image: 'assets/tabler_text-grammar.png', title: 'Grammar', trailing: 0),
               ),
