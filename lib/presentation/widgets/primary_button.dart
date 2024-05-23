@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:toefl_app/presentation/screens/written_question.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String text;
