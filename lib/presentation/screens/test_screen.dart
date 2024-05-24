@@ -16,45 +16,43 @@ class TestScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: MultiBlocListener(
-          listeners: [
-            BlocListener<TestPacketCubit, TestPacketState>(
-              listener: _onChangeSection,
-              listenWhen: (previous, current) =>
-                  previous is TestPacketAnswering &&
-                  current is TestPacketAnswering &&
-                  previous.currentSection != current.currentSection,
-            ),
-            BlocListener<TestPacketCubit, TestPacketState>(
-              listener: _onChangeSection,
-              listenWhen: (previous, current) =>
-                  previous is TestPacketInitial &&
-                  current is TestPacketAnswering,
-            ),
-          ],
-          child: BlocBuilder<TestPacketCubit, TestPacketState>(
-            builder: (context, state) {
-              switch (state) {
-                case TestPacketInitial():
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                case TestPacketAnswering():
-                  return _buildQuestionView();
-                case TestPacketError():
-                  return Text(state.errorMsg);
-                case TestPacketDone():
-                  return ResultPage(
-                    listeningScore: state.listeningScore,
-                    readingScore: state.readingScore,
-                    structureScore: state.structureScore,
-                    totalScore: state.totalScore,
-                  );
-              }
-            },
+    return Scaffold(
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<TestPacketCubit, TestPacketState>(
+            listener: _onChangeSection,
+            listenWhen: (previous, current) =>
+                previous is TestPacketAnswering &&
+                current is TestPacketAnswering &&
+                previous.currentSection != current.currentSection,
           ),
+          BlocListener<TestPacketCubit, TestPacketState>(
+            listener: _onChangeSection,
+            listenWhen: (previous, current) =>
+                previous is TestPacketInitial && current is TestPacketAnswering,
+          ),
+        ],
+        child: BlocBuilder<TestPacketCubit, TestPacketState>(
+          builder: (context, state) {
+            switch (state) {
+              case TestPacketLoading():
+              case TestPacketInitial():
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              case TestPacketAnswering():
+                return _buildQuestionView();
+              case TestPacketError():
+                return Text(state.errorMsg);
+              case TestPacketDone():
+                return ResultPage(
+                  listeningScore: state.listeningScore,
+                  readingScore: state.readingScore,
+                  structureScore: state.structureScore,
+                  totalScore: state.totalScore,
+                );
+            }
+          },
         ),
       ),
     );
@@ -95,7 +93,7 @@ class TestScreen extends StatelessWidget {
               }
             }
           case TestSectionStatus.done:
-            return SectionResult();
+            return const SectionResult();
         }
       },
     );
@@ -110,15 +108,15 @@ class TestScreen extends StatelessWidget {
       case SectionType.listening:
         context
             .read<TimerBloc>()
-            .add(const TimerStarted(duration: Duration(seconds: 100)));
+            .add(const TimerStarted(duration: Duration(hours: 1)));
       case SectionType.structure:
         context
             .read<TimerBloc>()
-            .add(const TimerStarted(duration: Duration(seconds: 25)));
+            .add(const TimerStarted(duration: Duration(hours: 1)));
       case SectionType.reading:
         context
             .read<TimerBloc>()
-            .add(const TimerStarted(duration: Duration(seconds: 55)));
+            .add(const TimerStarted(duration: Duration(hours: 1)));
       default:
         break;
     }

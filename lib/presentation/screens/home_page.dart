@@ -83,8 +83,11 @@ class HomePage extends StatelessWidget {
                   width: 350,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const HomeTest()));
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const HomeTest(),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
@@ -104,13 +107,18 @@ class HomePage extends StatelessWidget {
                       ));
                     },
                     style: OutlinedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 50),
-                        backgroundColor: Colors.white,
-                        side: BorderSide(
-                            color: Theme.of(context).colorScheme.primary)),
-                    child: Text('History',
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary)),
+                      minimumSize: const Size(double.infinity, 50),
+                      backgroundColor: Colors.white,
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    child: Text(
+                      'History',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
                   ),
                 ),
               ],

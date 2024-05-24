@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toefl_app/domain/state/test_packet/test_packet_cubit.dart';
-import 'package:toefl_app/presentation/widgets/primary_button.dart';
+import 'package:toefl_app/presentation/screens/test_layout.dart';
 
 class Result extends StatelessWidget {
   final String tesSection;
@@ -9,15 +7,15 @@ class Result extends StatelessWidget {
   final int? wrongCount;
 
   const Result({
-    Key? key,
+    super.key,
     required this.tesSection,
     this.correctCount,
     this.wrongCount,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return TestLayout(
       child: Container(
         color: Colors.white,
         child: Padding(
@@ -26,7 +24,7 @@ class Result extends StatelessWidget {
             children: [
               const Padding(padding: EdgeInsets.only(top: 30)),
               Text(
-                "${tesSection} Comprehension Section",
+                "$tesSection Comprehension Section",
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                     fontSize: 30,
@@ -82,20 +80,6 @@ class Result extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
-                ),
-              ),
-              const Spacer(),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 20.0),
-                  child: PrimaryButton(
-                    text: "Next Section",
-                    icon: null,
-                    onPressed: () {
-                      context.read<TestPacketCubit>().nextSection();
-                    },
                   ),
                 ),
               ),
