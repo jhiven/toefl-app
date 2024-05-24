@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toefl_app/domain/state/test_packet/test_packet_cubit.dart';
 import 'package:toefl_app/domain/state/user/user_cubit.dart';
 import 'package:toefl_app/presentation/screens/test_screen.dart';
 
@@ -52,9 +53,10 @@ class HomeTest extends StatelessWidget {
                     const Text(
                       'Test',
                       style: TextStyle(
-                          color: Color(0xFF14487A),
-                          fontSize: 24,
-                          fontWeight: FontWeight.w500),
+                        color: Color(0xFF14487A),
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     const SizedBox(
                       height: 70,
@@ -108,6 +110,14 @@ class HomeTest extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     onPressed: () {
+                      final packetCubit = context.read<TestPacketCubit>().state;
+
+                      switch (packetCubit) {
+                        case TestPacketAnswering():
+                          break;
+                        default:
+                          context.read<TestPacketCubit>().startTest();
+                      }
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => const TestScreen(),

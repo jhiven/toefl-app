@@ -58,7 +58,7 @@ class QuestionLayout extends StatelessWidget {
                         return Padding(
                           padding: const EdgeInsets.only(right: 4.0),
                           child: Text(
-                            "Page ${state.currentQuestionIdx} of ${state.section.questionList.length}",
+                            "Page ${state.currentQuestionIdx + 1} of ${state.section.questionList.length}",
                             style: const TextStyle(fontSize: 15),
                           ),
                         );
