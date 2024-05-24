@@ -122,6 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           labelText: "Email",
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
+                          enabled: true,
                           validator: (value) {
                             if (value == null) {
                               return 'Email can not be empty';
@@ -149,6 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           obscureText: true,
                           enableSuggestions: false,
                           autocorrect: false,
+                          enabled: true,
                           validator: (value) {
                             if (value == null) {
                               return 'Password can not be empty';

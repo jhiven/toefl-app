@@ -11,6 +11,7 @@ class LoginInput extends StatelessWidget {
     this.obscureText = false,
     this.enableSuggestions = true,
     this.autocorrect = true,
+    required this.enabled,
   });
 
   final TextEditingController controller;
@@ -21,6 +22,7 @@ class LoginInput extends StatelessWidget {
   final bool obscureText;
   final bool enableSuggestions;
   final bool autocorrect;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +57,7 @@ class LoginInput extends StatelessWidget {
       obscureText: obscureText,
       enableSuggestions: enableSuggestions,
       autocorrect: autocorrect,
+      enabled: enabled,
     );
   }
 }

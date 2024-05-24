@@ -102,6 +102,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             controller: _nameController,
                             labelText: 'Name',
                             hintText: "Fill ur name",
+                            enabled: true,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Name cannot be empty';
@@ -115,6 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             labelText: "Email",
                             hintText: "Fill ur Email",
                             keyboardType: TextInputType.emailAddress,
+                            enabled: true,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Email cannot be empty';
@@ -134,6 +136,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             obscureText: true,
                             enableSuggestions: false,
                             autocorrect: false,
+                            enabled: true,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Password cannot be empty';

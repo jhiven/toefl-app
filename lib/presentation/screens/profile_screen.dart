@@ -110,6 +110,7 @@ _profileField(
         controller: emailController,
         keyboardType: null,
         validator: null,
+        enabled: false,
       ),
       const SizedBox(
         height: 20,
