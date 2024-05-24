@@ -11,6 +11,7 @@ import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
 import 'package:toefl_app/domain/state/timer/timer_bloc.dart';
 import 'package:toefl_app/domain/state/user/user_cubit.dart';
 import 'package:toefl_app/presentation/screens/home_page.dart';
+import 'package:toefl_app/presentation/screens/leaderboard.dart';
 import 'package:toefl_app/presentation/screens/login_screen.dart';
 import 'package:toefl_app/theme.dart';
 import 'package:toefl_app/utils/supabase_constants.dart';
