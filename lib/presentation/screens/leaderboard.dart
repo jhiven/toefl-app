@@ -1,104 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toefl_app/domain/state/test_leaderboard/test_leaderboard_cubit.dart';
 import 'package:toefl_app/presentation/widgets/rangking.dart';
 
 class Leaderboard extends StatelessWidget {
-  const Leaderboard({Key? key});
+  const Leaderboard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> leaderboardData = [
-      {
-        'rank': 1,
-        'name': 'Kimi',
-        'score': 600,
-        'imageUrl': 'https://via.placeholder.com/50'
-      },
-      {
-        'rank': 2,
-        'name': 'Hamilton',
-        'score': 550,
-        'imageUrl': 'https://via.placeholder.com/50'
-      },
-      {
-        'rank': 3,
-        'name': 'Verstappen',
-        'score': 500,
-        'imageUrl': 'https://via.placeholder.com/50'
-      },
-      {
-        'rank': 4,
-        'name': 'Vettel',
-        'score': 450,
-        'imageUrl': 'https://via.placeholder.com/50'
-      },
-      {
-        'rank': 5,
-        'name': 'Leclerc',
-        'score': 400,
-        'imageUrl': 'https://via.placeholder.com/50'
-      },
-      {
-        'rank': 6,
-        'name': 'Alonso',
-        'score': 350,
-        'imageUrl': 'https://via.placeholder.com/50'
-      },
-      {
-        'rank': 7,
-        'name': 'Norris',
-        'score': 300,
-        'imageUrl': 'https://via.placeholder.com/50'
-      },
-      {
-        'rank': 8,
-        'name': 'Russell',
-        'score': 250,
-        'imageUrl': 'https://via.placeholder.com/50'
-      },
-      {
-        'rank': 9,
-        'name': 'Ricciardo',
-        'score': 200,
-        'imageUrl': 'https://via.placeholder.com/50'
-      },
-      {
-        'rank': 10,
-        'name': 'Perez',
-        'score': 150,
-        'imageUrl': 'https://via.placeholder.com/50'
-      },
-      {
-        'rank': 11,
-        'name': 'Perez',
-        'score': 150,
-        'imageUrl': 'https://via.placeholder.com/50'
-      },
-      {
-        'rank': 12,
-        'name': 'Perez',
-        'score': 150,
-        'imageUrl': 'https://via.placeholder.com/50'
-      },
-      {
-        'rank': 13,
-        'name': 'Perez',
-        'score': 150,
-        'imageUrl': 'https://via.placeholder.com/50'
-      },
-      {
-        'rank': 14,
-        'name': 'Perez',
-        'score': 150,
-        'imageUrl': 'https://via.placeholder.com/50'
-      },
-    ];
-
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+            const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -131,23 +46,37 @@ class Leaderboard extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+            const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
             Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: leaderboardData.length,
-                itemBuilder: (context, index) {
-                  final item = leaderboardData[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 16.0),
-                    child: Rangking(
-                      rank: item['rank'],
-                      name: item['name'],
-                      score: item['score'],
-                      imageUrl: item['imageUrl'],
-                    ),
-                  );
+              child: BlocBuilder<TestLeaderboardCubit, TestLeaderboardState>(
+                builder: (context, state) {
+                  switch (state) {
+                    case TestLeaderboardInitial():
+                    case TestLeaderboardLoading():
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    case TestLeaderboardSuccess():
+                      return ListView.builder(
+                        itemCount: state.leaderboards.length,
+                        itemBuilder: (context, index) {
+                          final item = state.leaderboards[index];
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 16.0),
+                            child: Rangking(
+                              rank: index + 1,
+                              name: item.name,
+                              score: item.totalScore,
+                            ),
+                          );
+                        },
+                      );
+                    case TestLeaderboardError():
+                      return Center(
+                        child: Text(state.errorMSg),
+                      );
+                  }
                 },
               ),
             ),

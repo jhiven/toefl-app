@@ -5,27 +5,32 @@ class LoginInput extends StatelessWidget {
     super.key,
     this.keyboardType,
     this.validator,
-    required this.controller,
+    this.controller,
     this.hintText,
     this.labelText,
     this.obscureText = false,
     this.enableSuggestions = true,
     this.autocorrect = true,
+    required this.enabled,
+    this.initialValue,
   });
 
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
   final String? hintText;
   final String? labelText;
+  final String? initialValue;
   final bool obscureText;
   final bool enableSuggestions;
   final bool autocorrect;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      initialValue: initialValue,
       decoration: InputDecoration(
         hintText: hintText,
         focusedBorder: OutlineInputBorder(
@@ -55,6 +60,7 @@ class LoginInput extends StatelessWidget {
       obscureText: obscureText,
       enableSuggestions: enableSuggestions,
       autocorrect: autocorrect,
+      enabled: enabled,
     );
   }
 }
