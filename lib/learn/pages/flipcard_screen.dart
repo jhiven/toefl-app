@@ -71,12 +71,18 @@ class _FlipcardScreenState extends State<FlipcardScreen> {
                       key: keyList[index],
                       flipOnTouch: disableFlip(index),
                       front: FlipcardWidget(
-                        title: 'QUESTION',
+                        title: ' ',
+                        content: 'trend',
                         color: Color.fromRGBO(20, 72, 122, 1),
+                        textColor: Colors.white,
+                        contentSize: 40,
                       ),
                       back: FlipcardWidget(
-                        title: 'ANSWER',
+                        title: 'tren',
+                        content: "nomina: gaya mutakhir\n\nverb: the direction or way in which something is changing\n\nToday's computer culture is trending toward more touch-screen technology.",
                         color: Color.fromRGBO(246, 196, 16, 1),
+                        textColor: Colors.black,
+                        contentSize: 17,
                       ),
                     ),
                   );

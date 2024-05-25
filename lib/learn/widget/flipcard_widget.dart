@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class FlipcardWidget extends StatelessWidget {
   final String title;
   final Color color;
+  final Color textColor;
+  final String content;
+  final double contentSize;
 
-  const FlipcardWidget({super.key, required this.title, required this.color});
+  const FlipcardWidget({super.key, required this.title, required this.color, required this.textColor, required this.content, required this.contentSize});
 
   @override
   Widget build(BuildContext context) {
@@ -20,23 +24,24 @@ class FlipcardWidget extends StatelessWidget {
           boxShadow: kElevationToShadow[4],
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               title,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
-                color: Colors.white,
+                color: textColor,
               ),
             ),
             Expanded(
               child: Center(
                 child: Text(
-                  'Content of the card',
+                  content,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Colors.white,
+                    fontSize: contentSize,
+                    color: textColor,
                   ),
                 ),
               ),
