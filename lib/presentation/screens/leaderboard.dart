@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toefl_app/presentation/screens/profile_screen.dart';
 import 'package:toefl_app/presentation/widgets/rangking.dart';
 
 class Leaderboard extends StatelessWidget {
@@ -95,10 +96,23 @@ class Leaderboard extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            IconButton(
+              icon: Icon(Icons.person),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => Profile(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(padding: EdgeInsets.symmetric(vertical: 10)),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 final appTheme = ThemeData.light().copyWith(
+  scaffoldBackgroundColor: Colors.white,
   colorScheme: const ColorScheme.light().copyWith(
     primary: const Color(0xff14487A), // button klik primary
     onPrimary:

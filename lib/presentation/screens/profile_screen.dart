@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toefl_app/data/repository/auth_repository.dart';
+import 'package:toefl_app/presentation/screens/login_screen.dart';
 import 'package:toefl_app/presentation/widgets/login_input.dart';
 
 class Profile extends StatefulWidget {
-  const Profile({super.key});
+  const Profile({Key? key});
 
   @override
   State<Profile> createState() => _ProfileState();
@@ -15,83 +18,100 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              height: 246,
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                color: Color(0xFF14487A),
-              ),
-              child: const Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 8.0, bottom: 32),
-                    child: Text(
-                      "Profile",
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                  ),
-                  Icon(
-                    Icons.account_circle,
-                    color: Colors.white,
-                    size: 130,
-                  ),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  Text(
-                    "Roby Arjuna",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  )
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 78,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: heading.length,
-                itemBuilder: (context, index) {
-                  String currentHeading = heading[index];
-                  String currentLabelText = labelText[index];
-                  return _profileField(
-                      currentHeading, currentLabelText, emailController);
-                },
-              ),
-            ),
-            const SizedBox(
-              height: 46,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: SizedBox(
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "Profile",
+            style: TextStyle(color: Theme.of(context).colorScheme.primary),
+          ),
+          leading: IconButton(
+            icon: const BackButtonIcon(),
+            color: const Color(0xFF14487A),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                height: 246,
                 width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: const ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(Colors.red)),
-                  child: const Text(
-                    "Logout",
-                    style: TextStyle(color: Colors.white),
+                decoration: const BoxDecoration(
+                  color: Color(0xFF14487A),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.account_circle,
+                        color: Colors.white,
+                        size: 130,
+                      ),
+                      SizedBox(
+                        height: 12,
+                      ),
+                      Text(
+                        "Roby Arjuna",
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      )
+                    ],
                   ),
                 ),
               ),
-            )
-          ],
+              const SizedBox(
+                height: 78,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: heading.length,
+                  itemBuilder: (context, index) {
+                    String currentHeading = heading[index];
+                    String currentLabelText = labelText[index];
+                    return _profileField(
+                        currentHeading, currentLabelText, emailController);
+                  },
+                ),
+              ),
+              const SizedBox(
+                height: 46,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.read<AuthRepository>().logout();
+
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => const LoginScreen()));
+                    },
+                    style: const ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(Colors.red)),
+                    child: const Text(
+                      "Logout",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-_profileField(
+Widget _profileField(
     String heading, String labelText, TextEditingController emailController) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
