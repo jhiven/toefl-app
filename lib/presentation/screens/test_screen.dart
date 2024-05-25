@@ -26,11 +26,6 @@ class TestScreen extends StatelessWidget {
                 current is TestPacketAnswering &&
                 previous.currentSection != current.currentSection,
           ),
-          BlocListener<TestPacketCubit, TestPacketState>(
-            listener: _onChangeSection,
-            listenWhen: (previous, current) =>
-                previous is TestPacketLoading && current is TestPacketAnswering,
-          ),
           BlocListener<TestSectionCubit, TestSectionState>(
             listener: _onSectionStart,
             listenWhen: (previous, current) =>

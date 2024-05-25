@@ -75,6 +75,15 @@ class SupabaseDatabase {
     }
   }
 
+  Future<int> getTestRemaining() async {
+    try {
+      final UserModel user = await getUser();
+      return user.testRemaining;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
   Future<TestPacketModel> getPacketById(int packetId) async {
     try {
       final Map<String, dynamic> data = await _supabaseClient
@@ -104,10 +113,10 @@ class SupabaseDatabase {
     }
   }
 
-  Future<void> decrementTestRemaining(int userId) {
+  Future<void> decrementTestRemaining() {
     return _supabaseClient.rpc(
       'decrement_test_remaining',
-      params: {'id': userId},
+      params: {'user_id': _supabaseClient.auth.currentUser!.id},
     );
   }
 

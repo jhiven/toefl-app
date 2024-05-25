@@ -20,10 +20,13 @@ class AnswerListButton extends StatelessWidget {
                 itemCount: answerList.length,
                 itemBuilder: (context, index) {
                   final answer = answerList[index];
+                  print(
+                    'selected answer: ${state.currentQuestion.selectedAnswer}',
+                  );
                   return SecondaryButton(
                     opsi: String.fromCharCode(65 + index),
                     text: answer.answer,
-                    isSelected: answer == state.selectedAnswer,
+                    isSelected: answer == state.currentQuestion.selectedAnswer,
                     onPressed: () {
                       context
                           .read<TestSectionCubit>()

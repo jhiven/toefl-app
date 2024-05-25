@@ -18,14 +18,19 @@ class TestPacketCubit extends Cubit<TestPacketState> {
       // final TestPacketModel packet = await _testRepository.getRandomPacket();
       final TestPacketModel packet = await _testRepository.getPacketById(1);
 
-      // await _testRepository.decrementTestRemaining(userId);
+      // await _testRepository.decrementTestRemaining();
+      final int testRemaining = await _testRepository.getTestRemaining();
 
-      emit(
-        TestPacketAnswering(
-          packet: packet,
-          currentSection: packet.listSection.first,
-        ),
-      );
+      if (testRemaining > 0) {
+        emit(
+          TestPacketAnswering(
+            packet: packet,
+            currentSection: packet.listSection.first,
+          ),
+        );
+      } else {
+        emit(const TestPacketError(errorMsg: 'Your test remaining is 0'));
+      }
     } catch (e) {
       emit(TestPacketError(errorMsg: e.toString()));
       throw Exception(e.toString());

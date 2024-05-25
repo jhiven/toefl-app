@@ -1,6 +1,8 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/state/test_packet/test_packet_cubit.dart';
+import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
 import 'package:toefl_app/domain/state/user/user_cubit.dart';
 import 'package:toefl_app/presentation/screens/test_screen.dart';
 
@@ -108,29 +110,62 @@ class HomeTest extends StatelessWidget {
             Expanded(
               child: Column(
                 children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      final packetCubit = context.read<TestPacketCubit>().state;
-
-                      switch (packetCubit) {
+                  BlocListener<TestPacketCubit, TestPacketState>(
+                    listener: (context, state) {
+                      switch (state) {
                         case TestPacketAnswering():
-                          break;
+                          context.read<TestSectionCubit>().setTestSection(
+                                section: state.currentSection,
+                              );
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const TestScreen(),
+                            ),
+                          );
+                        case TestPacketError():
+                          BotToast.showNotification(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.errorContainer,
+                            title: (cancelFunc) => Text(
+                              state.errorMsg,
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onErrorContainer,
+                              ),
+                            ),
+                          );
                         default:
-                          context.read<TestPacketCubit>().startTest();
+                          break;
                       }
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const TestScreen(),
-                        ),
-                      );
                     },
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 50),
-                      backgroundColor: const Color(0xFF14487A),
-                    ),
-                    child: const Text(
-                      'Start Test',
-                      style: TextStyle(color: Colors.white),
+                    listenWhen: (previous, current) =>
+                        previous != current && previous is TestPacketLoading,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        final prevPacketCubit =
+                            context.read<TestPacketCubit>().state;
+
+                        switch (prevPacketCubit) {
+                          case TestPacketAnswering():
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const TestScreen(),
+                              ),
+                            );
+                            break;
+                          default:
+                            context.read<TestPacketCubit>().startTest();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 50),
+                        backgroundColor: const Color(0xFF14487A),
+                      ),
+                      child: const Text(
+                        'Start Test',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 10),

@@ -18,8 +18,12 @@ class TestRepository {
     return await _supabaseDatabase.getRandomPacket();
   }
 
-  Future<void> decrementTestRemaining(int userId) {
-    return _supabaseDatabase.decrementTestRemaining(userId);
+  Future<void> decrementTestRemaining() {
+    return _supabaseDatabase.decrementTestRemaining();
+  }
+
+  Future<int> getTestRemaining() {
+    return _supabaseDatabase.getTestRemaining();
   }
 
   Future<void> insertHistory({
