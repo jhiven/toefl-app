@@ -1,6 +1,11 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:toefl_app/domain/models/test_history_model.dart';
 import 'package:toefl_app/domain/models/test_leaderboard_model.dart';
+import 'package:toefl_app/domain/models/flip_card.dart';
+import 'package:toefl_app/domain/models/material.dart';
+import 'package:toefl_app/domain/models/material_question.dart';
+import 'package:toefl_app/domain/models/pick_word.dart';
+import 'package:toefl_app/domain/models/synonym.dart';
 import 'package:toefl_app/domain/models/test_packet_model.dart';
 import 'package:toefl_app/domain/models/user_model.dart';
 
@@ -163,6 +168,71 @@ class SupabaseDatabase {
           .select('*, users(name)');
 
       return data.map((e) => TestLeaderboardModel.fromJson(e)).toList();
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<MaterialModel>> getMaterialByTypeId(int id) async {
+    try {
+      final List<dynamic> data = await _supabaseClient
+          .from('material')
+          .select('id, title, content')
+          .eq('modul_id', id);
+      return data.map((json) => MaterialModel.fromJson(json)).toList();
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<MaterialQuestionModel> getQuestionById(int id) async {
+    try {
+      final Map<String, dynamic> data = await _supabaseClient
+          .from('example_question')
+          .select(' question, url, example_answer(answer, value)')
+          .eq('material_id', id)
+          .single();
+      return MaterialQuestionModel.fromJson(json: data);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<SynonymModel>> getSynonym() async {
+    try {
+      final List<dynamic> allData =
+          await _supabaseClient.from('synonym').select('word1, word2');
+      final List<dynamic> randomData = allData;
+      randomData.shuffle(); // Shuffle the list
+      final List<dynamic> data = randomData.take(4).toList();
+      return data.map((json) => SynonymModel.fromJson(json)).toList();
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<PickWordModel>> getPickWord() async {
+    try {
+      final List<dynamic> allData =
+          await _supabaseClient.from('pick_word').select('word, type');
+      final List<dynamic> randomData = allData;
+      randomData.shuffle();
+      final List<dynamic> data = randomData.take(8).toList();
+      return data.map((json) => PickWordModel.fromJson(json)).toList();
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<FlipCardModel>> getFlipCardWord() async {
+    try {
+      final List<dynamic> allData = await _supabaseClient
+          .from('flipcards')
+          .select('front_side, back_side, vocab_translation');
+      final List<dynamic> randomData = allData;
+      randomData.shuffle();
+      final List<dynamic> data = randomData.take(5).toList();
+      return data.map((json) => FlipCardModel.fromJson(json)).toList();
     } catch (e) {
       throw Exception(e.toString());
     }

@@ -5,10 +5,25 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/data/provider/supabase_database.dart';
 import 'package:toefl_app/data/repository/auth_repository.dart';
+import 'package:toefl_app/data/repository/example_question.dart';
+import 'package:toefl_app/data/repository/flip_card_repository.dart';
+import 'package:toefl_app/data/repository/meterial_repository.dart';
+import 'package:toefl_app/data/repository/pick_word_repository.dart';
+import 'package:toefl_app/data/repository/synonym_repository.dart';
 import 'package:toefl_app/data/repository/test_repository.dart';
+import 'package:toefl_app/domain/state/answer_cubit.dart';
 import 'package:toefl_app/domain/state/auth/authentication_cubit.dart';
 import 'package:toefl_app/domain/state/test_history/test_history_cubit.dart';
 import 'package:toefl_app/domain/state/test_leaderboard/test_leaderboard_cubit.dart';
+import 'package:toefl_app/domain/state/button_next_cubit.dart';
+import 'package:toefl_app/domain/state/example_question/example_question_cubit.dart';
+import 'package:toefl_app/domain/state/flip_card_data/flip_card_data_cubit.dart';
+import 'package:toefl_app/domain/state/material/material_cubit.dart';
+import 'package:toefl_app/domain/state/modul_cubit.dart';
+import 'package:toefl_app/domain/state/pick_cubit.dart';
+import 'package:toefl_app/domain/state/pick_word_data/pick_word_data_cubit.dart';
+import 'package:toefl_app/domain/state/synonym_cubit.dart';
+import 'package:toefl_app/domain/state/synonym_data/synonym_data_cubit.dart';
 import 'package:toefl_app/domain/state/test_packet/test_packet_cubit.dart';
 import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
 import 'package:toefl_app/domain/state/timer/timer_bloc.dart';
@@ -65,6 +80,26 @@ class MyApp extends StatelessWidget {
             supabaseDatabase: supabaseDatabase,
           ),
         ),
+        RepositoryProvider(
+          create: (context) =>
+              MaterialRepository(supabaseDatabase: supabaseDatabase),
+        ),
+        RepositoryProvider(
+          create: (context) =>
+              ExampleRepository(supabaseDatabase: supabaseDatabase),
+        ),
+        RepositoryProvider(
+          create: (context) =>
+              SynonymRepository(supabaseDatabase: supabaseDatabase),
+        ),
+        RepositoryProvider(
+          create: (context) =>
+              PickWordRepository(supabaseDatabase: supabaseDatabase),
+        ),
+        RepositoryProvider(
+          create: (context) =>
+              FlipCardRepository(supabaseDatabase: supabaseDatabase),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -89,6 +124,41 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => TimerBloc(),
+          ),
+          BlocProvider(
+            create: (context) => SynonymCubit(),
+          ),
+          BlocProvider(
+            create: (context) => PickCubit(),
+          ),
+          BlocProvider(
+            create: (context) => ModulCubit(),
+          ),
+          BlocProvider(
+            create: (context) => ButtonNextCubit(),
+          ),
+          BlocProvider(
+            create: (context) => AnswerCubit(),
+          ),
+          BlocProvider(
+            create: (context) =>
+                MaterialModulCubit(context.read<MaterialRepository>()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                ExampleQuestionCubit(context.read<ExampleRepository>()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                SynonymDataCubit(context.read<SynonymRepository>()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                PickWordDataCubit(context.read<PickWordRepository>()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                FlipCardDataCubit(context.read<FlipCardRepository>()),
           ),
           BlocProvider(
             create: (context) => TestHistoryCubit(

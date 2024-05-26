@@ -1,5 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
   final String url;
@@ -59,49 +61,59 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.secondary,
-          borderRadius: const BorderRadius.all(Radius.circular(20))),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 22, top: 12),
-            child: GestureDetector(
-              onTap: () async {
-                if (_isPlaying) {
-                  await _audioPlayer.pause();
-                } else {
-                  await _audioPlayer.play(UrlSource(widget.url));
-                }
-              },
-              child: CircleAvatar(
-                radius: 15,
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                child: Icon(
-                  _isPlaying ? Icons.pause : Icons.play_arrow,
-                  color: Colors.white,
-                  size: 20,
+    return BlocListener<TestSectionCubit, TestSectionState>(
+      listener: (context, state) async {
+        await _audioPlayer.seek(Duration.zero);
+        await _audioPlayer.stop();
+        await _audioPlayer.play(UrlSource(widget.url));
+      },
+      listenWhen: (previous, current) =>
+          current.status == TestSectionStatus.success &&
+          current.currentQuestionIdx != previous.currentQuestionIdx,
+      child: Container(
+        decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.secondary,
+            borderRadius: const BorderRadius.all(Radius.circular(20))),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 22, top: 12),
+              child: GestureDetector(
+                onTap: () async {
+                  if (_isPlaying) {
+                    await _audioPlayer.pause();
+                  } else {
+                    await _audioPlayer.play(UrlSource(widget.url));
+                  }
+                },
+                child: CircleAvatar(
+                  radius: 15,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  child: Icon(
+                    _isPlaying ? Icons.pause : Icons.play_arrow,
+                    color: Colors.white,
+                    size: 20,
+                  ),
                 ),
               ),
             ),
-          ),
-          _buildSlider(),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 5,
+            _buildSlider(),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 5,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(_formatTime(_position)),
+                  Text(_formatTime(_duration))
+                ],
+              ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(_formatTime(_position)),
-                Text(_formatTime(_duration))
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -114,7 +126,6 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
       onChanged: (value) async {
         final position = Duration(seconds: value.toInt());
         await _audioPlayer.seek(position);
-        await _audioPlayer.resume();
       },
     );
   }

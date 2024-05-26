@@ -24,7 +24,12 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   void _onTimerStarted(TimerStarted event, Emitter<TimerState> emit) {
     final duration = event.duration.inSeconds;
 
-    emit(TimerRunInProgress(duration: duration));
+    emit(
+      TimerRunInProgress(
+        duration: duration,
+        formattedDuration: _formatTime(event.duration),
+      ),
+    );
     _tickerSubscription?.cancel();
 
     _tickerSubscription =
@@ -39,7 +44,10 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   ) {
     emit(
       event.duration > 0
-          ? TimerRunInProgress(duration: event.duration)
+          ? TimerRunInProgress(
+              duration: event.duration,
+              formattedDuration: _formatTime(Duration(seconds: event.duration)),
+            )
           : TimerRunComplete(),
     );
   }
@@ -48,5 +56,13 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
     _tickerSubscription?.cancel();
 
     emit(TimerRunComplete());
+  }
+
+  String _formatTime(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+
+    return "$minutes:$seconds";
   }
 }

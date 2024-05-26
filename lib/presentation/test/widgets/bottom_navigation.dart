@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:toefl_app/presentation/learn/pages/learn_method_page.dart';
 import 'package:toefl_app/presentation/test/screens/history_screen.dart';
-import 'package:toefl_app/presentation/test/screens/home_page.dart';
 import 'package:toefl_app/presentation/test/screens/home_tests.dart';
 import 'package:toefl_app/presentation/test/screens/leaderboard.dart';
 import 'package:toefl_app/presentation/test/widgets/custom_navigation.dart';
@@ -28,7 +28,7 @@ class _NavigationBottomState extends State<NavigationBottom> {
       ),
       body: <Widget>[
         const HomeTest(),
-        const HomePage(),
+        const LearnMainMethod(),
         const Leaderboard(),
         const HistoryPage(),
       ][currentPageIndex],

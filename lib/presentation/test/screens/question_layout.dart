@@ -41,7 +41,7 @@ class QuestionLayout extends StatelessWidget {
                             return const CircularProgressIndicator();
                           case TimerRunInProgress():
                             return Text(
-                              "Time left ${state.duration}",
+                              "Time left ${state.formattedDuration}",
                               style: const TextStyle(fontSize: 15),
                             );
                           case TimerRunComplete():
@@ -51,21 +51,41 @@ class QuestionLayout extends StatelessWidget {
                     ),
                   ],
                 ),
-                BlocBuilder<TestSectionCubit, TestSectionState>(
-                  builder: (context, state) {
-                    switch (state.status) {
-                      case TestSectionStatus.success:
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 4.0),
-                          child: Text(
-                            "Page ${state.currentQuestionIdx + 1} of ${state.section.questionList.length}",
-                            style: const TextStyle(fontSize: 15),
-                          ),
-                        );
-                      default:
-                        return const SizedBox();
-                    }
-                  },
+                Row(
+                  children: [
+                    BlocBuilder<TestSectionCubit, TestSectionState>(
+                      builder: (context, state) {
+                        switch (state.status) {
+                          case TestSectionStatus.success:
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 4.0),
+                              child: Text(
+                                "${state.currentQuestionIdx + 1} / ${state.section.questionList.length}",
+                                style: const TextStyle(fontSize: 15),
+                              ),
+                            );
+                          default:
+                            return const SizedBox();
+                        }
+                      },
+                    ),
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    IconButton(
+                      style: IconButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        foregroundColor:
+                            Theme.of(context).colorScheme.onPrimary,
+                      ),
+                      onPressed: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                      icon: const Icon(
+                        Icons.menu,
+                      ),
+                    )
+                  ],
                 ),
               ],
             ),

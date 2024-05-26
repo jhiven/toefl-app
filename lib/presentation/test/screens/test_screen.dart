@@ -10,6 +10,7 @@ import 'package:toefl_app/presentation/test/screens/result_screen.dart';
 import 'package:toefl_app/presentation/test/screens/section_direction.dart';
 import 'package:toefl_app/presentation/test/screens/section_result.dart';
 import 'package:toefl_app/presentation/test/screens/written_question.dart';
+import 'package:toefl_app/presentation/test/widgets/test_drawer.dart';
 
 class TestScreen extends StatelessWidget {
   const TestScreen({super.key});
@@ -17,6 +18,7 @@ class TestScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const TestDrawer(),
       body: MultiBlocListener(
         listeners: [
           BlocListener<TestPacketCubit, TestPacketState>(
