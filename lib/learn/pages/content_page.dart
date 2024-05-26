@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toefl_app/domain/models/material.dart';
 import 'package:toefl_app/domain/state/answer_cubit.dart';
 import 'package:toefl_app/domain/state/button_next_cubit.dart';
-import 'package:toefl_app/domain/state/cubit/example_question_cubit.dart';
+import 'package:toefl_app/domain/state/example_question/example_question_cubit.dart';
 import 'package:toefl_app/domain/state/material/material_cubit.dart';
 import 'package:toefl_app/domain/state/modul_cubit.dart';
 import 'package:toefl_app/learn/pages/listening_page.dart';
@@ -13,8 +14,8 @@ import 'package:toefl_app/learn/widget/button_test.dart';
 import 'package:toefl_app/learn/pages/question.dart';
 
 class ContentPage extends StatelessWidget {
-  const ContentPage({super.key, required this.id});
-  final int id;
+  const ContentPage({super.key, required this.index});
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +30,14 @@ class ContentPage extends StatelessWidget {
           body: BlocBuilder<MaterialModulCubit, MaterialModulState>(
             builder: (context, state2) {
               String? content;
+              int? id;
+              List<MaterialModel>? data; 
               if (state2 is MaterialLoaded) {
-                content =
-                    state2.data.firstWhere((item) => item.id == id).content;
+                // content =
+                //     state2.data.firstWhere((item) => item.id == id).content;
+                data = state2.data;
+                content = state2.data[index].content;
+                id = state2.data[index].id;
               }
               return Stack(
                 children: [
@@ -51,17 +57,22 @@ class ContentPage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => _changeWidget(modul),
+                            builder: (context) => _changeWidget(modul, data!.length),
                           ),
                         );
                         context.read<ButtonNextCubit>().changeButton(false);
                         context.read<AnswerCubit>().resetAnswer();
-                        context.read<ExampleQuestionCubit>().showQuestion(id);
+                        context.read<ExampleQuestionCubit>().showQuestion(id!);
                       },
                       child: ButtonTest(),
                     ),
                     button2: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        if (index + 1 < data!.length ) {
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ContentPage(index: index+1),));
+                          
+                        }
+                      },
                       child: ButtonNext(
                         next: true,
                       ),
@@ -76,17 +87,13 @@ class ContentPage extends StatelessWidget {
     );
   }
 
-  Widget _changeWidget(String modul) {
+  Widget _changeWidget(String modul, int length) {
     if (modul == 'Reading') {
-      return ReadingTest(
-        id: id,
-      );
+      return ReadingTest(index: index, length: length,);
     } else if (modul == 'Listening') {
-      return ListeningTest(
-        id: id,
-      );
+      return ListeningTest(index: index, length: length);
     } else {
-      return QuestionScreen();
+      return QuestionScreen(index: index, length: length);
     }
   }
 }

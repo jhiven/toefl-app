@@ -7,16 +7,17 @@ part 'pick_state.dart';
 class PickCubit extends Cubit<PickState> {
   PickCubit() : super(PickInitial());
 
+  void initialpick(List<String> answer) {
+    final isSelected = List.generate(8, (_) => false);
+    emit(PickSelectionChanged(answer, false, false, isSelected: isSelected));
+  }
+
   void buttonBorder(int index) {
-    if (state is PickInitial) {
-      final isSelected = List.generate(8, (_) => false);
-      emit(PickSelectionChanged(isSelected: isSelected));
-    }
     if (state is PickSelectionChanged) {
       final currentState = state as PickSelectionChanged;
       final List<bool> updatedSelected = List.from(currentState.isSelected);
       updatedSelected[index] = !updatedSelected[index];
-      emit(PickSelectionChanged(
+      emit(PickSelectionChanged(currentState.answer, false, false,
           isSelected: updatedSelected, chosen: currentState.chosen));
     }
   }
@@ -30,8 +31,21 @@ class PickCubit extends Cubit<PickState> {
       } else {
         updatedChosen.add(text);
       }
-      emit(PickSelectionChanged(
+      emit(PickSelectionChanged(currentState.answer, false, false,
           isSelected: currentState.isSelected, chosen: updatedChosen));
+    }
+  }
+
+  void check() {
+    if (state is PickSelectionChanged) {
+      final currentState = state as PickSelectionChanged;
+      bool areEqual =
+          Set.from(currentState.answer).containsAll(currentState.chosen) &&
+              Set.from(currentState.chosen).containsAll(currentState.answer);
+      print(PickSelectionChanged(currentState.answer, areEqual, true,
+          isSelected: currentState.isSelected, chosen: currentState.chosen));
+      emit(PickSelectionChanged(currentState.answer, areEqual, true,
+          isSelected: currentState.isSelected, chosen: currentState.chosen));
     }
   }
 }
