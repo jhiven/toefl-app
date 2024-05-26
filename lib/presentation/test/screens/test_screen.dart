@@ -4,12 +4,12 @@ import 'package:toefl_app/domain/models/test_section_model.dart';
 import 'package:toefl_app/domain/state/test_packet/test_packet_cubit.dart';
 import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
 import 'package:toefl_app/domain/state/timer/timer_bloc.dart';
-import 'package:toefl_app/presentation/screens/listening_test.dart';
-import 'package:toefl_app/presentation/screens/reading_question.dart';
-import 'package:toefl_app/presentation/screens/result_screen.dart';
-import 'package:toefl_app/presentation/screens/section_direction.dart';
-import 'package:toefl_app/presentation/screens/section_result.dart';
-import 'package:toefl_app/presentation/screens/written_question.dart';
+import 'package:toefl_app/presentation/test/screens/listening_test.dart';
+import 'package:toefl_app/presentation/test/screens/reading_question.dart';
+import 'package:toefl_app/presentation/test/screens/result_screen.dart';
+import 'package:toefl_app/presentation/test/screens/section_direction.dart';
+import 'package:toefl_app/presentation/test/screens/section_result.dart';
+import 'package:toefl_app/presentation/test/screens/written_question.dart';
 
 class TestScreen extends StatelessWidget {
   const TestScreen({super.key});

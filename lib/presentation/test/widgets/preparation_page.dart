@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:toefl_app/presentation/screens/test_layout.dart';
-import 'package:toefl_app/presentation/widgets/audio_player.dart';
+import 'package:toefl_app/presentation/test/screens/test_layout.dart';
+import 'package:toefl_app/presentation/test/widgets/audio_player.dart';
 
 class PreparationPage extends StatelessWidget {
   final String heading;

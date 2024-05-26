@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/data/repository/auth_repository.dart';
 import 'package:toefl_app/domain/state/test_history/test_history_cubit.dart';
 import 'package:toefl_app/domain/state/user/user_cubit.dart';
-import 'package:toefl_app/presentation/screens/history_screen.dart';
-import 'package:toefl_app/presentation/screens/home_tests.dart';
-import 'package:toefl_app/presentation/screens/login_screen.dart';
+import 'package:toefl_app/presentation/test/screens/history_screen.dart';
+import 'package:toefl_app/presentation/test/screens/home_tests.dart';
+import 'package:toefl_app/presentation/test/screens/login_screen.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -13,6 +13,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.logout),

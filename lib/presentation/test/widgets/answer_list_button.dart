@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
-import 'package:toefl_app/presentation/widgets/secondary_button.dart';
+import 'package:toefl_app/presentation/test/widgets/secondary_button.dart';
 
 class AnswerListButton extends StatelessWidget {
   const AnswerListButton({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/state/test_leaderboard/test_leaderboard_cubit.dart';
-import 'package:toefl_app/presentation/widgets/rangking.dart';
+import 'package:toefl_app/presentation/test/widgets/rangking.dart';
 
 class Leaderboard extends StatelessWidget {
   const Leaderboard({super.key});
@@ -57,20 +57,27 @@ class Leaderboard extends StatelessWidget {
                         child: CircularProgressIndicator(),
                       );
                     case TestLeaderboardSuccess():
-                      return ListView.builder(
-                        itemCount: state.leaderboards.length,
-                        itemBuilder: (context, index) {
-                          final item = state.leaderboards[index];
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 16.0),
-                            child: Rangking(
-                              rank: index + 1,
-                              name: item.name,
-                              score: item.totalScore,
-                            ),
-                          );
+                      return RefreshIndicator(
+                        onRefresh: () {
+                          return context
+                              .read<TestLeaderboardCubit>()
+                              .getLeaderboard();
                         },
+                        child: ListView.builder(
+                          itemCount: state.leaderboards.length,
+                          itemBuilder: (context, index) {
+                            final item = state.leaderboards[index];
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 16.0),
+                              child: Rangking(
+                                rank: index + 1,
+                                name: item.name,
+                                score: item.totalScore,
+                              ),
+                            );
+                          },
+                        ),
                       );
                     case TestLeaderboardError():
                       return Center(

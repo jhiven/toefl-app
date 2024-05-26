@@ -9,62 +9,79 @@ class HistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: const BackButton(
-          color: Color(0xFF39608F),
-        ),
-        title: const Text(
-          'History',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF39608F),
-          ),
-        ),
-      ),
-      body: Center(
-        child: BlocBuilder<TestHistoryCubit, TestHistoryState>(
-          builder: (context, state) {
-            switch (state) {
-              case TestHistoryLoading():
-              case TestHistoryInitial():
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              case TestHistorySuccess():
-                return RefreshIndicator(
-                  onRefresh: () async {
-                    final userId =
-                        (context.read<UserCubit>().state as UserFetchSucess)
-                            .user
-                            .userId;
-
-                    return context
-                        .read<TestHistoryCubit>()
-                        .getHistory(userId: userId);
-                  },
-                  child: ListView.builder(
-                    itemCount: state.historyList.length,
-                    itemBuilder: (context, index) {
-                      final history = state.historyList[index];
-
-                      return _historyCard(
-                        date: history.date,
-                        listeningScore: history.listeningScore,
-                        readingScore: history.readingScore,
-                        structureScore: history.structureScore,
-                        totalScore: history.listeningScore +
-                            history.readingScore +
-                            history.structureScore,
-                      );
-                    },
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Column(
+          children: [
+            const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'History ',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
                   ),
-                );
-              case TestHistoryError():
-                return Text(state.errorMSg);
-            }
-          },
+                ),
+                Text(
+                  'TOEFL',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
+                ),
+              ],
+            ),
+            Center(
+              child: BlocBuilder<TestHistoryCubit, TestHistoryState>(
+                builder: (context, state) {
+                  switch (state) {
+                    case TestHistoryLoading():
+                    case TestHistoryInitial():
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    case TestHistorySuccess():
+                      return RefreshIndicator(
+                        onRefresh: () async {
+                          final userId = (context.read<UserCubit>().state
+                                  as UserFetchSucess)
+                              .user
+                              .userId;
+
+                          return context
+                              .read<TestHistoryCubit>()
+                              .getHistory(userId: userId);
+                        },
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: state.historyList.length,
+                          itemBuilder: (context, index) {
+                            final history = state.historyList[index];
+
+                            return _historyCard(
+                              date: history.date,
+                              listeningScore: history.listeningScore,
+                              readingScore: history.readingScore,
+                              structureScore: history.structureScore,
+                              totalScore: history.listeningScore +
+                                  history.readingScore +
+                                  history.structureScore,
+                            );
+                          },
+                        ),
+                      );
+                    case TestHistoryError():
+                      return Text(state.errorMSg);
+                  }
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

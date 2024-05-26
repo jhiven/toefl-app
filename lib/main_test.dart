@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:toefl_app/presentation/screens/profile_screen.dart';
+import 'package:toefl_app/presentation/test/screens/profile_screen.dart';
 
 void main() => runApp(TestMain());
 

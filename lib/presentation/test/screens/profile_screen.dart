@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toefl_app/domain/state/auth/authentication_cubit.dart';
 import 'package:toefl_app/domain/state/user/user_cubit.dart';
-import 'package:toefl_app/presentation/widgets/login_input.dart';
+import 'package:toefl_app/presentation/test/screens/login_screen.dart';
+import 'package:toefl_app/presentation/test/widgets/login_input.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -14,6 +16,9 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Profile'),
+      ),
       body: SingleChildScrollView(
         child: BlocBuilder<UserCubit, UserState>(
           builder: (context, state) {
@@ -73,7 +78,17 @@ class _ProfileState extends State<Profile> {
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                context.read<AuthenticationCubit>().logout();
+                                Navigator.of(context).popUntil(
+                                  (route) => route.isFirst,
+                                );
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginScreen(),
+                                  ),
+                                );
+                              },
                               style: const ButtonStyle(
                                   backgroundColor:
                                       MaterialStatePropertyAll(Colors.red)),

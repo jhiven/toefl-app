@@ -12,7 +12,7 @@ class TestLeaderboardCubit extends Cubit<TestLeaderboardState> {
       : _testRepository = testRepository,
         super(TestLeaderboardInitial());
 
-  void getLeaderboard() async {
+  Future<void> getLeaderboard() async {
     try {
       emit(TestLeaderboardLoading());
       final leaderboards = await _testRepository.getLeaderboard();
