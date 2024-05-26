@@ -174,7 +174,7 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
-          title: 'Flutter Demo',
+          title: 'Toefl PENS',
           themeMode: ThemeMode.light,
           theme: appTheme,
           debugShowCheckedModeBanner: false,
