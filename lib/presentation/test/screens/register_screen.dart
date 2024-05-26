@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/state/auth/authentication_cubit.dart';
 import 'package:toefl_app/domain/state/user/user_cubit.dart';
-import 'package:toefl_app/presentation/test/screens/home_page.dart';
 import 'package:toefl_app/presentation/test/screens/login_screen.dart';
+import 'package:toefl_app/presentation/test/widgets/bottom_navigation.dart';
 import 'package:toefl_app/presentation/test/widgets/login_input.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -45,7 +45,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const SnackBar(content: Text('Register success')),
           );
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const HomePage()),
+            MaterialPageRoute(builder: (context) => const NavigationBottom()),
           );
         } else if (state is AuthenticationFailed) {
           ScaffoldMessenger.of(context).showSnackBar(
