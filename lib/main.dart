@@ -8,12 +8,13 @@ import 'package:toefl_app/data/repository/auth_repository.dart';
 import 'package:toefl_app/data/repository/test_repository.dart';
 import 'package:toefl_app/domain/state/auth/authentication_cubit.dart';
 import 'package:toefl_app/domain/state/test_history/test_history_cubit.dart';
+import 'package:toefl_app/domain/state/test_leaderboard/test_leaderboard_cubit.dart';
 import 'package:toefl_app/domain/state/test_packet/test_packet_cubit.dart';
 import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
 import 'package:toefl_app/domain/state/timer/timer_bloc.dart';
 import 'package:toefl_app/domain/state/user/user_cubit.dart';
-import 'package:toefl_app/presentation/screens/login_screen.dart';
-import 'package:toefl_app/presentation/widgets/bottom_navigation.dart';
+import 'package:toefl_app/presentation/test/screens/login_screen.dart';
+import 'package:toefl_app/presentation/test/widgets/bottom_navigation.dart';
 import 'package:toefl_app/theme.dart';
 import 'package:toefl_app/utils/supabase_constants.dart';
 import 'package:toefl_app/bloc_observer.dart';
@@ -92,7 +93,14 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => TestHistoryCubit(
               testRepository: context.read<TestRepository>(),
-            ),
+            )..getHistory(
+                userId: Supabase.instance.client.auth.currentUser!.id,
+              ),
+          ),
+          BlocProvider(
+            create: (context) => TestLeaderboardCubit(
+              testRepository: context.read<TestRepository>(),
+            )..getLeaderboard(),
           ),
         ],
         child: MaterialApp(

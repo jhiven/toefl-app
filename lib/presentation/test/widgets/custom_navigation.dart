@@ -42,8 +42,8 @@ class CustomNavigationBar extends StatelessWidget {
               label: 'Leaderboard',
             ),
             NavigationDestination(
-              selectedIcon: Icon(Icons.person),
-              icon: Icon(Icons.history),
+              selectedIcon: Icon(Icons.history),
+              icon: Icon(Icons.history_outlined),
               label: 'History',
             ),
           ],

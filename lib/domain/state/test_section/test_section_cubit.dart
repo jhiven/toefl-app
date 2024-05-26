@@ -15,7 +15,6 @@ class TestSectionCubit extends Cubit<TestSectionState> {
         section: section,
         currentQuestion: section.questionList.first,
         status: TestSectionStatus.success,
-        selectedAnswer: TestAnswerModel.empty,
         isShowInstruction: true,
         currentQuestionIdx: 0,
         totalCorrect: 0,
@@ -40,7 +39,6 @@ class TestSectionCubit extends Cubit<TestSectionState> {
         state.copyWith(
           currentQuestion: state.section.questionList[idx],
           currentQuestionIdx: idx,
-          selectedAnswer: TestAnswerModel.empty,
           status: TestSectionStatus.success,
         ),
       );
@@ -53,6 +51,19 @@ class TestSectionCubit extends Cubit<TestSectionState> {
     } catch (e) {
       throw Exception(e.toString());
     }
+  }
+
+  void prevQuestion() {
+    final int idx = state.currentQuestionIdx - 1;
+    final int nextIdx = idx < 0 ? 0 : idx;
+
+    emit(
+      state.copyWith(
+        currentQuestion: state.section.questionList[nextIdx],
+        currentQuestionIdx: nextIdx,
+        status: TestSectionStatus.success,
+      ),
+    );
   }
 
   void sectionTimeout() {
@@ -68,21 +79,46 @@ class TestSectionCubit extends Cubit<TestSectionState> {
   }
 
   void checkAnswer() {
-    final bool isCorrect = state.selectedAnswer.isCorrect;
+    final int totalCorrect = state.section.questionList
+        .where((element) => element.selectedAnswer.isCorrect)
+        .length;
+    final int totalIncorrect = state.section.questionList
+        .where((element) => !element.selectedAnswer.isCorrect)
+        .length;
+
     emit(
       state.copyWith(
-        totalCorrect: isCorrect ? state.totalCorrect + 1 : state.totalCorrect,
-        totalIncorrect:
-            !isCorrect ? state.totalIncorrect + 1 : state.totalIncorrect,
+        totalCorrect: totalCorrect,
+        totalIncorrect: totalIncorrect,
         status: TestSectionStatus.success,
       ),
     );
   }
 
   void setSelectedAnswer({required TestAnswerModel answer}) {
+    final currentQuestion = state.currentQuestion.copyWith(
+      selectedAnswer: answer,
+    );
     emit(
       state.copyWith(
-        selectedAnswer: answer,
+        section: state.section.copyWith(
+            questionList: state.section.questionList.map((e) {
+          if (e == state.currentQuestion) {
+            return currentQuestion;
+          }
+          return e;
+        }).toList()),
+        currentQuestion: currentQuestion,
+        status: TestSectionStatus.success,
+      ),
+    );
+  }
+
+  void setQuestion({required int index}) {
+    emit(
+      state.copyWith(
+        currentQuestion: state.section.questionList[index],
+        currentQuestionIdx: index,
         status: TestSectionStatus.success,
       ),
     );

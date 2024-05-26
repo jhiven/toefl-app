@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
 import 'package:toefl_app/domain/state/timer/timer_bloc.dart';
-import 'package:toefl_app/presentation/screens/test_layout.dart';
+import 'package:toefl_app/presentation/test/screens/test_layout.dart';
 
 class QuestionLayout extends StatelessWidget {
   const QuestionLayout({

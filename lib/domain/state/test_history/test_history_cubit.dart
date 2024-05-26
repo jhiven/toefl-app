@@ -26,12 +26,4 @@ class TestHistoryCubit extends Cubit<TestHistoryState> {
       throw Exception(e.toString());
     }
   }
-
-  Future<void> getLeaderboard() async {
-    try {
-      await _testRepository.getLeaderboard();
-    } catch (e) {
-      throw Exception(e.toString());
-    }
-  }
 }

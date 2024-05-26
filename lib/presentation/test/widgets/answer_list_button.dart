@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
-import 'package:toefl_app/presentation/widgets/secondary_button.dart';
+import 'package:toefl_app/presentation/test/widgets/secondary_button.dart';
 
 class AnswerListButton extends StatelessWidget {
   const AnswerListButton({super.key});
@@ -20,10 +20,13 @@ class AnswerListButton extends StatelessWidget {
                 itemCount: answerList.length,
                 itemBuilder: (context, index) {
                   final answer = answerList[index];
+                  print(
+                    'selected answer: ${state.currentQuestion.selectedAnswer}',
+                  );
                   return SecondaryButton(
                     opsi: String.fromCharCode(65 + index),
                     text: answer.answer,
-                    isSelected: answer == state.selectedAnswer,
+                    isSelected: answer == state.currentQuestion.selectedAnswer,
                     onPressed: () {
                       context
                           .read<TestSectionCubit>()

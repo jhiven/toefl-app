@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toefl_app/domain/models/test_section_model.dart';
-import 'package:toefl_app/presentation/widgets/preparation_page.dart';
+import 'package:toefl_app/presentation/test/widgets/preparation_page.dart';
 
 class SectionDirection extends StatelessWidget {
   const SectionDirection({

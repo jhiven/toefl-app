@@ -24,12 +24,10 @@ class PrimaryButton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Spacer(),
           Text(
             text,
             style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
           ),
-          const Spacer(),
           if (icon != null)
             Icon(
               icon!,

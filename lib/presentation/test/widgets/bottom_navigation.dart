@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:toefl_app/presentation/screens/history_screen.dart';
-import 'package:toefl_app/presentation/screens/home_page.dart';
-import 'package:toefl_app/presentation/screens/home_tests.dart';
-import 'package:toefl_app/presentation/screens/leaderboard.dart';
-import 'package:toefl_app/presentation/widgets/custom_navigation.dart';
+import 'package:toefl_app/presentation/test/screens/history_screen.dart';
+import 'package:toefl_app/presentation/test/screens/home_page.dart';
+import 'package:toefl_app/presentation/test/screens/home_tests.dart';
+import 'package:toefl_app/presentation/test/screens/leaderboard.dart';
+import 'package:toefl_app/presentation/test/widgets/custom_navigation.dart';
 
 class NavigationBottom extends StatefulWidget {
   const NavigationBottom({super.key});

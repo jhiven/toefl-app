@@ -68,8 +68,17 @@ class SupabaseDatabase {
             .single();
         return UserModel.fromJson(user);
       } else {
-        throw Exception('There is no user already logged in');
+        throw Exception('There is no user logged in');
       }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<int> getTestRemaining() async {
+    try {
+      final UserModel user = await getUser();
+      return user.testRemaining;
     } catch (e) {
       throw Exception(e.toString());
     }
@@ -104,10 +113,10 @@ class SupabaseDatabase {
     }
   }
 
-  Future<void> decrementTestRemaining(int userId) {
+  Future<void> decrementTestRemaining() {
     return _supabaseClient.rpc(
       'decrement_test_remaining',
-      params: {'id': userId},
+      params: {'user_id': _supabaseClient.auth.currentUser!.id},
     );
   }
 

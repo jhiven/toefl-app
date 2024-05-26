@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/state/auth/authentication_cubit.dart';
 import 'package:toefl_app/domain/state/user/user_cubit.dart';
-import 'package:toefl_app/presentation/screens/home_page.dart';
-import 'package:toefl_app/presentation/screens/register_screen.dart';
-import 'package:toefl_app/presentation/widgets/login_input.dart';
+import 'package:toefl_app/presentation/test/screens/register_screen.dart';
+import 'package:toefl_app/presentation/test/widgets/bottom_navigation.dart';
+import 'package:toefl_app/presentation/test/widgets/login_input.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -48,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) {
-                  return const HomePage();
+                  return const NavigationBottom();
                 },
               ),
             );
@@ -122,6 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           labelText: "Email",
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
+                          enabled: true,
                           validator: (value) {
                             if (value == null) {
                               return 'Email can not be empty';
@@ -149,6 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           obscureText: true,
                           enableSuggestions: false,
                           autocorrect: false,
+                          enabled: true,
                           validator: (value) {
                             if (value == null) {
                               return 'Password can not be empty';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:toefl_app/presentation/screens/test_layout.dart';
+import 'package:toefl_app/presentation/test/screens/test_layout.dart';
 
 class ResultPage extends StatelessWidget {
   final int listeningScore;

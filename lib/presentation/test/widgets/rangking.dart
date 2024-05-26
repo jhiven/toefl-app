@@ -47,18 +47,23 @@ class Rangking extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
-                Image.network(
-                  imageUrl ?? 'https://i.postimg.cc/ncsVLwJx/makanan.jpg',
-                  width: 40,
-                  height: 40,
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Icon(Icons.error);
-                  },
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return const CircularProgressIndicator();
-                  },
+                const Icon(
+                  Icons.account_circle,
+                  color: Color(0xFF14487A),
+                  size: 40,
                 ),
+                // Image.network(
+                //   imageUrl ?? 'https://i.postimg.cc/ncsVLwJx/makanan.jpg',
+                //   width: 40,
+                //   height: 40,
+                //   errorBuilder: (context, error, stackTrace) {
+                //     return const Icon(Icons.error);
+                //   },
+                //   loadingBuilder: (context, child, loadingProgress) {
+                //     if (loadingProgress == null) return child;
+                //     return const CircularProgressIndicator();
+                //   },
+                // ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Row(

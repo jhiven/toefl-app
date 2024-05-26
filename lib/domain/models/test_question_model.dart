@@ -6,12 +6,14 @@ class TestQuestionModel extends Equatable {
   final String? url;
   final List<TestAnswerModel> answerList;
   final String? text;
+  final TestAnswerModel selectedAnswer;
 
   const TestQuestionModel({
     this.question,
     this.url,
     this.text,
     required this.answerList,
+    this.selectedAnswer = TestAnswerModel.empty,
   });
 
   factory TestQuestionModel.fromJson({
@@ -27,6 +29,22 @@ class TestQuestionModel extends Equatable {
     );
   }
 
+  TestQuestionModel copyWith({
+    String? question,
+    String? url,
+    List<TestAnswerModel>? answerList,
+    String? text,
+    TestAnswerModel? selectedAnswer,
+  }) {
+    return TestQuestionModel(
+      question: question ?? this.question,
+      url: url ?? this.url,
+      answerList: answerList ?? this.answerList,
+      text: text ?? this.text,
+      selectedAnswer: selectedAnswer ?? this.selectedAnswer,
+    );
+  }
+
   static const empty = TestQuestionModel(
     question: null,
     url: null,
@@ -35,5 +53,5 @@ class TestQuestionModel extends Equatable {
   );
 
   @override
-  List<Object?> get props => [question, answerList, url, text];
+  List<Object?> get props => [question, answerList, url, text, selectedAnswer];
 }

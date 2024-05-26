@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/state/auth/authentication_cubit.dart';
 import 'package:toefl_app/domain/state/user/user_cubit.dart';
-import 'package:toefl_app/presentation/screens/home_page.dart';
-import 'package:toefl_app/presentation/screens/login_screen.dart';
-import 'package:toefl_app/presentation/widgets/login_input.dart';
+import 'package:toefl_app/presentation/test/screens/home_page.dart';
+import 'package:toefl_app/presentation/test/screens/login_screen.dart';
+import 'package:toefl_app/presentation/test/widgets/login_input.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -102,6 +102,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             controller: _nameController,
                             labelText: 'Name',
                             hintText: "Fill ur name",
+                            enabled: true,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Name cannot be empty';
@@ -115,6 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             labelText: "Email",
                             hintText: "Fill ur Email",
                             keyboardType: TextInputType.emailAddress,
+                            enabled: true,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Email cannot be empty';
@@ -134,6 +136,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             obscureText: true,
                             enableSuggestions: false,
                             autocorrect: false,
+                            enabled: true,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Password cannot be empty';

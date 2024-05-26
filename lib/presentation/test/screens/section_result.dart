@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/models/test_section_model.dart';
 import 'package:toefl_app/domain/state/test_packet/test_packet_cubit.dart';
 import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
-import 'package:toefl_app/presentation/widgets/result.dart';
+import 'package:toefl_app/presentation/test/widgets/result.dart';
 
 class SectionResult extends StatelessWidget {
   const SectionResult({super.key});
