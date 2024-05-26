@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/models/material_question.dart';
 import 'package:toefl_app/domain/state/answer_cubit.dart';
 import 'package:toefl_app/domain/state/button_next_cubit.dart';
-import 'package:toefl_app/domain/state/cubit/example_question_cubit.dart';
+import 'package:toefl_app/domain/state/example_question/example_question_cubit.dart';
+import 'package:toefl_app/learn/pages/content_page.dart';
 import 'package:toefl_app/learn/widget/bottom_backgorund.dart';
 import 'package:toefl_app/learn/widget/button_next.dart';
-import 'package:toefl_app/learn_grammar/style.dart';
 
 
 class QuestionScreen extends StatefulWidget {
-  const QuestionScreen({super.key});
+  const QuestionScreen({super.key, required this.index, required this.length});
+  final int index;
+  final int length;
 
   @override
   State<QuestionScreen> createState() => _QuestionScreenState();
@@ -81,7 +82,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(9.0),
                                   borderSide:
-                                      BorderSide(color: kPrimary, width: 1.0),),),
+                                      BorderSide(color: Colors.black, width: 1.0),),),
                         ),
                       ),
                     ],
@@ -104,6 +105,10 @@ class _QuestionScreenState extends State<QuestionScreen> {
                         if (answer!.isNotEmpty) {
                           if (next) {
                             context.read<ButtonNextCubit>().changeButton(false);
+                            if (widget.index + 1 < widget.length ) {
+                              Navigator.of(context).pop();
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ContentPage(index: widget.index+1),));
+                            }
                           } else {
                             context.read<ButtonNextCubit>().changeButton(true);
                             context.read<AnswerCubit>().checkAnswer(

@@ -1,6 +1,9 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:toefl_app/domain/models/flip_card.dart';
 import 'package:toefl_app/domain/models/material.dart';
 import 'package:toefl_app/domain/models/material_question.dart';
+import 'package:toefl_app/domain/models/pick_word.dart';
+import 'package:toefl_app/domain/models/synonym.dart';
 import 'package:toefl_app/domain/models/test_packet_model.dart';
 import 'package:toefl_app/domain/models/user_model.dart';
 
@@ -152,6 +155,43 @@ class SupabaseDatabase {
           .eq('material_id', id)
           .single();
       return MaterialQuestionModel.fromJson(json: data);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<SynonymModel>> getSynonym() async {
+    try {
+      final List<dynamic> allData =
+          await _supabaseClient.from('synonym').select('word1, word2');
+      final List<dynamic> randomData = allData;
+      randomData.shuffle(); // Shuffle the list
+      final List<dynamic> data = randomData.take(4).toList();
+      return data.map((json) => SynonymModel.fromJson(json)).toList();
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<PickWordModel>> getPickWord() async{
+    try {
+      final List<dynamic> allData = await _supabaseClient.from('pick_word').select('word, type');
+      final List<dynamic> randomData = allData;
+      randomData.shuffle();
+      final List<dynamic> data = randomData.take(8).toList();
+      return data.map((json) => PickWordModel.fromJson(json)).toList();
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<FlipCardModel>> getFlipCardWord() async{
+    try {
+      final List<dynamic> allData = await _supabaseClient.from('flipcards').select('front_side, back_side, vocab_translation');
+      final List<dynamic> randomData = allData;
+      randomData.shuffle();
+      final List<dynamic> data = randomData.take(5).toList();
+      return data.map((json) => FlipCardModel.fromJson(json)).toList();
     } catch (e) {
       throw Exception(e.toString());
     }

@@ -35,12 +35,12 @@ class _ChapterListState extends State<ChapterList> {
                 return const Center(child: CircularProgressIndicator());
               } else if (state2 is MaterialLoaded) {
                 final chapters = state2.data;
-                List<int> idAll = [];
                 return SingleChildScrollView(
                   child: Column(
                     children: [
-                      ...chapters.map((value) {
-                        idAll.add(value.id);
+                      ...chapters.asMap().entries.map((entry) {
+                        int index = entry.key;
+                        var value = entry.value;
                         return Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 10, bottom: 10),
@@ -49,7 +49,9 @@ class _ChapterListState extends State<ChapterList> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => ContentPage(id: value.id),
+                                    builder: (context) => ContentPage(
+                                      index: index,
+                                    ),
                                   ));
                               context
                                   .read<ModulCubit>()
@@ -65,7 +67,7 @@ class _ChapterListState extends State<ChapterList> {
                     ],
                   ),
                 );
-              } else{
+              } else {
                 return Center(child: Text('Failed to load data'));
               }
             },

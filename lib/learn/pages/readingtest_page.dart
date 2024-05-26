@@ -3,13 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/models/material_question.dart';
 import 'package:toefl_app/domain/state/answer_cubit.dart';
 import 'package:toefl_app/domain/state/button_next_cubit.dart';
-import 'package:toefl_app/domain/state/cubit/example_question_cubit.dart';
+import 'package:toefl_app/domain/state/example_question/example_question_cubit.dart';
+import 'package:toefl_app/learn/pages/content_page.dart';
 import 'package:toefl_app/learn/widget/bottom_backgorund.dart';
 import 'package:toefl_app/learn/widget/button_next.dart';
 
 class ReadingTest extends StatefulWidget {
-  const ReadingTest({super.key, required this.id});
-  final int id;
+  const ReadingTest({super.key, required this.index, required this.length});
+  final int index;
+  final int length;
 
   @override
   State<ReadingTest> createState() => _ReadingTestState();
@@ -158,6 +160,10 @@ class _ReadingTestState extends State<ReadingTest> {
                           if (next) {
                             context.read<ButtonNextCubit>().changeButton(false);
                             context.read<AnswerCubit>().resetAnswer();
+                            if (widget.index + 1 < widget.length ) {
+                              Navigator.of(context).pop();
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ContentPage(index: widget.index+1),));
+                            }
                           } else {
                             context.read<ButtonNextCubit>().changeButton(true);
                           }
