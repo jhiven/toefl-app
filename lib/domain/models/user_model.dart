@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class UserModel extends Equatable {
+  final String userId;
   final String name;
   final String email;
   final int testRemaining;
@@ -11,6 +12,7 @@ class UserModel extends Equatable {
     required this.email,
     required this.testRemaining,
     required this.isAdmin,
+    required this.userId,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -19,9 +21,10 @@ class UserModel extends Equatable {
       email: json['email'] as String,
       testRemaining: json['test_remaining'] as int,
       isAdmin: json['is_admin'] as bool,
+      userId: json['id'] as String,
     );
   }
 
   @override
-  List<Object?> get props => [name, email, testRemaining, isAdmin];
+  List<Object?> get props => [name, email, testRemaining, isAdmin, userId];
 }
