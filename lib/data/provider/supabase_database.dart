@@ -153,7 +153,8 @@ class SupabaseDatabase {
       final data = await _supabaseClient
           .from('test_history')
           .select()
-          .eq('user_id', userId);
+          .eq('user_id', userId)
+          .order('created_at', ascending: false);
 
       return data.map((e) => TestHistoryModel.fromJson(e)).toList();
     } catch (e) {

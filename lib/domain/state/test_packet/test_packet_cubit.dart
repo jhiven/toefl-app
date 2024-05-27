@@ -18,7 +18,7 @@ class TestPacketCubit extends Cubit<TestPacketState> {
       // final TestPacketModel packet = await _testRepository.getRandomPacket();
       final TestPacketModel packet = await _testRepository.getPacketById(1);
 
-      // await _testRepository.decrementTestRemaining();
+      await _testRepository.decrementTestRemaining();
       final int testRemaining = await _testRepository.getTestRemaining();
 
       if (testRemaining > 0) {

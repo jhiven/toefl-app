@@ -25,9 +25,16 @@ class SecondaryButton extends StatelessWidget {
         child: ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
-            backgroundColor: isSelected
-                ? Theme.of(context).colorScheme.tertiary
-                : Colors.grey,
+            backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(9999),
+              side: isSelected
+                  ? BorderSide(
+                      color: Theme.of(context).colorScheme.primary,
+                      width: 2,
+                    )
+                  : BorderSide.none,
+            ),
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -41,10 +48,11 @@ class SecondaryButton extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Text(
                       opsi,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w500,
-                        color: Colors.black,
+                        color:
+                            Theme.of(context).colorScheme.onTertiaryContainer,
                       ),
                     ),
                   ),
@@ -55,10 +63,11 @@ class SecondaryButton extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       text,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
-                        color: Colors.black,
+                        color:
+                            Theme.of(context).colorScheme.onTertiaryContainer,
                       ),
                     ),
                   ),
