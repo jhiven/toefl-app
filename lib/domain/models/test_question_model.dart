@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:toefl_app/domain/models/test_answer_model.dart';
 
 class TestQuestionModel extends Equatable {
+  final int id;
   final String? question;
   final String? url;
   final List<TestAnswerModel> answerList;
@@ -9,6 +10,7 @@ class TestQuestionModel extends Equatable {
   final TestAnswerModel selectedAnswer;
 
   const TestQuestionModel({
+    required this.id,
     this.question,
     this.url,
     this.text,
@@ -22,6 +24,7 @@ class TestQuestionModel extends Equatable {
     final answers = json['test_answer'] as List;
 
     return TestQuestionModel(
+      id: json['id'] as int,
       question: json['question'] as String?,
       text: json['text'] as String?,
       url: json['url'] as String?,
@@ -30,6 +33,7 @@ class TestQuestionModel extends Equatable {
   }
 
   TestQuestionModel copyWith({
+    int? id,
     String? question,
     String? url,
     List<TestAnswerModel>? answerList,
@@ -37,7 +41,7 @@ class TestQuestionModel extends Equatable {
     TestAnswerModel? selectedAnswer,
   }) {
     return TestQuestionModel(
-      question: question ?? this.question,
+      id: id ?? this.id,
       url: url ?? this.url,
       answerList: answerList ?? this.answerList,
       text: text ?? this.text,
@@ -46,6 +50,7 @@ class TestQuestionModel extends Equatable {
   }
 
   static const empty = TestQuestionModel(
+    id: -1,
     question: null,
     url: null,
     text: null,
@@ -53,5 +58,12 @@ class TestQuestionModel extends Equatable {
   );
 
   @override
-  List<Object?> get props => [question, answerList, url, text, selectedAnswer];
+  List<Object?> get props => [
+        id,
+        question,
+        answerList,
+        url,
+        text,
+        selectedAnswer,
+      ];
 }
