@@ -12,19 +12,25 @@ class TestPacketCubit extends Cubit<TestPacketState> {
 
   TestPacketCubit(this._testRepository) : super(TestPacketInitial());
 
-  void startTest(int userId) async {
+  void startTest() async {
     try {
+      emit(const TestPacketLoading());
       // final TestPacketModel packet = await _testRepository.getRandomPacket();
       final TestPacketModel packet = await _testRepository.getPacketById(1);
 
-      // await _testRepository.decrementTestRemaining(userId);
+      // await _testRepository.decrementTestRemaining();
+      final int testRemaining = await _testRepository.getTestRemaining();
 
-      emit(
-        TestPacketAnswering(
-          packet: packet,
-          currentSection: packet.listSection.first,
-        ),
-      );
+      if (testRemaining > 0) {
+        emit(
+          TestPacketAnswering(
+            packet: packet,
+            currentSection: packet.listSection.first,
+          ),
+        );
+      } else {
+        emit(const TestPacketError(errorMsg: 'Your test remaining is 0'));
+      }
     } catch (e) {
       emit(TestPacketError(errorMsg: e.toString()));
       throw Exception(e.toString());
@@ -53,7 +59,7 @@ class TestPacketCubit extends Cubit<TestPacketState> {
 
         emit(
           tps.copyWith(
-            listeningScore: score * 10 / 3,
+            listeningScore: (score * 10 / 3).floor(),
           ),
         );
       case SectionType.structure:
@@ -61,7 +67,7 @@ class TestPacketCubit extends Cubit<TestPacketState> {
 
         emit(
           tps.copyWith(
-            structureScore: score * 10 / 3,
+            structureScore: (score * 10 / 3).floor(),
           ),
         );
       case SectionType.reading:
@@ -69,7 +75,7 @@ class TestPacketCubit extends Cubit<TestPacketState> {
 
         emit(
           tps.copyWith(
-            readingScore: score * 10 / 3,
+            readingScore: (score * 10 / 3).floor(),
           ),
         );
       default:
@@ -97,6 +103,8 @@ class TestPacketCubit extends Cubit<TestPacketState> {
       );
     } on RangeError catch (_) {
       final total = tps.listeningScore + tps.readingScore + tps.structureScore;
+
+      emit(const TestPacketLoading());
 
       await _testRepository.insertHistory(
         listeningScore: tps.listeningScore,

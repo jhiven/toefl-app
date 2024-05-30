@@ -1,4 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:toefl_app/domain/models/test_history_model.dart';
+import 'package:toefl_app/domain/models/test_leaderboard_model.dart';
 import 'package:toefl_app/domain/models/flip_card.dart';
 import 'package:toefl_app/domain/models/material.dart';
 import 'package:toefl_app/domain/models/material_question.dart';
@@ -71,8 +73,17 @@ class SupabaseDatabase {
             .single();
         return UserModel.fromJson(user);
       } else {
-        throw Exception('There is no user already logged in');
+        throw Exception('There is no user logged in');
       }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<int> getTestRemaining() async {
+    try {
+      final UserModel user = await getUser();
+      return user.testRemaining;
     } catch (e) {
       throw Exception(e.toString());
     }
@@ -83,7 +94,7 @@ class SupabaseDatabase {
       final Map<String, dynamic> data = await _supabaseClient
           .from('test_packet')
           .select(
-            'id, name, test_question(question, url, type_id, test_answer(answer, is_correct))',
+            'id, name, test_question(question, text, url, type_id, test_answer(answer, is_correct))',
           )
           .eq('id', packetId)
           .single();
@@ -107,29 +118,56 @@ class SupabaseDatabase {
     }
   }
 
-  Future<void> decrementTestRemaining(int userId) {
+  Future<void> decrementTestRemaining() {
     return _supabaseClient.rpc(
       'decrement_test_remaining',
-      params: {'id': userId},
+      params: {'user_id': _supabaseClient.auth.currentUser!.id},
     );
   }
 
   Future<void> insertHistory({
     required int packetId,
-    required double listeningScore,
-    required double readingScore,
-    required double structureScore,
+    required int listeningScore,
+    required int readingScore,
+    required int structureScore,
   }) async {
     final data = {
       'packet_id': packetId,
       'user_id': _supabaseClient.auth.currentUser!.id,
-      'listening_score': listeningScore.floor(),
-      'reading_score': readingScore.floor(),
-      'structure_score': structureScore.floor(),
+      'listening_score': listeningScore,
+      'reading_score': readingScore,
+      'structure_score': structureScore,
     };
 
     try {
       await _supabaseClient.from('test_history').insert(data);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<TestHistoryModel>> getHistory({
+    required String userId,
+  }) async {
+    try {
+      final data = await _supabaseClient
+          .from('test_history')
+          .select()
+          .eq('user_id', userId);
+
+      return data.map((e) => TestHistoryModel.fromJson(e)).toList();
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<TestLeaderboardModel>> getLeaderboard() async {
+    try {
+      final data = await _supabaseClient
+          .from('test_leaderboard')
+          .select('*, users(name)');
+
+      return data.map((e) => TestLeaderboardModel.fromJson(e)).toList();
     } catch (e) {
       throw Exception(e.toString());
     }
@@ -173,9 +211,10 @@ class SupabaseDatabase {
     }
   }
 
-  Future<List<PickWordModel>> getPickWord() async{
+  Future<List<PickWordModel>> getPickWord() async {
     try {
-      final List<dynamic> allData = await _supabaseClient.from('pick_word').select('word, type');
+      final List<dynamic> allData =
+          await _supabaseClient.from('pick_word').select('word, type');
       final List<dynamic> randomData = allData;
       randomData.shuffle();
       final List<dynamic> data = randomData.take(8).toList();
@@ -185,9 +224,11 @@ class SupabaseDatabase {
     }
   }
 
-  Future<List<FlipCardModel>> getFlipCardWord() async{
+  Future<List<FlipCardModel>> getFlipCardWord() async {
     try {
-      final List<dynamic> allData = await _supabaseClient.from('flipcards').select('front_side, back_side, vocab_translation');
+      final List<dynamic> allData = await _supabaseClient
+          .from('flipcards')
+          .select('front_side, back_side, vocab_translation');
       final List<dynamic> randomData = allData;
       randomData.shuffle();
       final List<dynamic> data = randomData.take(5).toList();

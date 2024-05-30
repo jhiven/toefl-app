@@ -5,8 +5,8 @@ enum TestSectionStatus { initial, success, done }
 final class TestSectionState extends Equatable {
   final TestSectionModel section;
   final TestQuestionModel currentQuestion;
-  final TestAnswerModel selectedAnswer;
   final TestSectionStatus status;
+  final bool isShowInstruction;
   final int currentQuestionIdx;
   final int totalCorrect;
   final int totalIncorrect;
@@ -14,8 +14,8 @@ final class TestSectionState extends Equatable {
   const TestSectionState({
     this.section = TestSectionModel.empty,
     this.currentQuestion = TestQuestionModel.empty,
-    this.selectedAnswer = TestAnswerModel.empty,
     this.status = TestSectionStatus.initial,
+    this.isShowInstruction = true,
     this.currentQuestionIdx = 0,
     this.totalCorrect = 0,
     this.totalIncorrect = 0,
@@ -24,8 +24,8 @@ final class TestSectionState extends Equatable {
   TestSectionState copyWith({
     TestSectionModel? section,
     TestQuestionModel? currentQuestion,
-    TestAnswerModel? selectedAnswer,
     TestSectionStatus? status,
+    bool? isShowInstruction,
     int? currentQuestionIdx,
     int? totalCorrect,
     int? totalIncorrect,
@@ -33,8 +33,8 @@ final class TestSectionState extends Equatable {
     return TestSectionState(
       section: section ?? this.section,
       currentQuestion: currentQuestion ?? this.currentQuestion,
-      selectedAnswer: selectedAnswer ?? this.selectedAnswer,
       status: status ?? this.status,
+      isShowInstruction: isShowInstruction ?? this.isShowInstruction,
       totalCorrect: totalCorrect ?? this.totalCorrect,
       totalIncorrect: totalIncorrect ?? this.totalIncorrect,
       currentQuestionIdx: currentQuestionIdx ?? this.currentQuestionIdx,
@@ -45,8 +45,8 @@ final class TestSectionState extends Equatable {
   List<Object> get props => [
         section,
         currentQuestion,
-        selectedAnswer,
         totalCorrect,
+        isShowInstruction,
         totalIncorrect,
         status,
         currentQuestion,

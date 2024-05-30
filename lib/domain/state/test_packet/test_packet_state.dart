@@ -7,15 +7,13 @@ sealed class TestPacketState extends Equatable {
   List<Object> get props => [];
 }
 
-final class TestPacketInitial extends TestPacketState {}
-
 final class TestPacketAnswering extends TestPacketState {
   final TestPacketModel packet;
   final TestSectionModel currentSection;
   final int currentSectionIdx;
-  final double listeningScore;
-  final double structureScore;
-  final double readingScore;
+  final int listeningScore;
+  final int structureScore;
+  final int readingScore;
 
   const TestPacketAnswering({
     required this.packet,
@@ -30,9 +28,9 @@ final class TestPacketAnswering extends TestPacketState {
     TestPacketModel? packet,
     TestSectionModel? currentSection,
     int? currentSectionIdx,
-    double? listeningScore,
-    double? structureScore,
-    double? readingScore,
+    int? listeningScore,
+    int? structureScore,
+    int? readingScore,
   }) {
     return TestPacketAnswering(
       packet: packet ?? this.packet,
@@ -65,10 +63,10 @@ final class TestPacketError extends TestPacketState {
 }
 
 final class TestPacketDone extends TestPacketState {
-  final double listeningScore;
-  final double structureScore;
-  final double readingScore;
-  final double totalScore;
+  final int listeningScore;
+  final int structureScore;
+  final int readingScore;
+  final int totalScore;
 
   const TestPacketDone({
     required this.listeningScore,
@@ -85,3 +83,9 @@ final class TestPacketDone extends TestPacketState {
         totalScore,
       ];
 }
+
+final class TestPacketLoading extends TestPacketState {
+  const TestPacketLoading();
+}
+
+final class TestPacketInitial extends TestPacketState {}
