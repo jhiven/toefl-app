@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:toefl_app/domain/state/flip_card_data/flip_card_data_cubit.dart';
-import 'package:toefl_app/learn/widget/flipcard_widget.dart';
+import 'package:toefl_app/presentation/learn/widget/flipcard_widget.dart';
 
 class FlipcardScreen extends StatefulWidget {
   const FlipcardScreen({super.key});
@@ -83,7 +83,7 @@ class _FlipcardScreenState extends State<FlipcardScreen> {
                           back: FlipcardWidget(
                             title: 'Explanation',
                             content: flipcards.data[index].backSide,
-                            color: Color.fromRGBO(246, 196, 16, 1),
+                            color: Color.fromARGB(255, 249, 186, 0),
                           ),
                         ),
                       );

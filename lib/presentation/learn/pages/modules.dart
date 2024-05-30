@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/state/material/material_cubit.dart';
 import 'package:toefl_app/domain/state/modul_cubit.dart';
-import 'package:toefl_app/learn/pages/chapter_list.dart';
-import 'package:toefl_app/learn/widget/customListTile.dart';
+import 'package:toefl_app/presentation/learn/pages/chapter_list.dart';
+import 'package:toefl_app/presentation/learn/widget/customListTile.dart';
 
 class Modules extends StatefulWidget {
   const Modules({super.key});
