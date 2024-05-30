@@ -235,6 +235,9 @@ class _FlipcardScreenState extends State<FlipcardScreen> {
                         onPressed: () {
                           Navigator.of(context).pop();
                           context.read<FlipCardDataCubit>().showFlipCard();
+                          setState(() {
+                            _currentIndex = 0;
+                          });
                         },
                       ),
                     ),
