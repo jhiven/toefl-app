@@ -63,11 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          leading: const BackButton(
-            color: Colors.black,
-          ),
-        ),
+        appBar: AppBar(),
         body: Column(
           mainAxisAlignment:
               MainAxisAlignment.start, // Mengatur posisi vertikal ke atas
