@@ -43,6 +43,7 @@ class TestQuestionModel extends Equatable {
     return TestQuestionModel(
       id: id ?? this.id,
       url: url ?? this.url,
+      question: question ?? this.question,
       answerList: answerList ?? this.answerList,
       text: text ?? this.text,
       selectedAnswer: selectedAnswer ?? this.selectedAnswer,
