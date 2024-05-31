@@ -94,7 +94,7 @@ class SupabaseDatabase {
       final Map<String, dynamic> data = await _supabaseClient
           .from('test_packet')
           .select(
-            'id, name, test_question(question, text, url, type_id, test_answer(answer, is_correct))',
+            'id, name, test_question(id, question, text, url, type_id, test_answer(answer, is_correct))',
           )
           .eq('id', packetId)
           .single();
@@ -153,7 +153,8 @@ class SupabaseDatabase {
       final data = await _supabaseClient
           .from('test_history')
           .select()
-          .eq('user_id', userId);
+          .eq('user_id', userId)
+          .order('created_at', ascending: false);
 
       return data.map((e) => TestHistoryModel.fromJson(e)).toList();
     } catch (e) {

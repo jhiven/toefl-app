@@ -1,7 +1,13 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:equatable/equatable.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:toefl_app/data/repository/test_repository.dart';
 import 'package:toefl_app/domain/models/test_packet_model.dart';
+import 'package:toefl_app/domain/models/test_question_model.dart';
 import 'package:toefl_app/domain/models/test_section_model.dart';
 import 'package:toefl_app/utils/score_env.dart';
 
@@ -13,19 +19,38 @@ class TestPacketCubit extends Cubit<TestPacketState> {
   TestPacketCubit(this._testRepository) : super(TestPacketInitial());
 
   void startTest() async {
+    emit(const TestPacketLoading());
+    final loading = BotToast.showLoading();
     try {
-      emit(const TestPacketLoading());
       // final TestPacketModel packet = await _testRepository.getRandomPacket();
       final TestPacketModel packet = await _testRepository.getPacketById(1);
 
-      // await _testRepository.decrementTestRemaining();
+      final TestSectionModel listeningSection = packet.listSection.firstWhere(
+          (element) => element.sectionType == SectionType.listening);
+
+      final List<TestQuestionModel> downloadedAudioList = await Future.wait(
+          listeningSection.questionList
+              .map((e) => _testRepository.downloadAudio(e))
+              .toList());
+
+      final newPacket = packet.copyWith(
+          listSection: packet.listSection
+              .map(
+                (e) => e.sectionType == SectionType.listening
+                    ? e.copyWith(questionList: downloadedAudioList)
+                    : e,
+              )
+              .toList());
+      log(newPacket.toString());
+
+      await _testRepository.decrementTestRemaining();
       final int testRemaining = await _testRepository.getTestRemaining();
 
       if (testRemaining > 0) {
         emit(
           TestPacketAnswering(
-            packet: packet,
-            currentSection: packet.listSection.first,
+            packet: newPacket,
+            currentSection: newPacket.listSection.first,
           ),
         );
       } else {
@@ -34,6 +59,8 @@ class TestPacketCubit extends Cubit<TestPacketState> {
     } catch (e) {
       emit(TestPacketError(errorMsg: e.toString()));
       throw Exception(e.toString());
+    } finally {
+      loading();
     }
   }
 
@@ -95,6 +122,11 @@ class TestPacketCubit extends Cubit<TestPacketState> {
     final int idx = tps.currentSectionIdx + 1;
 
     try {
+      if (tps.currentSection.sectionType == SectionType.listening) {
+        Directory dir = await getTemporaryDirectory();
+        dir.deleteSync(recursive: true);
+        dir.create();
+      }
       emit(
         tps.copyWith(
           currentSection: tps.packet.listSection[idx],

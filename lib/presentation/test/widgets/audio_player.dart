@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toefl_app/domain/models/test_section_model.dart';
 import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
@@ -16,7 +17,7 @@ class AudioPlayerWidget extends StatefulWidget {
 }
 
 class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
-  final _audioPlayer = AudioPlayer();
+  final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isPlaying = false;
   Duration _duration = Duration.zero;
   Duration _position = Duration.zero;
@@ -24,6 +25,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   @override
   void initState() {
     super.initState();
+    _setSource();
     _initializePlayer();
   }
 
@@ -33,7 +35,11 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     super.dispose();
   }
 
-  void _initializePlayer() {
+  void _setSource() async {
+    await _audioPlayer.setSource(DeviceFileSource(widget.url));
+  }
+
+  void _initializePlayer() async {
     _audioPlayer.onPlayerStateChanged.listen((state) {
       if (mounted) {
         setState(() {
@@ -63,12 +69,16 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   Widget build(BuildContext context) {
     return BlocListener<TestSectionCubit, TestSectionState>(
       listener: (context, state) async {
-        await _audioPlayer.seek(Duration.zero);
-        await _audioPlayer.stop();
-        await _audioPlayer.play(UrlSource(widget.url));
+        if (mounted) {
+          await _audioPlayer.stop();
+
+          _setSource();
+          await _audioPlayer.resume();
+        }
       },
       listenWhen: (previous, current) =>
           current.status == TestSectionStatus.success &&
+          current.section.sectionType == SectionType.listening &&
           current.currentQuestionIdx != previous.currentQuestionIdx,
       child: Container(
         decoration: BoxDecoration(
@@ -84,7 +94,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                   if (_isPlaying) {
                     await _audioPlayer.pause();
                   } else {
-                    await _audioPlayer.play(UrlSource(widget.url));
+                    await _audioPlayer.resume();
                   }
                 },
                 child: CircleAvatar(
