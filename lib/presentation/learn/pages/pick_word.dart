@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/state/button_next_cubit.dart';
 import 'package:toefl_app/domain/state/pick_cubit.dart';
 import 'package:toefl_app/domain/state/pick_word_data/pick_word_data_cubit.dart';
-import 'package:toefl_app/learn/widget/bottom_backgorund.dart';
-import 'package:toefl_app/learn/widget/button_next.dart';
+import 'package:toefl_app/presentation/learn/widget/bottom_backgorund.dart';
+import 'package:toefl_app/presentation/learn/widget/button_next.dart';
 
 class PickWord extends StatefulWidget {
   const PickWord({super.key});
@@ -16,6 +16,8 @@ class PickWord extends StatefulWidget {
 class _PickWordState extends State<PickWord> {
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double widthItem = screenWidth * 0.4;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -36,8 +38,8 @@ class _PickWordState extends State<PickWord> {
                 return Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 30),
-                      child: Text("pilih kalimat ${state1.question}"),
+                      padding: const EdgeInsets.only(top: 20, bottom: 30),
+                      child: Text("select the sentence that contains ${state1.question}", style: TextStyle(fontSize: 15),),
                     ),
                     BlocBuilder<PickCubit, PickState>(
                       builder: (context, state) {
@@ -47,7 +49,7 @@ class _PickWordState extends State<PickWord> {
                         return SizedBox(
                           width: double.infinity,
                           child: Wrap(
-                            alignment: WrapAlignment.spaceBetween,
+                            alignment: WrapAlignment.spaceAround,
                             children: [
                               state is PickSelectionChanged &&
                                       state.doCheck &&
@@ -55,7 +57,7 @@ class _PickWordState extends State<PickWord> {
                                   ? Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Text('Answer : '),
+                                        Text('Answer : ', style: TextStyle(fontSize: 12),),
                                         ...state.answer.map(
                                           (value) {
                                             return Text('${value} ');
@@ -69,7 +71,7 @@ class _PickWordState extends State<PickWord> {
                                   int index = state1.data.indexOf(value);
 
                                   return Padding(
-                                    padding: const EdgeInsets.all(15),
+                                    padding: const EdgeInsets.only(bottom: 20, top: 20),
                                     child: InkWell(
                                       onTap: () {
                                         context
@@ -80,8 +82,8 @@ class _PickWordState extends State<PickWord> {
                                             .getChosenText(value.word);
                                       },
                                       child: Container(
-                                          height: 60,
-                                          width: 150,
+                                          height: 80,
+                                          width: widthItem,
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 const BorderRadius.all(

@@ -6,7 +6,12 @@ class FlipcardWidget extends StatelessWidget {
   final String? translation;
   final Color color;
 
-  const FlipcardWidget({super.key, required this.title, required this.color, required this.content, this.translation});
+  const FlipcardWidget(
+      {super.key,
+      required this.title,
+      required this.color,
+      required this.content,
+      this.translation});
 
   @override
   Widget build(BuildContext context) {
@@ -35,22 +40,28 @@ class FlipcardWidget extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    content,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.white,
+                  Flexible(
+                    child: Text(
+                      content,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
+                      overflow: TextOverflow
+                          .ellipsis,
+                      maxLines: 14,
                     ),
                   ),
-                  translation != null 
-                  ? Text(
-                    translation!,
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                    ),
-                  ) : Container(), 
+                  translation != null
+                      ? Text(
+                          translation!,
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
+                        )
+                      : Container(),
                 ],
               ),
             ),
