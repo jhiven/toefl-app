@@ -12,7 +12,7 @@ class TestPacketModel extends Equatable {
     required this.id,
   });
 
-  factory TestPacketModel.fromJson(Map<String, dynamic> json) {
+  factory TestPacketModel.fromSupaJson(Map<String, dynamic> json) {
     final questions = json['test_question'] as List;
 
     return TestPacketModel(
@@ -20,10 +20,28 @@ class TestPacketModel extends Equatable {
       id: json['id'] as int,
       listSection: SectionType.values
           .where((element) => element != SectionType.unknown)
-          .map((sectionType) => TestSectionModel.fromQuestionsJson(
+          .map((sectionType) => TestSectionModel.fromSupaJson(
               questions: questions, sectionType: sectionType))
           .toList(),
     );
+  }
+
+  factory TestPacketModel.fromJson(Map<String, dynamic> json) {
+    return TestPacketModel(
+      name: json['name'] as String,
+      listSection: (json['listSection'] as List)
+          .map((e) => TestSectionModel.fromJson(e))
+          .toList(),
+      id: json['id'] as int,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'id': id,
+      'listSection': listSection.map((e) => e.toJson()).toList(),
+    };
   }
 
   TestPacketModel copyWith({

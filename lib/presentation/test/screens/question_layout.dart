@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toefl_app/domain/state/test_packet/test_packet_cubit.dart';
 import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
 import 'package:toefl_app/domain/state/timer/timer_bloc.dart';
 import 'package:toefl_app/presentation/test/screens/test_layout.dart';
@@ -36,6 +37,13 @@ class QuestionLayout extends StatelessWidget {
                     ),
                     BlocConsumer<TimerBloc, TimerState>(
                       listener: (context, state) {
+                        final sectionState =
+                            context.read<TestSectionCubit>().state;
+
+                        context.read<TestPacketCubit>().calculateSectionScore(
+                              sectionType: sectionState.section.sectionType,
+                              totalCorrect: sectionState.totalCorrect,
+                            );
                         context.read<TestSectionCubit>().sectionTimeout();
                       },
                       listenWhen: (previous, current) =>

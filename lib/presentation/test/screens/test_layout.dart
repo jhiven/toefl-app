@@ -42,6 +42,9 @@ class TestLayout extends StatelessWidget {
                         if (sectionCubit.state.isShowInstruction) {
                           sectionCubit.startSection();
                         } else {
+                          if (sectionCubit.state.currentQuestionIdx ==
+                              sectionCubit.state.section.questionList.length -
+                                  1) {}
                           sectionCubit.checkAnswer();
                           sectionCubit.nextQuestion();
                         }

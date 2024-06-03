@@ -67,7 +67,6 @@ class HistoryPage extends StatelessWidget {
                       .getHistory(userId: userId);
                 },
                 child: ListView.builder(
-                  shrinkWrap: true,
                   itemCount: state.historyList.length,
                   itemBuilder: (context, index) {
                     final history = state.historyList[index];

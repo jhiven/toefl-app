@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/state/test_packet/test_packet_cubit.dart';
 import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
+import 'package:toefl_app/domain/state/timer/timer_bloc.dart';
 import 'package:toefl_app/domain/state/user/user_cubit.dart';
 import 'package:toefl_app/presentation/test/screens/profile_screen.dart';
 import 'package:toefl_app/presentation/test/screens/test_screen.dart';
@@ -157,6 +158,9 @@ class HomeTest extends StatelessWidget {
 
                           switch (prevPacketCubit) {
                             case TestPacketAnswering():
+                              context
+                                  .read<TimerBloc>()
+                                  .add(const TimerResume());
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => const TestScreen(),

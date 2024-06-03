@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 final appTheme = ThemeData.light().copyWith(
   scaffoldBackgroundColor: Colors.white,
+  appBarTheme: const AppBarTheme(scrolledUnderElevation: 0),
   colorScheme: const ColorScheme.light().copyWith(
     primary: const Color(0xff14487A), // button klik primary
     onPrimary:

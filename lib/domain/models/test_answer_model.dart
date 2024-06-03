@@ -16,6 +16,13 @@ class TestAnswerModel extends Equatable {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'answer': answer,
+      'is_correct': isCorrect,
+    };
+  }
+
   static const empty = TestAnswerModel(
     answer: '',
     isCorrect: false,

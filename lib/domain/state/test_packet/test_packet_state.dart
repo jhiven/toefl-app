@@ -42,6 +42,21 @@ final class TestPacketAnswering extends TestPacketState {
     );
   }
 
+  factory TestPacketAnswering.fromJson(Map<String, dynamic> json) {
+    return TestPacketAnswering(
+      packet: TestPacketModel.fromJson(json['packet']),
+      currentSection: TestSectionModel.fromJson(json['currentSection']),
+      currentSectionIdx: json['currentSectionIdx'] as int,
+    );
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      'packet': packet.toJson(),
+      'currentSection': currentSection.toJson(),
+      'currentSectionIdx': currentSectionIdx,
+    };
+  }
+
   @override
   List<Object> get props => [
         packet,

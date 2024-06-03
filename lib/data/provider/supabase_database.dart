@@ -99,7 +99,7 @@ class SupabaseDatabase {
           .eq('id', packetId)
           .single();
 
-      return TestPacketModel.fromJson(data);
+      return TestPacketModel.fromSupaJson(data);
     } catch (e) {
       throw Exception(e.toString());
     }

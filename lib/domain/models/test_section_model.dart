@@ -12,17 +12,33 @@ class TestSectionModel extends Equatable {
     required this.sectionType,
   });
 
-  factory TestSectionModel.fromQuestionsJson({
+  factory TestSectionModel.fromSupaJson({
     required List questions,
     required SectionType sectionType,
   }) {
     return TestSectionModel(
       questionList: questions
           .where((element) => element['type_id'] == sectionType.index + 1)
-          .map((e) => TestQuestionModel.fromJson(json: e))
+          .map((e) => TestQuestionModel.fromSupaJson(json: e))
           .toList(),
       sectionType: sectionType,
     );
+  }
+
+  factory TestSectionModel.fromJson(Map<String, dynamic> json) {
+    return TestSectionModel(
+      questionList: (json['questionList'] as List)
+          .map((e) => TestQuestionModel.fromJson(e))
+          .toList(),
+      sectionType: SectionType.values[json['sectionType'] as int],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'questionList': questionList.map((e) => e.toJson()).toList(),
+      'sectionType': sectionType.index,
+    };
   }
 
   TestSectionModel copyWith({
