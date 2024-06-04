@@ -108,14 +108,6 @@ class _MusicPlayerState extends State<MusicPlayer> {
               ],
             ),
           ),
-          if (_playerState == PlayerState.completed) // Perubahan di sini
-            IconButton(
-              icon: Icon(Icons.replay),
-              onPressed: () {
-                _player.seek(Duration.zero);
-                _player.resume();
-              },
-            ),
         ],
       ),
     );

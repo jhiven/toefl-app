@@ -190,7 +190,7 @@ class SupabaseDatabase {
     try {
       final Map<String, dynamic> data = await _supabaseClient
           .from('example_question')
-          .select(' question, url, example_answer(answer, value)')
+          .select(' question, url, example_answer(answer, value), pembahasan')
           .eq('material_id', id)
           .single();
       return MaterialQuestionModel.fromJson(json: data);
