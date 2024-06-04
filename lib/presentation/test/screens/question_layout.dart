@@ -19,7 +19,6 @@ class QuestionLayout extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: 20.0,
               vertical: 8,
             ),
             child: Row(
@@ -27,7 +26,14 @@ class QuestionLayout extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.timer),
+                    Icon(
+                      Icons.timer,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 30,
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
                     BlocConsumer<TimerBloc, TimerState>(
                       listener: (context, state) {
                         context.read<TestSectionCubit>().sectionTimeout();

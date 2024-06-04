@@ -21,8 +21,8 @@ class TestDrawer extends StatelessWidget {
                 children: [
                   Image.asset(
                     'assets/icon/icon.png',
-                    height: 100,
-                    width: 100,
+                    height: 80,
+                    width: 80,
                   ),
                   Text(
                     'TOEFL ',
@@ -41,6 +41,9 @@ class TestDrawer extends StatelessWidget {
                     ),
                   ),
                 ],
+              ),
+              const SizedBox(
+                height: 24,
               ),
               BlocBuilder<TestSectionCubit, TestSectionState>(
                 builder: (context, state) {

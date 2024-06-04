@@ -6,6 +6,7 @@ import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
 import 'package:toefl_app/domain/state/user/user_cubit.dart';
 import 'package:toefl_app/presentation/test/screens/profile_screen.dart';
 import 'package:toefl_app/presentation/test/screens/test_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeTest extends StatelessWidget {
   const HomeTest({super.key});
@@ -18,7 +19,7 @@ class HomeTest extends StatelessWidget {
         appBar: AppBar(
           actions: [
             IconButton(
-              icon: Icon(Icons.person),
+              icon: const Icon(Icons.person),
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -178,7 +179,13 @@ class HomeTest extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     OutlinedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        await launchUrl(
+                          Uri.parse(
+                            'https://wa.me/+6285848454128?text=Bang%20tambah%20token%20dong%20%F0%9F%98%AB%21%21',
+                          ),
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size(double.infinity, 50),
                         backgroundColor: Colors.white,
