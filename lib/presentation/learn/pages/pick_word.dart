@@ -95,14 +95,15 @@ class _PickWordState extends State<PickWord> {
                                             borderRadius:
                                                 const BorderRadius.all(
                                                     Radius.circular(9)),
-                                            color: const Color.fromARGB(
+                                            color: state is PickSelectionChanged &&
+                                                    state.doCheck && state.isSelected[index] ? state.check ? Colors.green.shade300 : Colors.red.shade300 : const Color.fromARGB(
                                                 255, 143, 195, 244),
                                             border: state is PickSelectionChanged &&
                                                     state.doCheck && state.isSelected[index]
                                                 ? Border.all(
                                                     color: state.check
-                                                        ? Colors.green
-                                                        : Colors.red,
+                                                        ? Colors.green.shade300
+                                                        : Colors.red.shade300,
                                                     width: 2,
                                                   )
                                                 : state is PickSelectionChanged &&

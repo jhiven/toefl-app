@@ -17,10 +17,11 @@ class _SynonymGameState extends State<SynonymGame> {
   @override
   void initState() {
     super.initState();
-   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _showBeginDialog();
     });
   }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -39,7 +40,10 @@ class _SynonymGameState extends State<SynonymGame> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 20, bottom: 30),
-                child: Text("Choose Synonym Word", style: TextStyle(fontSize: 18),),
+                child: Text(
+                  "Choose Synonym Word",
+                  style: TextStyle(fontSize: 18),
+                ),
               ),
               BlocBuilder<SynonymDataCubit, SynonymDataState>(
                 builder: (context, state) {
@@ -59,7 +63,8 @@ class _SynonymGameState extends State<SynonymGame> {
                                 ...data.map((kata1) {
                                   int index = data.indexOf(kata1);
                                   return Padding(
-                                    padding: const EdgeInsets.only(top: 20, bottom: 20),
+                                    padding: const EdgeInsets.only(
+                                        top: 20, bottom: 20),
                                     child: InkWell(
                                       onTap: () {
                                         context
@@ -76,22 +81,26 @@ class _SynonymGameState extends State<SynonymGame> {
                                             borderRadius:
                                                 const BorderRadius.all(
                                                     Radius.circular(9)),
-                                            color: const Color.fromARGB(
-                                                255, 143, 195, 244),
+                                            color: state is SynonymWord1Click &&
+                                                    state.answer1[index]
+                                                ? Colors.green.shade300
+                                                : const Color.fromARGB(
+                                                    255, 143, 195, 244),
                                             border: state
                                                         is SynonymWord1Click &&
                                                     (state.isSelected1[index] ||
                                                         state.answer1[index])
                                                 ? Border.all(
                                                     color: state.answer1[index]
-                                                        ? Colors.green
+                                                        ? Colors.green.shade300
                                                         : Colors.black,
                                                     width: 2,
                                                   )
                                                 : null,
                                           ),
                                           child: Center(
-                                            child: Text(kata1.word1, style: TextStyle(fontSize: 18)),
+                                            child: Text(kata1.word1,
+                                                style: TextStyle(fontSize: 18)),
                                           )),
                                     ),
                                   );
@@ -103,7 +112,8 @@ class _SynonymGameState extends State<SynonymGame> {
                                 ...dataRandom.map((kata2) {
                                   int index = dataRandom.indexOf(kata2);
                                   return Padding(
-                                    padding: const EdgeInsets.only(top: 20, bottom: 20),
+                                    padding: const EdgeInsets.only(
+                                        top: 20, bottom: 20),
                                     child: InkWell(
                                       onTap: () {
                                         context
@@ -120,22 +130,26 @@ class _SynonymGameState extends State<SynonymGame> {
                                             borderRadius:
                                                 const BorderRadius.all(
                                                     Radius.circular(9)),
-                                            color: const Color.fromARGB(
-                                                255, 143, 195, 244),
+                                            color: state is SynonymWord1Click &&
+                                                    state.answer2[index]
+                                                ? Colors.green.shade300
+                                                : const Color.fromARGB(
+                                                    255, 143, 195, 244),
                                             border: state
                                                         is SynonymWord1Click &&
                                                     (state.isSelected2[index] ||
                                                         state.answer2[index])
                                                 ? Border.all(
                                                     color: state.answer2[index]
-                                                        ? Colors.green
+                                                        ? Colors.green.shade300
                                                         : Colors.black,
                                                     width: 2,
                                                   )
                                                 : null,
                                           ),
                                           child: Center(
-                                            child: Text(kata2.word2, style: TextStyle(fontSize: 18)),
+                                            child: Text(kata2.word2,
+                                                style: TextStyle(fontSize: 18)),
                                           )),
                                     ),
                                   );
@@ -170,10 +184,10 @@ class _SynonymGameState extends State<SynonymGame> {
                       ),
                     ),
                   );
-                }else{
+                } else {
                   return Container();
                 }
-              }else{
+              } else {
                 return Container();
               }
             },
@@ -182,6 +196,7 @@ class _SynonymGameState extends State<SynonymGame> {
       ),
     );
   }
+
   Future<void> _showBeginDialog() async {
     return showDialog<void>(
       context: context,
@@ -208,17 +223,22 @@ class _SynonymGameState extends State<SynonymGame> {
                     children: [
                       Padding(
                         padding: EdgeInsets.all(10),
-                        child: Text('Synonym', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                        child: Text(
+                          'Synonym',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.all(10),
-                        child: Text('Match the left box and the right box. If the answer is correct the border will change to green.'),
+                        child: Text(
+                            'Match the left box and the right box. If the answer is correct the border will change to green.'),
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 20),
                         child: Image(
-                            image: AssetImage(
-                                'assets/images/synonym_dialog.png')),
+                            image:
+                                AssetImage('assets/images/synonym_dialog.png')),
                       ),
                     ],
                   ),
