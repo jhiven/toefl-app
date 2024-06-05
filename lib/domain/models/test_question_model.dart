@@ -33,15 +33,18 @@ class TestQuestionModel extends Equatable {
   }
 
   factory TestQuestionModel.fromJson(Map<String, dynamic> json) {
+    final answerList = (json['answerList'] as List)
+        .map((e) => TestAnswerModel.fromJson(e))
+        .toList()
+      ..shuffle();
+
     return TestQuestionModel(
       id: json['id'] as int,
       question: json['question'] as String?,
       selectedAnswer: TestAnswerModel.fromJson(json['selectedAnswer']),
       text: json['text'] as String?,
       url: json['url'] as String?,
-      answerList: (json['answerList'] as List)
-          .map((e) => TestAnswerModel.fromJson(e))
-          .toList(),
+      answerList: answerList,
     );
   }
 
