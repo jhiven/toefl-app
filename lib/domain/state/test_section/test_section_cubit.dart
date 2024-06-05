@@ -1,12 +1,12 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:toefl_app/domain/models/test_answer_model.dart';
 import 'package:toefl_app/domain/models/test_question_model.dart';
 import 'package:toefl_app/domain/models/test_section_model.dart';
 
 part 'test_section_state.dart';
 
-class TestSectionCubit extends Cubit<TestSectionState> {
+class TestSectionCubit extends HydratedCubit<TestSectionState> {
   TestSectionCubit() : super(TestSectionInitial());
 
   void setTestSection({required TestSectionModel section}) {
@@ -122,5 +122,15 @@ class TestSectionCubit extends Cubit<TestSectionState> {
         status: TestSectionStatus.success,
       ),
     );
+  }
+
+  @override
+  TestSectionState? fromJson(Map<String, dynamic> json) {
+    return TestSectionState.fromJson(json);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(TestSectionState state) {
+    return state.toJson();
   }
 }

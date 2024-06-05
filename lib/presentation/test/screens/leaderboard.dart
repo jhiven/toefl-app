@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/state/test_leaderboard/test_leaderboard_cubit.dart';
+import 'package:toefl_app/domain/state/user/user_cubit.dart';
 import 'package:toefl_app/presentation/test/screens/profile_screen.dart';
 import 'package:toefl_app/presentation/test/widgets/rangking.dart';
 
@@ -80,11 +81,16 @@ class Leaderboard extends StatelessWidget {
                       child: ListView.builder(
                         itemCount: state.leaderboards.length,
                         itemBuilder: (context, index) {
+                          final username = (context.read<UserCubit>().state
+                                  as UserFetchSucess)
+                              .user
+                              .name;
                           final item = state.leaderboards[index];
                           return Padding(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 8.0, horizontal: 16.0),
                             child: Rangking(
+                              isMe: username == item.name,
                               rank: index + 1,
                               name: item.name,
                               score: item.totalScore,

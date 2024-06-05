@@ -41,6 +41,30 @@ final class TestSectionState extends Equatable {
     );
   }
 
+  factory TestSectionState.fromJson(Map<String, dynamic> json) {
+    return TestSectionState(
+      section: TestSectionModel.fromJson(json['section']),
+      currentQuestion: TestQuestionModel.fromJson(json['currentQuestion']),
+      status: TestSectionStatus.values[json['status'] as int],
+      isShowInstruction: json['isShowInstruction'] as bool,
+      currentQuestionIdx: json['currentQuestionIdx'] as int,
+      totalCorrect: json['totalCorrect'] as int,
+      totalIncorrect: json['totalIncorrect'] as int,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'section': section.toJson(),
+      'currentQuestion': currentQuestion.toJson(),
+      'status': status.index,
+      'isShowInstruction': isShowInstruction,
+      'currentQuestionIdx': currentQuestionIdx,
+      'totalCorrect': totalCorrect,
+      'totalIncorrect': totalIncorrect,
+    };
+  }
+
   @override
   List<Object> get props => [
         section,

@@ -1,9 +1,8 @@
-import 'dart:developer';
 import 'dart:io';
 
-import 'package:bloc/bloc.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:equatable/equatable.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:toefl_app/data/repository/test_repository.dart';
 import 'package:toefl_app/domain/models/test_packet_model.dart';
@@ -13,7 +12,7 @@ import 'package:toefl_app/utils/score_env.dart';
 
 part 'test_packet_state.dart';
 
-class TestPacketCubit extends Cubit<TestPacketState> {
+class TestPacketCubit extends HydratedCubit<TestPacketState> {
   final TestRepository _testRepository;
 
   TestPacketCubit(this._testRepository) : super(TestPacketInitial());
@@ -41,7 +40,6 @@ class TestPacketCubit extends Cubit<TestPacketState> {
                     : e,
               )
               .toList());
-      log(newPacket.toString());
 
       await _testRepository.decrementTestRemaining();
       final int testRemaining = await _testRepository.getTestRemaining();
@@ -155,6 +153,24 @@ class TestPacketCubit extends Cubit<TestPacketState> {
       );
     } catch (e) {
       throw Exception(e.toString());
+    }
+  }
+
+  @override
+  TestPacketState? fromJson(Map<String, dynamic> json) {
+    if (json['packet'] != null) {
+      return TestPacketAnswering.fromJson(json);
+    }
+    return TestPacketInitial();
+  }
+
+  @override
+  Map<String, dynamic>? toJson(TestPacketState state) {
+    switch (state) {
+      case TestPacketAnswering():
+        return state.toJson();
+      default:
+        return null;
     }
   }
 }

@@ -45,6 +45,7 @@ class TestLayout extends StatelessWidget {
                         } else {
                           if (sectionCubit.state.currentQuestionIdx ==
                               sectionCubit.state.section.questionList.length -
+
                                   1) {
                             showDialog(
                               context: context,
@@ -55,6 +56,7 @@ class TestLayout extends StatelessWidget {
 
                             sectionCubit.nextQuestion();
                           }
+
                         }
                       case TestSectionStatus.done:
                         packetCubit.nextSection();
