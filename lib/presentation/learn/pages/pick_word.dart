@@ -66,20 +66,8 @@ class _PickWordState extends State<PickWord> {
                               state is PickSelectionChanged &&
                                       state.doCheck &&
                                       !state.check
-                                  ? Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text('Answer : ',
-                                            style: TextStyle(fontSize: 18)),
-                                        ...state.answer.map(
-                                          (value) {
-                                            return Text('${value} ',
-                                                style: TextStyle(fontSize: 18));
-                                          },
-                                        )
-                                      ],
-                                    )
+                                  ? Text('Answer : ${state.answer.join(', ')}',
+                                      style: TextStyle(fontSize: 18), textAlign: TextAlign.center,)
                                   : Container(),
                               ...state1.data.map(
                                 (value) {
