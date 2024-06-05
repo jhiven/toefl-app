@@ -21,6 +21,7 @@ class _PickWordState extends State<PickWord> {
       _showBeginDialog();
     });
   }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -46,7 +47,11 @@ class _PickWordState extends State<PickWord> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(20),
-                      child: Text("select the sentence that contains ${state1.question}", style: TextStyle(fontSize: 18), textAlign: TextAlign.center,),
+                      child: Text(
+                        "select the sentence that contains ${state1.question}",
+                        style: TextStyle(fontSize: 18),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                     BlocBuilder<PickCubit, PickState>(
                       builder: (context, state) {
@@ -62,12 +67,15 @@ class _PickWordState extends State<PickWord> {
                                       state.doCheck &&
                                       !state.check
                                   ? Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
-                                        Text('Answer : ', style: TextStyle(fontSize: 18)),
+                                        Text('Answer : ',
+                                            style: TextStyle(fontSize: 18)),
                                         ...state.answer.map(
                                           (value) {
-                                            return Text('${value} ', style: TextStyle(fontSize: 18));
+                                            return Text('${value} ',
+                                                style: TextStyle(fontSize: 18));
                                           },
                                         )
                                       ],
@@ -78,15 +86,19 @@ class _PickWordState extends State<PickWord> {
                                   int index = state1.data.indexOf(value);
 
                                   return Padding(
-                                    padding: const EdgeInsets.only(bottom: 20, top: 20),
+                                    padding: const EdgeInsets.only(
+                                        bottom: 20, top: 20),
                                     child: InkWell(
                                       onTap: () {
-                                        context
-                                            .read<PickCubit>()
-                                            .buttonBorder(index);
-                                        context
-                                            .read<PickCubit>()
-                                            .getChosenText(value.word);
+                                        if (state is PickSelectionChanged &&
+                                            !state.doCheck) {
+                                          context
+                                              .read<PickCubit>()
+                                              .buttonBorder(index);
+                                          context
+                                              .read<PickCubit>()
+                                              .getChosenText(value.word);
+                                        }
                                       },
                                       child: Container(
                                           height: 80,
@@ -95,11 +107,19 @@ class _PickWordState extends State<PickWord> {
                                             borderRadius:
                                                 const BorderRadius.all(
                                                     Radius.circular(9)),
-                                            color: state is PickSelectionChanged &&
-                                                    state.doCheck && state.isSelected[index] ? state.check ? Colors.green.shade300 : Colors.red.shade300 : const Color.fromARGB(
-                                                255, 143, 195, 244),
-                                            border: state is PickSelectionChanged &&
-                                                    state.doCheck && state.isSelected[index]
+                                            color:
+                                                state is PickSelectionChanged &&
+                                                        state.doCheck &&
+                                                        state.isSelected[index]
+                                                    ? state.check
+                                                        ? Colors.green.shade300
+                                                        : Colors.red.shade300
+                                                    : const Color.fromARGB(
+                                                        255, 143, 195, 244),
+                                            border: state
+                                                        is PickSelectionChanged &&
+                                                    state.doCheck &&
+                                                    state.isSelected[index]
                                                 ? Border.all(
                                                     color: state.check
                                                         ? Colors.green.shade300
@@ -115,7 +135,10 @@ class _PickWordState extends State<PickWord> {
                                                     : null,
                                           ),
                                           child: Center(
-                                            child: Text(value.word, style: TextStyle(fontSize: 18),),
+                                            child: Text(
+                                              value.word,
+                                              style: TextStyle(fontSize: 18),
+                                            ),
                                           )),
                                     ),
                                   );
@@ -180,6 +203,7 @@ class _PickWordState extends State<PickWord> {
       ),
     );
   }
+
   Future<void> _showBeginDialog() async {
     return showDialog<void>(
       context: context,
@@ -206,7 +230,11 @@ class _PickWordState extends State<PickWord> {
                     children: [
                       Padding(
                         padding: EdgeInsets.all(10),
-                        child: Text('Pick Word', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                        child: Text(
+                          'Pick Word',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.all(20),
