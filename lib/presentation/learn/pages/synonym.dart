@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/models/synonym.dart';
 import 'package:toefl_app/domain/state/synonym_cubit.dart';
 import 'package:toefl_app/domain/state/synonym_data/synonym_data_cubit.dart';
-import 'package:toefl_app/learn/widget/bottom_backgorund.dart';
-import 'package:toefl_app/learn/widget/button_next.dart';
+import 'package:toefl_app/presentation/learn/widget/bottom_backgorund.dart';
+import 'package:toefl_app/presentation/learn/widget/button_next.dart';
 
 class SynonymGame extends StatefulWidget {
   const SynonymGame({super.key});
@@ -16,6 +16,8 @@ class SynonymGame extends StatefulWidget {
 class _SynonymGameState extends State<SynonymGame> {
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double widthItem = screenWidth * 0.4;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -29,8 +31,8 @@ class _SynonymGameState extends State<SynonymGame> {
           Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 30),
-                child: Text("pilih kalimat"),
+                padding: const EdgeInsets.only(top: 20, bottom: 30),
+                child: Text("Choose Synonym Word", style: TextStyle(fontSize: 15),),
               ),
               BlocBuilder<SynonymDataCubit, SynonymDataState>(
                 builder: (context, state) {
@@ -43,13 +45,14 @@ class _SynonymGameState extends State<SynonymGame> {
                     return BlocBuilder<SynonymCubit, SynonymState>(
                       builder: (context, state) {
                         return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Column(
                               children: [
                                 ...data.map((kata1) {
                                   int index = data.indexOf(kata1);
                                   return Padding(
-                                    padding: const EdgeInsets.all(15),
+                                    padding: const EdgeInsets.only(top: 20, bottom: 20),
                                     child: InkWell(
                                       onTap: () {
                                         context
@@ -60,8 +63,8 @@ class _SynonymGameState extends State<SynonymGame> {
                                             .getChosenText1(kata1.word1);
                                       },
                                       child: Container(
-                                          height: 60,
-                                          width: 150,
+                                          height: 80,
+                                          width: widthItem,
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 const BorderRadius.all(
@@ -93,7 +96,7 @@ class _SynonymGameState extends State<SynonymGame> {
                                 ...dataRandom.map((kata2) {
                                   int index = dataRandom.indexOf(kata2);
                                   return Padding(
-                                    padding: const EdgeInsets.all(15),
+                                    padding: const EdgeInsets.only(top: 20, bottom: 20),
                                     child: InkWell(
                                       onTap: () {
                                         context
@@ -104,8 +107,8 @@ class _SynonymGameState extends State<SynonymGame> {
                                             .getChosenText2(kata2.word2);
                                       },
                                       child: Container(
-                                          height: 60,
-                                          width: 150,
+                                          height: 80,
+                                          width: widthItem,
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 const BorderRadius.all(

@@ -4,9 +4,9 @@ import 'package:toefl_app/domain/models/material_question.dart';
 import 'package:toefl_app/domain/state/answer_cubit.dart';
 import 'package:toefl_app/domain/state/button_next_cubit.dart';
 import 'package:toefl_app/domain/state/example_question/example_question_cubit.dart';
-import 'package:toefl_app/learn/pages/content_page.dart';
-import 'package:toefl_app/learn/widget/bottom_backgorund.dart';
-import 'package:toefl_app/learn/widget/button_next.dart';
+import 'package:toefl_app/presentation/learn/pages/content_page.dart';
+import 'package:toefl_app/presentation/learn/widget/bottom_backgorund.dart';
+import 'package:toefl_app/presentation/learn/widget/button_next.dart';
 
 class ReadingTest extends StatefulWidget {
   const ReadingTest({super.key, required this.index, required this.length});
@@ -59,8 +59,9 @@ class _ReadingTestState extends State<ReadingTest> {
                                             .selectAnswer(index);
                                       }
                                     },
+                                    splashColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
                                     child: Container(
-                                      width: double.infinity,
                                       padding: EdgeInsets.all(15),
                                       decoration: BoxDecoration(
                                         color: const Color.fromARGB(
@@ -90,7 +91,10 @@ class _ReadingTestState extends State<ReadingTest> {
                                                         : Colors.transparent,
                                                     width: 2,
                                                   )
-                                                : null,
+                                                : Border.all(
+                                                    color: Colors.transparent,
+                                                    width: 2,
+                                                  ),
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.only(
@@ -112,6 +116,7 @@ class _ReadingTestState extends State<ReadingTest> {
                                                 ? Icon(
                                                     Icons.check_circle,
                                                     color: Colors.green,
+                                                    size: 20,
                                                   )
                                                 : state2 is ButtonNextChange &&
                                                         state2.next &&
@@ -121,6 +126,7 @@ class _ReadingTestState extends State<ReadingTest> {
                                                     ? Icon(
                                                         Icons.cancel,
                                                         color: Colors.red,
+                                                        size: 20,
                                                       )
                                                     : Container()
                                           ],
@@ -145,38 +151,51 @@ class _ReadingTestState extends State<ReadingTest> {
               }
             },
           ),
-          BottomBackground(
-            butoon1: Container(),
-            button2: BlocBuilder<ButtonNextCubit, ButtonNextState>(
-              builder: (context, state1) {
-                bool next = state1 is ButtonNextChange ? state1.next : false;
-                return BlocBuilder<AnswerCubit, AnswerState>(
-                  builder: (context, state2) {
-                    return InkWell(
-                      onTap: () {
-                        if (state2 is AnswerPick
-                            ? state2.isSelected.contains(true)
-                            : false) {
-                          if (next) {
-                            context.read<ButtonNextCubit>().changeButton(false);
-                            context.read<AnswerCubit>().resetAnswer();
-                            if (widget.index + 1 < widget.length ) {
-                              Navigator.of(context).pop();
-                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ContentPage(index: widget.index+1),));
+          BlocBuilder<ButtonNextCubit, ButtonNextState>(
+            builder: (context, state1) {
+              bool next = state1 is ButtonNextChange ? state1.next : false;
+              if (next && widget.index + 1 == widget.length) {
+                return Container();
+              } else {
+                return BottomBackground(
+                  butoon1: Container(),
+                  button2: BlocBuilder<AnswerCubit, AnswerState>(
+                    builder: (context, state2) {
+                      return InkWell(
+                        onTap: () {
+                          if (state2 is AnswerPick
+                              ? state2.isSelected.contains(true)
+                              : false) {
+                            if (next) {
+                              context
+                                  .read<ButtonNextCubit>()
+                                  .changeButton(false);
+                              context.read<AnswerCubit>().resetAnswer();
+                              if (widget.index + 1 < widget.length) {
+                                Navigator.of(context).pop();
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ContentPage(index: widget.index + 1),
+                                    ));
+                              }
+                            } else {
+                              context
+                                  .read<ButtonNextCubit>()
+                                  .changeButton(true);
                             }
-                          } else {
-                            context.read<ButtonNextCubit>().changeButton(true);
                           }
-                        }
-                      },
-                      child: ButtonNext(
-                        next: next,
-                      ),
-                    );
-                  },
+                        },
+                        child: ButtonNext(
+                          next: next,
+                        ),
+                      );
+                    },
+                  ),
                 );
-              },
-            ),
+              }
+            },
           ),
         ],
       ),

@@ -1,7 +1,9 @@
+import 'package:toefl_app/data/provider/audio_provider.dart';
 import 'package:toefl_app/data/provider/supabase_database.dart';
 import 'package:toefl_app/domain/models/test_history_model.dart';
 import 'package:toefl_app/domain/models/test_leaderboard_model.dart';
 import 'package:toefl_app/domain/models/test_packet_model.dart';
+import 'package:toefl_app/domain/models/test_question_model.dart';
 
 class TestRepository {
   final SupabaseDatabase _supabaseDatabase;
@@ -49,6 +51,17 @@ class TestRepository {
   }) async {
     return await _supabaseDatabase.getHistory(
       userId: userId,
+    );
+  }
+
+  Future<TestQuestionModel> downloadAudio(TestQuestionModel question) async {
+    final audioProvider = AudioProvider();
+
+    return question.copyWith(
+      url: await audioProvider.downloadAudio(
+        id: question.id,
+        url: question.url!,
+      ),
     );
   }
 }

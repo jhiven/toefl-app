@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/state/test_packet/test_packet_cubit.dart';
 import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
+import 'package:toefl_app/domain/state/user/user_cubit.dart';
+import 'package:toefl_app/presentation/test/widgets/dialog_confirm.dart';
 import 'package:toefl_app/presentation/test/widgets/primary_button.dart';
 
 class TestLayout extends StatelessWidget {
@@ -41,13 +43,25 @@ class TestLayout extends StatelessWidget {
                         if (sectionCubit.state.isShowInstruction) {
                           sectionCubit.startSection();
                         } else {
-                          sectionCubit.checkAnswer();
-                          sectionCubit.nextQuestion();
+                          if (sectionCubit.state.currentQuestionIdx ==
+                              sectionCubit.state.section.questionList.length -
+                                  1) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => DialogConfirm(),
+                            );
+                          } else {
+                            sectionCubit.checkAnswer();
+
+                            sectionCubit.nextQuestion();
+                          }
                         }
                       case TestSectionStatus.done:
                         packetCubit.nextSection();
                     }
                   case TestPacketDone():
+                    context.read<UserCubit>().getSession();
+
                     Navigator.popUntil(
                       context,
                       (route) => route.isFirst,

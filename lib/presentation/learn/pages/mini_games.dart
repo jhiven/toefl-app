@@ -4,10 +4,10 @@ import 'package:toefl_app/domain/state/button_next_cubit.dart';
 import 'package:toefl_app/domain/state/flip_card_data/flip_card_data_cubit.dart';
 import 'package:toefl_app/domain/state/pick_word_data/pick_word_data_cubit.dart';
 import 'package:toefl_app/domain/state/synonym_data/synonym_data_cubit.dart';
-import 'package:toefl_app/learn/pages/flipcard_screen.dart';
-import 'package:toefl_app/learn/pages/pick_word.dart';
-import 'package:toefl_app/learn/pages/synonym.dart';
-import 'package:toefl_app/learn/widget/customListTile.dart';
+import 'package:toefl_app/presentation/learn/pages/flipcard_screen.dart';
+import 'package:toefl_app/presentation/learn/pages/pick_word.dart';
+import 'package:toefl_app/presentation/learn/pages/synonym.dart';
+import 'package:toefl_app/presentation/learn/widget/customListTile.dart';
 
 class MiniGames extends StatefulWidget {
   const MiniGames({super.key});
