@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
 class Rangking extends StatelessWidget {
-  final int? rank;
-  final String? name;
-  final int? score;
-  final String? imageUrl;
+  final int rank;
+  final String name;
+  final int score;
+  final bool isMe;
 
   const Rangking({
     super.key,
-    this.rank = 1,
-    this.name,
-    this.score = 666,
-    this.imageUrl,
+    required this.rank,
+    required this.name,
+    required this.score,
+    this.isMe = false,
   });
 
   @override
@@ -20,7 +20,9 @@ class Rangking extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
+            color: isMe
+                ? Theme.of(context).colorScheme.secondary
+                : Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(8.0),
           ),
           padding: const EdgeInsets.all(8.0),
@@ -43,6 +45,12 @@ class Rangking extends StatelessWidget {
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.onSecondaryContainer,
               borderRadius: BorderRadius.circular(8.0),
+              border: isMe
+                  ? Border.all(
+                      color: Theme.of(context).colorScheme.secondary,
+                      width: 1.5,
+                    )
+                  : null,
             ),
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -52,28 +60,24 @@ class Rangking extends StatelessWidget {
                   color: Color(0xFF14487A),
                   size: 40,
                 ),
-                // Image.network(
-                //   imageUrl ?? 'https://i.postimg.cc/ncsVLwJx/makanan.jpg',
-                //   width: 40,
-                //   height: 40,
-                //   errorBuilder: (context, error, stackTrace) {
-                //     return const Icon(Icons.error);
-                //   },
-                //   loadingBuilder: (context, child, loadingProgress) {
-                //     if (loadingProgress == null) return child;
-                //     return const CircularProgressIndicator();
-                //   },
-                // ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(name ?? "kimi",
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
-                      Text("$score",
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                      Text(
+                        isMe ? 'You' : name,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        "$score",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ],
                   ),
                 ),

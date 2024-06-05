@@ -18,7 +18,7 @@ class TestQuestionModel extends Equatable {
     this.selectedAnswer = TestAnswerModel.empty,
   });
 
-  factory TestQuestionModel.fromJson({
+  factory TestQuestionModel.fromSupaJson({
     required Map<String, dynamic> json,
   }) {
     final answers = json['test_answer'] as List;
@@ -30,6 +30,33 @@ class TestQuestionModel extends Equatable {
       url: json['url'] as String?,
       answerList: answers.map((e) => TestAnswerModel.fromJson(e)).toList(),
     );
+  }
+
+  factory TestQuestionModel.fromJson(Map<String, dynamic> json) {
+    final answerList = (json['answerList'] as List)
+        .map((e) => TestAnswerModel.fromJson(e))
+        .toList()
+      ..shuffle();
+
+    return TestQuestionModel(
+      id: json['id'] as int,
+      question: json['question'] as String?,
+      selectedAnswer: TestAnswerModel.fromJson(json['selectedAnswer']),
+      text: json['text'] as String?,
+      url: json['url'] as String?,
+      answerList: answerList,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'question': question,
+      'text': text,
+      'url': url,
+      'answerList': answerList.map((e) => e.toJson()).toList(),
+      'selectedAnswer': selectedAnswer.toJson(),
+    };
   }
 
   TestQuestionModel copyWith({

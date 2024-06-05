@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toefl_app/domain/models/test_answer_model.dart';
 import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
 import 'package:toefl_app/utils/extensions.dart';
 
@@ -56,8 +57,10 @@ class TestDrawer extends StatelessWidget {
                     crossAxisCount: 5,
                     children: state.section.questionList
                         .mapIndexed((e, i) => e == state.currentQuestion
-                            ? _selectedQuestionButton(theme, i, context)
-                            : _questionButton(theme, i, context))
+                            ? _selectedQuestionButton(theme, i, context,
+                                e.selectedAnswer != TestAnswerModel.empty)
+                            : _questionButton(theme, i, context,
+                                e.selectedAnswer != TestAnswerModel.empty))
                         .toList(),
                   );
                 },
@@ -73,6 +76,7 @@ class TestDrawer extends StatelessWidget {
     ThemeData theme,
     int index,
     BuildContext context,
+    bool isDone,
   ) {
     return GestureDetector(
       onTap: () {
@@ -82,7 +86,9 @@ class TestDrawer extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: theme.colorScheme.tertiaryContainer,
+          color: isDone
+              ? Colors.green.shade300
+              : theme.colorScheme.tertiaryContainer,
         ),
         padding: const EdgeInsets.all(8),
         child: Center(
@@ -102,6 +108,7 @@ class TestDrawer extends StatelessWidget {
     ThemeData theme,
     int index,
     BuildContext context,
+    bool isDone,
   ) {
     return GestureDetector(
       onTap: () {
@@ -115,7 +122,9 @@ class TestDrawer extends StatelessWidget {
             color: theme.colorScheme.primary,
             width: 2,
           ),
-          color: theme.colorScheme.tertiaryContainer,
+          color: isDone
+              ? Colors.green.shade300
+              : theme.colorScheme.tertiaryContainer,
         ),
         padding: const EdgeInsets.all(8),
         child: Center(
