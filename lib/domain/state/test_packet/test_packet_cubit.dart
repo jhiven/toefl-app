@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:bot_toast/bot_toast.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -8,6 +7,7 @@ import 'package:toefl_app/data/repository/test_repository.dart';
 import 'package:toefl_app/domain/models/test_packet_model.dart';
 import 'package:toefl_app/domain/models/test_question_model.dart';
 import 'package:toefl_app/domain/models/test_section_model.dart';
+import 'package:toefl_app/presentation/test/widgets/loading.dart';
 import 'package:toefl_app/utils/score_env.dart';
 
 part 'test_packet_state.dart';
@@ -19,7 +19,7 @@ class TestPacketCubit extends HydratedCubit<TestPacketState> {
 
   void startTest() async {
     emit(const TestPacketLoading());
-    final loading = BotToast.showLoading();
+    final loading = showLoading(text: 'Preparing test...');
     try {
       // final TestPacketModel packet = await _testRepository.getRandomPacket();
       final TestPacketModel packet = await _testRepository.getPacketById(1);

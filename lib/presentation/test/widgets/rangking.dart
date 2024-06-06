@@ -28,7 +28,7 @@ class Rangking extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           height: 60,
           child: SizedBox(
-            width: 30,
+            width: 40,
             child: Center(
               child: Text(
                 "$rank",

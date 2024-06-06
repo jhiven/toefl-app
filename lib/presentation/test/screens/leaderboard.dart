@@ -81,16 +81,16 @@ class Leaderboard extends StatelessWidget {
                       child: ListView.builder(
                         itemCount: state.leaderboards.length,
                         itemBuilder: (context, index) {
-                          final username = (context.read<UserCubit>().state
+                          final userId = (context.read<UserCubit>().state
                                   as UserFetchSucess)
                               .user
-                              .name;
+                              .userId;
                           final item = state.leaderboards[index];
                           return Padding(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 8.0, horizontal: 16.0),
                             child: Rangking(
-                              isMe: username == item.name,
+                              isMe: userId == item.userId,
                               rank: index + 1,
                               name: item.name,
                               score: item.totalScore,

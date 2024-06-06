@@ -119,6 +119,11 @@ class TimerBloc extends HydratedBloc<TimerEvent, TimerState> {
     if (json['doneTime'] != null) {
       final doneTime = DateTime.parse(json['doneTime'] as String);
       final duration = doneTime.difference(DateTime.now());
+
+      if (duration.inSeconds.isNegative) {
+        return TimerRunComplete();
+      }
+
       return TimerRunInProgress(
         duration: duration,
         formattedDuration: _formatTime(duration),

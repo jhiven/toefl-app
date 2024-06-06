@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class TestLeaderboardModel extends Equatable {
+  final String userId;
   final int listeningScore;
   final int readingScore;
   final int structureScore;
@@ -9,6 +10,7 @@ class TestLeaderboardModel extends Equatable {
   final DateTime date;
 
   const TestLeaderboardModel({
+    required this.userId,
     required this.listeningScore,
     required this.readingScore,
     required this.structureScore,
@@ -19,6 +21,7 @@ class TestLeaderboardModel extends Equatable {
 
   factory TestLeaderboardModel.fromJson(Map<String, dynamic> json) {
     return TestLeaderboardModel(
+      userId: json['user_id'] as String,
       listeningScore: json['listening_score'] as int,
       readingScore: json['reading_score'] as int,
       structureScore: json['structure_score'] as int,
@@ -29,7 +32,8 @@ class TestLeaderboardModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
+  List<Object> get props => [
+        userId,
         readingScore,
         listeningScore,
         structureScore,
