@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:equatable/equatable.dart';
 import 'package:toefl_app/data/repository/auth_repository.dart';
+import 'package:toefl_app/presentation/test/widgets/loading.dart';
 
 part 'authentication_state.dart';
 
@@ -14,7 +14,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     required String email,
     required String password,
   }) async {
-    final loading = BotToast.showLoading();
+    final loading = showLoading();
     try {
       emit(AuthenticationLoading());
 
@@ -40,7 +40,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     required String password,
     required String name,
   }) async {
-    final loading = BotToast.showLoading();
+    final loading = showLoading();
     try {
       emit(AuthenticationLoading());
 

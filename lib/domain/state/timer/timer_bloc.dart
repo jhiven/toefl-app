@@ -77,7 +77,9 @@ class TimerBloc extends HydratedBloc<TimerEvent, TimerState> {
     TimerResume event,
     Emitter<TimerState> emit,
   ) {
-    if (state is! TimerRunInProgress) {
+    if (state is TimerRunComplete) {
+      return emit(TimerRunComplete());
+    } else if (state is! TimerRunInProgress) {
       throw Exception('timer is not running before');
     }
 
@@ -119,6 +121,11 @@ class TimerBloc extends HydratedBloc<TimerEvent, TimerState> {
     if (json['doneTime'] != null) {
       final doneTime = DateTime.parse(json['doneTime'] as String);
       final duration = doneTime.difference(DateTime.now());
+
+      if (duration.inSeconds.isNegative) {
+        return TimerRunComplete();
+      }
+
       return TimerRunInProgress(
         duration: duration,
         formattedDuration: _formatTime(duration),
