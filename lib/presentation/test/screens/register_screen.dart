@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/state/auth/authentication_cubit.dart';
 import 'package:toefl_app/domain/state/user/user_cubit.dart';
-import 'package:toefl_app/presentation/test/screens/login_screen.dart';
 import 'package:toefl_app/presentation/test/widgets/bottom_navigation.dart';
 import 'package:toefl_app/presentation/test/widgets/login_input.dart';
 
@@ -206,12 +205,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const LoginScreen(),
-                                    ),
-                                  );
+                                  Navigator.pop(context);
                                 },
                                 child: const Text(
                                   'Login',
