@@ -77,7 +77,9 @@ class TimerBloc extends HydratedBloc<TimerEvent, TimerState> {
     TimerResume event,
     Emitter<TimerState> emit,
   ) {
-    if (state is! TimerRunInProgress) {
+    if (state is TimerRunComplete) {
+      return emit(TimerRunComplete());
+    } else if (state is! TimerRunInProgress) {
       throw Exception('timer is not running before');
     }
 
