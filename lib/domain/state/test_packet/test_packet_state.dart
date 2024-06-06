@@ -47,6 +47,9 @@ final class TestPacketAnswering extends TestPacketState {
       packet: TestPacketModel.fromJson(json['packet']),
       currentSection: TestSectionModel.fromJson(json['currentSection']),
       currentSectionIdx: json['currentSectionIdx'] as int,
+      listeningScore: json['listeningScore'] as int,
+      structureScore: json['structureScore'] as int,
+      readingScore: json['readingScore'] as int,
     );
   }
   Map<String, dynamic> toJson() {
@@ -54,6 +57,9 @@ final class TestPacketAnswering extends TestPacketState {
       'packet': packet.toJson(),
       'currentSection': currentSection.toJson(),
       'currentSectionIdx': currentSectionIdx,
+      'listeningScore': listeningScore,
+      'structureScore': structureScore,
+      'readingScore': readingScore,
     };
   }
 
