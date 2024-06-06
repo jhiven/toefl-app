@@ -5,9 +5,6 @@ import 'package:toefl_app/domain/state/answer_cubit.dart';
 import 'package:toefl_app/domain/state/button_next_cubit.dart';
 import 'package:toefl_app/domain/state/example_question/example_question_cubit.dart';
 import 'package:toefl_app/domain/state/material/material_cubit.dart';
-import 'package:toefl_app/domain/state/modul_cubit.dart';
-import 'package:toefl_app/presentation/learn/pages/listening_page.dart';
-import 'package:toefl_app/presentation/learn/pages/readingtest_page.dart';
 import 'package:toefl_app/presentation/learn/widget/bottom_backgorund.dart';
 import 'package:toefl_app/presentation/learn/widget/button_next.dart';
 import 'package:toefl_app/presentation/learn/widget/button_test.dart';
@@ -48,66 +45,42 @@ class ContentPage extends StatelessWidget {
                       child: Text(content!)),
                 ),
               ),
-              BlocBuilder<ModulCubit, ModulState>(
-                builder: (context, state) {
-                  if (state is ModulValue) {
-                    String modul = state.modul;
-                    return BottomBackground(
-                      butoon1: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  _changeWidget(modul, data!.length),
-                            ),
-                          );
-                          context.read<ButtonNextCubit>().changeButton(false);
-                          context.read<AnswerCubit>().resetAnswer();
-                          context
-                              .read<ExampleQuestionCubit>()
-                              .showQuestion(id!);
-                        },
-                        child: ButtonTest(),
+              BottomBackground(
+                butoon1: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            QuestionScreen(index: index, length: data!.length),
                       ),
-                      button2: index + 1 < data!.length
-                          ? InkWell(
-                              onTap: () {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          ContentPage(index: index + 1),
-                                    ));
-                              },
-                              child: ButtonNext(
-                                next: true,
-                              ),
-                            )
-                          : Container(),
                     );
-                  } else {
-                    return Container();
-                  }
-                },
+                    context.read<ButtonNextCubit>().changeButton(false);
+                    context.read<AnswerCubit>().resetAnswer();
+                    context.read<ExampleQuestionCubit>().showQuestion(id!);
+                  },
+                  child: const ButtonTest(),
+                ),
+                button2: index + 1 < data!.length
+                    ? InkWell(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ContentPage(index: index + 1),
+                              ));
+                        },
+                        child: const ButtonNext(
+                          next: true,
+                        ),
+                      )
+                    : Container(),
               ),
             ],
           ),
         );
       },
     );
-  }
-
-  Widget _changeWidget(String modul, int length) {
-    if (modul == 'Reading') {
-      return ReadingTest(
-        index: index,
-        length: length,
-      );
-    } else if (modul == 'Listening') {
-      return ListeningTest(index: index, length: length);
-    } else {
-      return QuestionScreen(index: index, length: length);
-    }
   }
 }

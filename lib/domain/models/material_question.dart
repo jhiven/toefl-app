@@ -5,8 +5,9 @@ class MaterialQuestionModel extends Equatable {
   final String? question;
   final String? url;
   final List<MaterialAnswerModel> answerList;
+  final String pembahasan;
 
-  const MaterialQuestionModel({required this.question, required this.url, required this.answerList});
+  const MaterialQuestionModel({required this.question, required this.url, required this.answerList, required this.pembahasan});
 
   factory MaterialQuestionModel.fromJson({
     required Map<String, dynamic> json,
@@ -17,6 +18,7 @@ class MaterialQuestionModel extends Equatable {
       question: json['question'] as String?,
       url: json['url'] as String?,
       answerList: answers.map((e) => MaterialAnswerModel.fromJson(e)).toList(),
+      pembahasan: json['pembahasan'] as String
     );
   }
 
@@ -24,8 +26,9 @@ class MaterialQuestionModel extends Equatable {
     question: '',
     url: '',
     answerList: [],
+    pembahasan: '',
   );
 
   @override
-  List<Object?> get props => [question, answerList, url];
+  List<Object?> get props => [question, answerList, url, pembahasan];
 }

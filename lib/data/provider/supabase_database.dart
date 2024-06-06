@@ -188,11 +188,18 @@ class SupabaseDatabase {
 
   Future<MaterialQuestionModel> getQuestionById(int id) async {
     try {
-      final Map<String, dynamic> data = await _supabaseClient
+      final List<dynamic> allData = await _supabaseClient
           .from('example_question')
-          .select(' question, url, example_answer(answer, value)')
-          .eq('material_id', id)
-          .single();
+          .select(' question, url, example_answer(answer, value), pembahasan')
+          .eq('material_id', id);
+      final List<dynamic> randomData = allData;
+      randomData.shuffle();
+      final Map<String, dynamic> data = randomData.first;
+      // final Map<String, dynamic> data = await _supabaseClient
+      //     .from('example_question')
+      //     .select(' question, url, example_answer(answer, value), pembahasan')
+      //     .eq('material_id', id)
+      //     .single();
       return MaterialQuestionModel.fromJson(json: data);
     } catch (e) {
       throw Exception(e.toString());
