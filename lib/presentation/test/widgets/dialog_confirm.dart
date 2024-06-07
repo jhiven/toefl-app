@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toefl_app/domain/state/test_section/test_section_cubit.dart';
 
 class DialogConfirm extends StatelessWidget {
-  const DialogConfirm({Key? key}) : super(key: key);
+  const DialogConfirm({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +13,13 @@ class DialogConfirm extends StatelessWidget {
       ),
       backgroundColor: Colors.white,
       child: Container(
-        color: Colors.white,
         constraints: const BoxConstraints(
           minWidth: 280.0,
           maxWidth: 350.0,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.white,
         ),
         padding: const EdgeInsets.all(20.0),
         child: Column(
